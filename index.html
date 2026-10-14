@@ -683,18 +683,18 @@
       const casinoTables = {
         roulette: [
           { chance: 45, mult: 0, title: 'Чёрная дыра поглотила ставку', icon: '🕳️', color: '#722f63' },
+          { chance: .1, mult: 50, title: 'Планетарный джекпот · выигрыш x50!', icon: '🪐', color: '#345f68', jackpot: true },
           { chance: 20, mult: 0, title: 'Метеоритный промах · ставка потеряна', icon: '☄️', color: '#7c3c48' },
+          { chance: .05, mult: 100, title: 'Голубой гигант · выигрыш x100!', icon: '💠', color: '#285b77', jackpot: true },
           { chance: 12, mult: .5, title: 'Тёмная луна · возврат половины ставки', icon: '🌑', color: '#39436c' },
+          { chance: .02, mult: 500, title: 'КВАЗАР · выигрыш x500!', icon: '🔷', color: '#345f68', jackpot: true },
           { chance: 8, mult: 1, title: 'Древний артефакт · возврат ставки x1', icon: '🔮', color: '#4b3c7c' },
+          { chance: .01, mult: 1000, title: 'СВЕРХНОВАЯ · выигрыш x1 000!', icon: '🎆', color: '#674c87', jackpot: true },
           { chance: 8.815, mult: 2, title: 'Звёздный корабль · выигрыш x2!', icon: '🚀', color: '#315b56' },
+          { chance: .005, mult: 2500, title: 'АБСОЛЮТНЫЙ ДЖЕКПОТ · выигрыш x2 500!', icon: '🌌', color: '#285b77', jackpot: true },
           { chance: 3, mult: 3, title: 'Кристалл сверхновой · выигрыш x3!', icon: '💎', color: '#3c6c7b' },
           { chance: 2, mult: 5, title: 'Солнечный джекпот · выигрыш x5!', icon: '☀️', color: '#80652f' },
-          { chance: 1, mult: 10, title: 'Корона галактики · выигрыш x10!', icon: '👑', color: '#674c87', jackpot: true },
-          { chance: .1, mult: 50, title: 'Планетарный джекпот · выигрыш x50!', icon: '🪐', color: '#345f68', jackpot: true },
-          { chance: .05, mult: 100, title: 'Голубой гигант · выигрыш x100!', icon: '💠', color: '#285b77', jackpot: true },
-          { chance: .02, mult: 500, title: 'КВАЗАР · выигрыш x500!', icon: '🔷', color: '#345f68', jackpot: true },
-          { chance: .01, mult: 1000, title: 'СВЕРХНОВАЯ · выигрыш x1 000!', icon: '🎆', color: '#674c87', jackpot: true },
-          { chance: .005, mult: 2500, title: 'АБСОЛЮТНЫЙ ДЖЕКПОТ · выигрыш x2 500!', icon: '🌌', color: '#285b77', jackpot: true }
+          { chance: 1, mult: 10, title: 'Корона галактики · выигрыш x10!', icon: '👑', color: '#674c87', jackpot: true }
         ],
         capsule: [
           { chance: 35, mult: 0, title: 'Капсула оказалась пустой', icon: '🫙' },
@@ -744,11 +744,11 @@
         }).join(',');
         wheel.style.background = `conic-gradient(from -${firstWidth / 2}deg,${segments})`;
         wheel.replaceChildren();
-        passed = 0; let rareLabelIndex = 0;
+        passed = 0;
         outcomes.forEach(item => {
           const symbol = document.createElement('span'), width = item.chance / total * 360;
           const angle = (passed / total * 360 + width / 2) * Math.PI / 180;
-          const rareRadii = [27, 34, 41, 30, 37], radius = item.chance <= .1 ? rareRadii[rareLabelIndex++ % rareRadii.length] : 36;
+          const radius = 36;
           symbol.className = 'roulette-symbol'; symbol.textContent = item.icon;
           symbol.setAttribute('aria-hidden', 'true');
           symbol.style.left = `${50 + Math.sin(angle) * radius}%`; symbol.style.top = `${50 - Math.cos(angle) * radius}%`;
