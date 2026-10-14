@@ -219,6 +219,7 @@
     .casino-mode span:first-child { font-size:23px; }
     .casino-mode small { color:var(--muted);font-size:9px;font-weight:500; }
     .casino-card { margin-top:14px;text-align:center; }
+    .casino-card.slots-theme { border-color:#65d9ff55;background:radial-gradient(ellipse at 50% 0%,#3856a044,transparent 55%),linear-gradient(145deg,#151a32f5,#0b0d1bf5); }
     .casino-balance { color:#b8a4df;font-size:12px; }
     .casino-balance strong { color:#fff;font-variant-numeric:tabular-nums; }
     .casino-bet-label { display:block;margin:17px 0 7px;text-align:left;color:#c9bddf;font-size:12px; }
@@ -226,6 +227,12 @@
     .casino-chips { grid-template-columns:repeat(3,minmax(0,1fr));margin:8px 0 14px; }
     .casino-chip { padding:9px 4px;font-size:10px; }
     .casino-machine { min-height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;margin:12px 0;padding:18px;border:1px solid #bd9aff22;border-radius:18px;background:radial-gradient(ellipse,#7045a833,transparent 70%),#0d0c18; }
+    .slots-theme .casino-machine { min-height:200px;overflow:hidden;border:1px solid #71ddff55;border-radius:28px;background:radial-gradient(ellipse at 50% 6%,#6beaff23,transparent 52%),linear-gradient(180deg,#17294a,#111326 56%,#090b18);box-shadow:inset 0 0 34px #040712,0 0 30px #37caff20; }
+    .slots-theme .casino-machine::before,.slots-theme .casino-machine::after { content:"✦";position:absolute;color:#9feaff;font-size:12px;text-shadow:0 0 12px #61dfff;animation:starTwinkle 2.4s ease-in-out infinite alternate; }
+    .slots-theme .casino-machine::before { top:19px;left:13%; }.slots-theme .casino-machine::after { right:13%;bottom:18px;animation-delay:1s; }
+    @keyframes starTwinkle { to { opacity:.25;transform:scale(.65); } }
+    .slot-title { display:none;position:absolute;top:17px;color:#aeeeff;font-size:10px;font-weight:800;letter-spacing:2.4px;text-shadow:0 0 13px #58cfff; }
+    .slots-theme .slot-title { display:block; }
     .roulette-wheel { width:94px;height:94px;border:5px solid #f2d58a;border-radius:50%;background:conic-gradient(#df4569 0 30deg,#281e49 30deg 60deg,#ecb845 60deg 90deg,#281e49 90deg 120deg,#df4569 120deg 150deg,#281e49 150deg 180deg,#ecb845 180deg 210deg,#281e49 210deg 240deg,#df4569 240deg 270deg,#281e49 270deg 300deg,#ecb845 300deg 330deg,#281e49 330deg);box-shadow:0 0 24px #d59bff55,inset 0 0 0 5px #100e1b; }
     .roulette-wheel::after { content:"✦";display:grid;place-items:center;width:100%;height:100%;color:#fff5cc;font-size:23px;text-shadow:0 0 12px #fff; }
     .roulette-wheel[hidden] { display:none; }
@@ -234,15 +241,16 @@
     .casino-reel { font-size:48px;filter:drop-shadow(0 0 16px #d5a5ff88); }
     .casino-reel.rolling { animation:casinoRoll .16s linear infinite alternate; }
     @keyframes casinoRoll { to { transform:translateY(-7px) rotate(8deg) scale(1.08);filter:drop-shadow(0 0 24px #ffa8ef); } }
-    .slot-reels { display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 12px;border:1px solid #c4a4ff55;border-radius:17px;background:linear-gradient(180deg,#2c2441,#11101b);box-shadow:inset 0 0 20px #0008,0 0 24px #ac7aff22; }
+    .slot-reels { display:flex;align-items:center;justify-content:center;gap:9px;padding:12px;border:1px solid #c4a4ff55;border-radius:17px;background:linear-gradient(180deg,#2c2441,#11101b);box-shadow:inset 0 0 20px #0008,0 0 24px #ac7aff22; }
     .slot-reels[hidden] { display:none; }
-    .slot-reel { width:62px;height:66px;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffff18;border-radius:12px;background:linear-gradient(180deg,#ffffff12,#ffffff03);font-size:34px;text-shadow:0 0 16px #d5a5ff99; }
-    .slot-reel.spinning { animation:slotPulse .45s ease-in-out infinite alternate; }
-    .slot-reel.stopping { animation:slotStop .45s cubic-bezier(.12,.72,.21,1) both; }
-    @keyframes slotPulse { to { transform:translateY(-4px);filter:brightness(1.4); } }
-    @keyframes slotStop { 0% { transform:translateY(-18px) scale(.9); } 70% { transform:translateY(4px) scale(1.08); } 100% { transform:translateY(0) scale(1); } }
-    .casino-speed { margin:0 0 10px;padding:9px 14px;border:1px solid #f0cb7b66;border-radius:12px;background:#f0cb7b16;color:#ffe5a4;font-size:12px;font-weight:750;cursor:pointer; }
+    .slot-reel { width:68px;height:72px;display:grid;place-items:center;overflow:hidden;border:1px solid #a4edff44;border-radius:14px;background:linear-gradient(180deg,#ffffff16,#68ccff08);font-size:36px;text-shadow:0 0 16px #85eaff99;transition:transform .32s cubic-bezier(.2,.8,.2,1),filter .32s ease; }
+    .slot-reel.spinning { animation:slotFlow .14s linear infinite;filter:blur(1px) brightness(1.35); }
+    .slot-reel.stopping { animation:slotStop .68s cubic-bezier(.16,.82,.22,1) both; }
+    @keyframes slotFlow { 0% { transform:translateY(-13px); } 100% { transform:translateY(13px); } }
+    @keyframes slotStop { 0% { transform:translateY(-24px) scale(.92);filter:blur(4px); } 62% { transform:translateY(5px) scale(1.07);filter:blur(0); } 82% { transform:translateY(-2px) scale(.99); } 100% { transform:translateY(0) scale(1);filter:brightness(1.25); } }
+    .casino-speed { display:block;margin:10px auto;padding:9px 14px;border:1px solid #f0cb7b66;border-radius:12px;background:#f0cb7b16;color:#ffe5a4;font-size:12px;font-weight:750;cursor:pointer; }
     .casino-speed[hidden] { display:none; }
+    .casino-speed[aria-pressed="true"] { border-color:#67e4ff99;background:#45cfff20;color:#a9f2ff;box-shadow:0 0 18px #45cfff24; }
     .journal-group { margin-top:16px; }
     .journal-title { margin:0 0 6px;color:#cdb6ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px; }
     .casino-result { min-height:43px;color:#e9deff;font-size:13px;line-height:1.5; }
@@ -311,13 +319,13 @@
           <button class="casino-mode" data-casino-mode="capsule" type="button"><span>🪐</span><b>Капсула</b><small>Редкий артефакт</small></button>
           <button class="casino-mode" data-casino-mode="slots" type="button"><span>🎰</span><b>Автомат</b><small>Три символа</small></button>
         </div>
-        <div class="casino-card">
+        <div class="casino-card" id="casinoCard">
           <div class="casino-balance">Твой баланс: <strong id="casinoBalance">0</strong> ✦</div>
           <label class="casino-bet-label" id="casinoBetLabel" for="casinoBet">Ставка</label>
           <input class="casino-bet" id="casinoBet" type="number" inputmode="numeric" min="100" step="100" value="1000" aria-label="Размер ставки">
           <div class="casino-chips" id="casinoChips"><button class="casino-chip" data-bet="1000" type="button">+1 тыс.</button><button class="casino-chip" data-bet="10000" type="button">+10 тыс.</button><button class="casino-chip" data-bet="100000" type="button">+100 тыс.</button><button class="casino-chip" data-bet="1000000" type="button">+1 млн</button><button class="casino-chip" data-bet="10000000" type="button">+10 млн</button></div>
           <div class="casino-chips casino-lower-chips" id="casinoLowerChips"><button class="casino-chip" data-bet-adjust="1000" type="button">−1 тыс.</button><button class="casino-chip" data-bet-adjust="10000" type="button">−10 тыс.</button><button class="casino-chip" data-bet-adjust="100000" type="button">−100 тыс.</button><button class="casino-chip" data-bet-adjust="1000000" type="button">−1 млн</button><button class="casino-chip" data-bet-adjust="10000000" type="button">−10 млн</button><button class="casino-chip" data-bet-reset type="button">Сбросить</button></div>
-          <div class="casino-machine"><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div><div class="slot-reels" id="slotReels" aria-label="Барабаны космического автомата" hidden><span class="slot-reel">✦</span><span class="slot-reel">🪐</span><span class="slot-reel">💎</span></div></div>
+          <div class="casino-machine"><div class="slot-title">✦ ORBITAL JACKPOT ✦</div><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div><div class="slot-reels" id="slotReels" aria-label="Барабаны космического автомата" hidden><span class="slot-reel">✦</span><span class="slot-reel">🪐</span><span class="slot-reel">💎</span></div></div>
           <button class="casino-speed" id="casinoSpeed" type="button" hidden>⚡ Ускорить прокрутку ×3</button>
           <div class="casino-result" id="casinoResult">Выбери игру и сделай ставку.</div>
           <button class="casino-action" id="casinoAction" type="button">Сделать ставку · 1 000 ✦</button>
@@ -518,11 +526,17 @@
           }
         } else if (!avatar.dataset.photo) avatar.textContent = [...name][0]?.toUpperCase() || '✦';
       }
-      let casinoMode = 'roulette', casinoBusy = false;
+      let casinoMode = 'roulette', casinoBusy = false, slotFastMode = false;
+      try { slotFastMode = localStorage.getItem('spark_slot_fast') === '1'; } catch (_) {}
       const capsuleCost = 5000;
       function renderCasino() {
         $('casinoBalance').textContent = fullNumber(state.sparks);
         const capsule = casinoMode === 'capsule';
+        $('casinoCard').classList.toggle('slots-theme', casinoMode === 'slots');
+        $('casinoSpeed').hidden = casinoMode !== 'slots';
+        $('casinoSpeed').setAttribute('aria-pressed', String(slotFastMode));
+        $('casinoSpeed').textContent = slotFastMode ? '⚡ Ускорение ×3 · включено (нажми, чтобы выключить)' : '⚡ Ускорение ×3 · выключено (нажми, чтобы включить)';
+        $('casinoSpeed').disabled = false;
         $('casinoBetLabel').hidden = capsule; $('casinoBet').hidden = capsule; $('casinoChips').hidden = capsule; $('casinoLowerChips').hidden = capsule;
         $('casinoAction').textContent = capsule ? `Купить капсулу · ${fullNumber(capsuleCost)} ✦` : `${casinoMode === 'slots' ? 'Крутить' : 'Сделать ставку'} · ${fullNumber(Math.floor(Number($('casinoBet').value) || 0))} ✦`;
         $('casinoAction').disabled = casinoBusy || state.sparks < (capsule ? capsuleCost : Math.max(100, Math.floor(Number($('casinoBet').value) || 0)));
@@ -657,7 +671,7 @@
           state.stats.casinoBoosts++;
         }
         $('casinoResult').innerHTML = `${prize.title}<br>Выплата: <b>${fullNumber(payout)} ✦</b> · ${net >= 0 ? 'прибыль' : 'итог'}: <b>${net >= 0 ? '+' : '−'}${fullNumber(Math.abs(net))} ✦</b>`;
-        casinoBusy = false; $('casinoSpeed').hidden = true; checkAchievements(); changed(); save(); haptic(prize.jackpot || prize.boost ? 'notify' : 'impact', prize.jackpot || prize.boost ? 'success' : 'light');
+        casinoBusy = false; checkAchievements(); changed(); save(); renderCasino(); haptic(prize.jackpot || prize.boost ? 'notify' : 'impact', prize.jackpot || prize.boost ? 'success' : 'light');
       }
       function finalSlotSymbols(prize) {
         if (prize.jackpot || prize.boost) return [prize.icon, prize.icon, prize.icon];
@@ -669,51 +683,58 @@
       function startSlotAnimation(prize, wager) {
         const reels = [...$('slotReels').querySelectorAll('.slot-reel')];
         slotFinals = finalSlotSymbols(prize); pendingSlotPrize = prize; pendingSlotWager = wager;
-        const stopDelays = [1900, 3550, 5200];
+        const stopDelays = [2200, 3950, 5700];
         $('casinoWheel').hidden = true; $('casinoReel').hidden = true; $('slotReels').hidden = false;
-        $('casinoSpeed').hidden = false; $('casinoSpeed').textContent = '⚡ Ускорить прокрутку ×3';
-        slotSpinSpeed = 1; slotIndexes = reels.map((_, i) => (i * 3) % slotSymbols.length); slotActive = reels.map(() => true);
+        slotSpinSpeed = slotFastMode ? 3 : 1; slotIndexes = reels.map((_, i) => (i * 3) % slotSymbols.length); slotActive = reels.map(() => true);
         reels.forEach((reel, i) => { reel.dataset.finalSymbol = slotFinals[i]; reel.classList.remove('stopping'); reel.classList.add('spinning'); reel.textContent = slotSymbols[slotIndexes[i]]; });
         const beginTicker = () => {
           clearInterval(slotRollInterval);
           slotRollInterval = setInterval(() => reels.forEach((reel, i) => {
             if (!slotActive[i]) return;
             slotIndexes[i] = (slotIndexes[i] + 1) % slotSymbols.length; reel.textContent = slotSymbols[slotIndexes[i]];
-          }), Math.max(48, 135 / slotSpinSpeed));
+          }), Math.max(55, 125 / slotSpinSpeed));
+        };
+        const stopReel = i => {
+          const reel = reels[i]; if (!slotActive[i]) return;
+          slotActive[i] = false; reel.classList.remove('spinning'); reel.classList.add('stopping'); reel.textContent = slotFinals[i];
+          if (slotActive.every(active => !active)) {
+            clearInterval(slotRollInterval); slotRollInterval = null;
+            setTimeout(() => { $('slotReels').hidden = true; settleCasinoPrize(prize, wager); pendingSlotPrize = null; }, 700);
+          }
         };
         const scheduleStops = () => reels.forEach((reel, i) => {
           clearTimeout(slotStopTimers[i]);
           const remaining = Math.max(100, slotStopDeadlines[i] - Date.now());
-          slotStopTimers[i] = setTimeout(() => {
-            slotActive[i] = false; reel.classList.remove('spinning'); reel.classList.add('stopping'); reel.textContent = results[i];
-            if (i === reels.length - 1) {
-              clearInterval(slotRollInterval); slotRollInterval = null;
-              setTimeout(() => { $('slotReels').hidden = true; $('casinoReel').hidden = true; settleCasinoPrize(prize, wager); pendingSlotPrize = null; }, 450);
-            }
-          }, remaining);
+          slotStopTimers[i] = setTimeout(() => stopReel(i), remaining);
         });
-        slotStopDeadlines = stopDelays.map(delay => Date.now() + delay); beginTicker(); scheduleStops();
+        slotStopDeadlines = stopDelays.map(delay => Date.now() + delay / slotSpinSpeed); beginTicker(); scheduleStops();
       }
       $('casinoSpeed').addEventListener('click', () => {
-        if (!casinoBusy || casinoMode !== 'slots' || slotSpinSpeed >= 3) return;
-        slotSpinSpeed = 3;
-        const now = Date.now(); slotStopDeadlines = slotStopDeadlines.map((deadline, i) => slotActive[i] ? now + Math.max(100, (deadline - now) / 3) : deadline);
-        $('casinoSpeed').textContent = '⚡ Ускорение включено ×3'; $('casinoSpeed').disabled = true;
-        slotStopTimers.forEach(clearTimeout); slotStopTimers = []; clearInterval(slotRollInterval);
-        const reels = [...$('slotReels').querySelectorAll('.slot-reel')];
-        slotRollInterval = setInterval(() => reels.forEach((reel, i) => { if (slotActive[i]) { slotIndexes[i] = (slotIndexes[i] + 1) % slotSymbols.length; reel.textContent = slotSymbols[slotIndexes[i]]; } }), 45);
-        reels.forEach((reel, i) => { if (!slotActive[i]) return; slotStopTimers[i] = setTimeout(() => {
-          slotActive[i] = false; reel.classList.remove('spinning'); reel.classList.add('stopping');
-          reel.textContent = reel.dataset.finalSymbol || '✦';
-          if (i === reels.length - 1 || slotActive.every(active => !active)) {
-            clearInterval(slotRollInterval); slotRollInterval = null;
-            setTimeout(() => { $('slotReels').hidden = true; settleCasinoPrize(pendingSlotPrize, pendingSlotWager); pendingSlotPrize = null; }, 450);
-          }
-        }, Math.max(100, slotStopDeadlines[i] - Date.now())); });
+        if (casinoMode !== 'slots') return;
+        const previousSpeed = slotSpinSpeed;
+        slotFastMode = !slotFastMode; slotSpinSpeed = slotFastMode ? 3 : 1;
+        try { localStorage.setItem('spark_slot_fast', slotFastMode ? '1' : '0'); } catch (_) {}
+        if (casinoBusy) {
+          const now = Date.now();
+          slotStopDeadlines = slotStopDeadlines.map((deadline, i) => slotActive[i] ? now + Math.max(140, (deadline - now) * previousSpeed / slotSpinSpeed) : deadline);
+          slotStopTimers.forEach(clearTimeout); slotStopTimers = []; clearInterval(slotRollInterval);
+          slotRollInterval = null;
+          const reels = [...$('slotReels').querySelectorAll('.slot-reel')];
+          slotRollInterval = setInterval(() => reels.forEach((reel, i) => { if (slotActive[i]) { slotIndexes[i] = (slotIndexes[i] + 1) % slotSymbols.length; reel.textContent = slotSymbols[slotIndexes[i]]; } }), Math.max(55, 125 / slotSpinSpeed));
+          reels.forEach((_, i) => { if (slotActive[i]) slotStopTimers[i] = setTimeout(() => {
+            slotActive[i] = false; reels[i].classList.remove('spinning'); reels[i].classList.add('stopping'); reels[i].textContent = slotFinals[i];
+            if (slotActive.every(active => !active)) {
+              clearInterval(slotRollInterval); slotRollInterval = null;
+              setTimeout(() => { $('slotReels').hidden = true; settleCasinoPrize(pendingSlotPrize, pendingSlotWager); pendingSlotPrize = null; }, 700);
+            }
+          }, Math.max(140, slotStopDeadlines[i] - Date.now())); });
+        }
+        renderCasino();
       });
       document.querySelector('.casino-modes').addEventListener('click', e => {
         const button = e.target.closest('[data-casino-mode]'); if (!button || casinoBusy) return;
         casinoMode = button.dataset.casinoMode;
+        renderCasino();
         document.querySelectorAll('.casino-mode').forEach(item => item.classList.toggle('active', item === button));
         $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoReel').hidden = casinoMode === 'roulette' || casinoMode === 'slots'; $('slotReels').hidden = casinoMode !== 'slots';
         $('casinoReel').textContent = casinoMode === 'capsule' ? '🪐' : '';
