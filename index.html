@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#090912">
+  <meta name="description" content="ПУЛЬСАР — космический кликер. Собирай звёздную пыль, открывай улучшения и разжигай галактику.">
+  <title>ПУЛЬСАР — космический кликер</title>
+  <script src="https://telegram.org/js/telegram-web-app.js?64"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101019;
+      --panel: rgba(29, 29, 43, .82);
+      --muted: #9999ad;
+      --text: #f7f5ff;
+      --purple: #9b73ff;
+      --pink: #ff76bb;
+      --mint: #73f0c0;
+      --line: rgba(255,255,255,.09);
+    }
+    * { box-sizing: border-box; }
+    html { touch-action: manipulation; }
+    body {
+      margin: 0; min-height: 100vh; min-height: 100dvh; color: var(--text);
+      font-family: Inter, ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(ellipse at 50% 10%, #30204d 0, #191624 34%, var(--bg) 75%);
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation; overscroll-behavior: none;
+    }
+    button { font: inherit; color: inherit; }
+    .app { width: min(100%, 520px); margin: auto; padding: max(22px, env(safe-area-inset-top), var(--tg-safe-area-inset-top, 0px)) 20px max(28px, env(safe-area-inset-bottom), var(--tg-safe-area-inset-bottom, 0px)); }
+    header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 28px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; font-size:20px; }
+    .brand-icon { width:36px; height:36px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(145deg,var(--pink),var(--purple)); box-shadow:0 5px 22px #9b73ff55; }
+    .reset { border:1px solid var(--line); background:#ffffff08; border-radius:12px; padding:9px 12px; color:var(--muted); font-size:12px; cursor:pointer; }
+    .balance-card { text-align:center; padding:19px 16px 12px; }
+    .eyebrow { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:1.8px; }
+    .balance { margin:8px 0 3px; font-size:clamp(42px, 12vw, 62px); font-weight:850; letter-spacing:-2.5px; line-height:1; font-variant-numeric:tabular-nums; text-shadow:0 0 32px #b38aff55; }
+    .spark-label { color:#d7c8ff; font-size:15px; }
+    .rate { display:inline-flex; margin-top:13px; gap:7px; align-items:center; color:var(--mint); font-size:13px; background:#73f0c012; border:1px solid #73f0c02a; border-radius:99px; padding:7px 12px; }
+    .play-area { display:grid; place-items:center; padding:22px 0 26px; position:relative; }
+    .orb-wrap { width:min(68vw, 280px); aspect-ratio:1; display:grid; place-items:center; position:relative; }
+    .orb-wrap::before,.orb-wrap::after { content:""; position:absolute; inset:6%; border-radius:50%; border:1px solid #c3a4ff1c; pointer-events:none; }
+    .orb-wrap::after { inset:-3%; border-style:dashed; border-color:#ffffff12; animation:spin 35s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .orb { width:82%; height:82%; border:0; border-radius:50%; cursor:pointer; touch-action:none; position:relative; overflow:hidden;
+      background:radial-gradient(circle at 36% 27%, #fff5ff 0 2%, #ffc6f4 5%, #bd8aff 22%, #754ce4 52%, #382568 78%);
+      box-shadow:inset -15px -22px 38px #21143e99, inset 10px 10px 24px #ffffffaa, 0 0 42px #a271ff77, 0 0 100px #9b73ff30;
+      transition:transform .1s ease, filter .15s;
+    }
+    .orb:active { transform:scale(.93); filter:brightness(1.16); }
+    .orb::before { content:""; position:absolute; width:45%; height:25%; top:13%; left:17%; border-radius:50%; background:#fff9; filter:blur(12px); transform:rotate(-32deg); }
+    .orb-emoji { position:relative; font-size:clamp(62px, 18vw, 94px); filter:drop-shadow(0 4px 12px #4b267c88); user-select:none; }
+    .tap-hint { color:var(--muted); font-size:13px; margin-top:8px; }
+    .section-head { display:flex; align-items:baseline; justify-content:space-between; margin:8px 2px 12px; }
+    h2 { margin:0; font-size:18px; letter-spacing:-.3px; }
+    .section-note { color:var(--muted); font-size:12px; }
+    .shop { display:grid; gap:10px; }
+    .upgrade { display:flex; align-items:center; gap:12px; padding:13px; width:100%; text-align:left; border:1px solid var(--line); border-radius:18px; background:var(--panel); cursor:pointer; transition:transform .12s,border-color .12s,background .12s; }
+    .upgrade:active { transform:scale(.985); }
+    .upgrade.affordable { border-color:#9b73ff52; background:linear-gradient(110deg,#33274b,#211e2e); }
+    .upgrade:disabled { cursor:default; opacity:.68; }
+    .upgrade-icon { flex:0 0 46px; width:46px; height:46px; display:grid; place-items:center; border-radius:14px; background:#ffffff0c; font-size:23px; }
+    .upgrade-info { flex:1; min-width:0; }
+    .upgrade-title { font-size:14px; font-weight:700; }
+    .upgrade-desc { color:var(--muted); font-size:11px; margin-top:4px; }
+    .upgrade-side { text-align:right; flex:0 0 auto; }
+    .upgrade-level { color:var(--muted); font-size:10px; margin-bottom:5px; }
+    .price { color:#e4d6ff; font-size:12px; font-weight:700; white-space:nowrap; }
+    .price span { color:#d9baff; }
+    .toast { position:fixed; top:max(18px,env(safe-area-inset-top)); left:50%; transform:translate(-50%,-20px); opacity:0; pointer-events:none; padding:10px 15px; border-radius:99px; background:#312546; border:1px solid #bd9aff55; box-shadow:0 8px 28px #0008; font-size:13px; transition:.2s; z-index:4; white-space:nowrap; }
+    .toast.show { transform:translate(-50%,0); opacity:1; }
+    .float { position:absolute; pointer-events:none; color:#fff; font-weight:800; font-size:22px; text-shadow:0 2px 10px #5738bbaa; animation:floatUp .8s ease-out forwards; }
+    @keyframes floatUp { from { opacity:1; transform:translateY(0) scale(.8); } to { opacity:0; transform:translateY(-95px) scale(1.15); } }
+    footer { color:#69697d; text-align:center; font-size:11px; padding-top:18px; }
+    @media (min-height:850px) { .play-area { padding:34px 0; } .balance-card { padding-top:26px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; } }
+    /* ПУЛЬСАР: новый космический интерфейс */
+    :root { --bg:#090912; --panel:rgba(20,20,35,.88); --muted:#9898b4; --text:#f8f6ff; --purple:#a879ff; --pink:#ff74c8; --mint:#9bf7d3; --line:rgba(200,180,255,.12); }
+    body { background:radial-gradient(ellipse at 50% 28%,#30214f 0,#171326 34%,#090912 76%); }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.42; background-image:radial-gradient(1px 1px at 8% 18%,#fff 99%,transparent),radial-gradient(1px 1px at 79% 13%,#d8c5ff 99%,transparent),radial-gradient(1.5px 1.5px at 91% 48%,#fff 99%,transparent),radial-gradient(1px 1px at 19% 65%,#d8c5ff 99%,transparent),radial-gradient(1px 1px at 68% 82%,#fff 99%,transparent),radial-gradient(1px 1px at 38% 9%,#fff 99%,transparent); background-size:360px 320px; }
+    .app { position:relative; z-index:1;padding-bottom:calc(105px + max(env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom, 0px))); }
+    .tab-panel { min-height:calc(100dvh - 142px); }
+    .tab-panel[hidden] { display:none; }
+    .shop-panel { min-height:calc(100dvh - 150px); }
+    .bottom-nav { position:fixed;z-index:10;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,520px);display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:9px 8px max(10px,env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom, 0px));background:linear-gradient(180deg,#11101cdd,#0d0c16f5);border-top:1px solid #c4a4ff1a;backdrop-filter:blur(18px); }
+    .nav-tab { display:grid;justify-items:center;gap:4px;border:1px solid transparent;border-radius:13px;padding:8px 2px;background:transparent;color:#89849f;cursor:pointer;touch-action:manipulation; }
+    .nav-tab.active { color:#f4eaff;background:#a879ff1b;border-color:#c39bff22; }
+    .nav-icon { font-size:19px;line-height:1; }
+    .nav-label { font-size:9px;font-weight:700;white-space:nowrap; }
+    .shop-panel .section-head { margin-top:14px; }
+    .asset-grid { display:grid;gap:10px; }
+    .asset-offer,.asset-card { display:flex;align-items:center;gap:12px;width:100%;padding:13px;text-align:left;border:1px solid #ffffff12;border-radius:18px;background:linear-gradient(125deg,#1e1b30e8,#141421ed);color:var(--text); }
+    .asset-offer { cursor:pointer;transition:transform .12s,border-color .12s; }
+    .asset-offer:active { transform:scale(.985); }
+    .asset-offer.affordable { border-color:#ac83ff65;background:linear-gradient(115deg,#35274f,#211d32); }
+    .asset-offer:disabled { cursor:default;opacity:.58; }
+    .asset-symbol { flex:0 0 46px;width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#ffffff12,#9b73ff18);font-size:24px; }
+    .asset-copy { flex:1;min-width:0; }
+    .asset-name { display:block;font-size:13px;font-weight:750; }
+    .asset-desc { display:block;margin-top:4px;color:var(--muted);font-size:10px;line-height:1.4; }
+    .asset-type { color:#aaa0c7;font-size:9px;text-transform:uppercase;letter-spacing:1px; }
+    .asset-side { flex:0 0 auto;text-align:right;color:#dfceff;font-size:11px;font-weight:700; }
+    .asset-side small { display:block;margin-top:5px;color:var(--mint);font-size:10px;font-weight:600; }
+    .system-grid { display:grid;gap:9px; }
+    .asset-card { cursor:pointer;border-color:#ffffff12; }
+    .asset-card.selected { border-color:#a879ff88;background:linear-gradient(110deg,#34264f,#201c31); }
+    .asset-card .asset-side { color:#bfa6ff; }
+    .asset-detail { margin-top:14px;padding:17px;border:1px solid #bd9aff40;border-radius:20px;background:linear-gradient(145deg,#211b35,#12121f);box-shadow:0 10px 30px #0003; }
+    .asset-detail[hidden] { display:none; }
+    .asset-detail-head { display:flex;align-items:center;gap:12px;margin-bottom:13px; }
+    .asset-detail .asset-symbol { width:54px;height:54px;font-size:28px; }
+    .asset-stat-row { display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid #ffffff10;color:#a9a3be;font-size:11px; }
+    .asset-stat-row b { color:#f1eaff;text-align:right; }
+    .asset-upgrade-button { width:100%;margin-top:12px;padding:12px;border:1px solid #bd9aff55;border-radius:13px;background:linear-gradient(135deg,#8e5bea,#6447c3);font-weight:750;cursor:pointer; }
+    .asset-upgrade-button:disabled { opacity:.55;cursor:default; }
+    .empty-system { padding:28px 18px;text-align:center;border:1px dashed #c4a4ff35;border-radius:18px;color:#aaa2c6;font-size:12px;line-height:1.6; }
+    .game-upgrades-head { margin-top:26px; }
+    header { margin-bottom:19px; }
+    .brand { gap:11px; font-size:18px; letter-spacing:2px; }
+    .brand-icon { width:39px;height:39px;border-radius:14px;background:linear-gradient(145deg,#ff85cc,#9666ff 68%,#6f7bff);box-shadow:0 0 28px #a36cff88;font-size:19px; }
+    .reset { background:#171625aa; border-color:#ffffff16; }
+    .balance-card { padding:20px 16px 10px; }
+    .eyebrow { color:#c1addf; letter-spacing:2.5px; font-size:10px; }
+    .balance { font-size:clamp(50px,14vw,72px); letter-spacing:-3px; text-shadow:0 0 36px #b28aff77; }
+    .spark-label { color:#c3b6e7; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+    .rate { background:#a878ff15;border-color:#b99aff33;color:#b6ffdc; }
+    .play-area { padding:27px 0 28px; }
+    .orb-wrap { width:min(70vw,300px); }
+    .orb-wrap::before { inset:1%; border:1px solid #cbaaff28; box-shadow:0 0 45px #9e66ff18,inset 0 0 35px #a86dff12; }
+    .orb-wrap::after { inset:-8%; border:1px dashed #d8c5ff35; animation:spin 48s linear infinite; }
+    .orb { width:78%;height:78%;background:radial-gradient(circle at 37% 29%,#fff 0 1.5%,#ffd9fb 4%,#ff9cda 11%,#b070ff 28%,#5944cb 54%,#17142f 82%);box-shadow:inset -20px -26px 42px #100c28bb,inset 12px 12px 30px #ffffffaa,0 0 28px #c787ff99,0 0 75px #a06cff66,0 0 140px #7347e522; }
+    .orb:active { transform:scale(.92); filter:brightness(1.28); }
+    .orb-emoji { font-size:clamp(72px,20vw,105px); color:#fff4ff; text-shadow:0 0 28px #fff,0 0 52px #ffd1ff; }
+    .tap-hint { color:#aaa2c6; letter-spacing:.15px; }
+    .section-head { margin-top:10px; margin-bottom:14px; }
+    h2 { font-size:19px; }
+    .section-note { color:#b8a4df; }
+    .upgrade { border-radius:20px;background:linear-gradient(125deg,#1e1b30e8,#141421ed);border-color:#ffffff12;padding:14px;box-shadow:0 8px 26px #0002; }
+    .upgrade.affordable { border-color:#ac83ff65;background:linear-gradient(115deg,#35274f,#211d32);box-shadow:0 0 24px #a16aff15; }
+    .upgrade-icon { background:linear-gradient(145deg,#ffffff12,#9b73ff18);border:1px solid #ffffff0b; }
+    .upgrade-title { font-size:14px; }
+    .price { color:#eadfff; }
+    footer { color:#76728e; }
+    @media (min-height:850px) { .play-area { padding:38px 0 35px; } }
+    .mini-game { margin:8px 0 25px; }
+    .game-lobby,.game-panel { border:1px solid #c4a4ff2b;border-radius:22px;background:linear-gradient(135deg,#1c1930ee,#10101eee);box-shadow:0 12px 32px #0003; }
+    .game-lobby { display:flex;align-items:center;gap:13px;padding:16px; }
+    .lobby-icon { flex:0 0 48px;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#392553,#201b39);font-size:24px; }
+    .lobby-copy { flex:1;min-width:0; }
+    .lobby-title { font-size:14px;font-weight:750; }
+    .lobby-desc { margin-top:5px;color:var(--muted);font-size:11px;line-height:1.45; }
+    .launch-button,.exit-game { border:1px solid #bd9aff55;border-radius:13px;padding:10px 13px;background:linear-gradient(135deg,#8e5bea,#6447c3);font-size:12px;font-weight:750;cursor:pointer;box-shadow:0 5px 18px #8e5bea33;white-space:nowrap; }
+    .launch-button:active,.exit-game:active { transform:scale(.97); }
+    .game-panel { padding:11px; }
+    .game-panel[hidden],.game-lobby[hidden] { display:none; }
+    .game-toolbar { display:flex;align-items:center;justify-content:space-between;padding:2px 2px 10px; }
+    .game-status { color:#c4b7e5;font-size:11px; }
+    .exit-game { padding:8px 11px;background:#ffffff0c;box-shadow:none;border-color:#ffffff18;color:#d1c8e5; }
+    .catch-field { position:relative; height:230px; overflow:hidden; isolation:isolate; border:1px solid #c4a4ff2b; border-radius:16px; background:radial-gradient(ellipse at 50% 110%,#754ba933,transparent 65%),linear-gradient(135deg,#17152aee,#0f1020ee); box-shadow:inset 0 0 36px #a979ff0b,0 12px 32px #0003; }
+    .catch-field::before { content:""; position:absolute; inset:0; opacity:.4; pointer-events:none; background-image:radial-gradient(1px 1px at 14% 25%,#fff 99%,transparent),radial-gradient(1px 1px at 73% 68%,#fff 99%,transparent),radial-gradient(1px 1px at 45% 42%,#d3bcff 99%,transparent),radial-gradient(1px 1px at 88% 18%,#fff 99%,transparent); }
+    .field-label { position:absolute; z-index:1;left:13px;top:11px;color:#a69abf;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;pointer-events:none; }
+    .field-hint { position:absolute;z-index:1;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;color:#827d9f;font-size:12px;pointer-events:none; }
+    .flyby { position:absolute;z-index:2;top:-60px;left:0;display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #ffffff30;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff32,#9b73ff20 62%,#0c0b18aa);box-shadow:0 0 22px #bd91ff77;cursor:pointer;touch-action:manipulation;animation:flyby 3.6s linear forwards; }
+    .flyby.planet { width:54px;height:54px;box-shadow:0 0 24px #ff9dba66; }
+    .flyby.bomb { border-color:#ff796e99;background:radial-gradient(circle at 35% 30%,#ffb7a944,#ed39402e 62%,#210d18ee);box-shadow:0 0 24px #ff514e99; }
+    .flyby.asteroid { border-color:#ffb26099;background:radial-gradient(circle at 35% 30%,#ffe0a944,#bd602a35 62%,#27130bee);box-shadow:0 0 24px #ff9e4e88; }
+    .flyby span { font-size:26px;filter:drop-shadow(0 0 7px #fff9);pointer-events:none; }
+    @keyframes flyby { from { top:-62px;transform:rotate(0deg) scale(.78); } to { top:calc(100% + 12px);transform:rotate(330deg) scale(1); } }
+    .ship-lobby { margin-top:16px; }
+    .ship-field { position:relative;height:330px;overflow:hidden;isolation:isolate;border:1px solid #c4a4ff2b;border-radius:18px;background:radial-gradient(ellipse at 50% 100%,#5441a333,transparent 60%),linear-gradient(180deg,#111322,#17142b);touch-action:none; }
+    .ship-field::before { content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;background-image:linear-gradient(#c9b1ff0b 1px,transparent 1px),linear-gradient(90deg,#c9b1ff0b 1px,transparent 1px);background-size:33.33% 100%,33.33% 100%; }
+    .ship-lane-mark { position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(transparent,#c6a6ff17,transparent);pointer-events:none; }
+    .ship-player { position:absolute;z-index:3;bottom:10px;left:50%;width:62px;height:68px;display:grid;place-items:center;filter:drop-shadow(0 0 12px #78d9ffcc);transform:translateX(-50%);transition:left .07s linear;pointer-events:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none; }
+    .fighter-svg { display:block;width:60px;height:68px;overflow:visible;filter:drop-shadow(0 0 8px #62caff77); }
+    .ship-player:active { cursor:grabbing; }
+    .ship-hazard { position:absolute;z-index:2;top:-44px;width:38px;height:38px;display:grid;place-items:center;font-size:27px;transform:translateX(-50%);filter:drop-shadow(0 0 8px #ff9066bb);animation:shipFall 1.8s linear forwards; }
+    .ship-hazard.pickup { filter:drop-shadow(0 0 12px #fff174); }
+    @keyframes shipFall { to { top:calc(100% + 46px); } }
+    .ship-controls { display:flex;justify-content:center;gap:16px;margin-top:11px; }
+    .ship-controls button { width:74px;height:42px;border:1px solid #bd9aff38;border-radius:13px;background:#a879ff19;font-size:20px;cursor:pointer;touch-action:manipulation; }
+    .ship-result { padding:18px 10px 6px;text-align:center; }
+    .ship-result-title { font-weight:800;font-size:17px; }
+    .ship-result-score { color:#cdb6ff;font-size:13px;margin:8px 0 13px;line-height:1.6; }
+    .ship-result[hidden] { display:none; }
+    .round-fullscreen { position:fixed!important;inset:0!important;z-index:30;display:flex;flex-direction:column;gap:10px;padding:max(12px,env(safe-area-inset-top),var(--tg-safe-area-inset-top,0px)) 12px max(12px,env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom,0px));border:0;border-radius:0;overflow:hidden; }
+    .round-fullscreen .catch-field,.round-fullscreen .ship-field { flex:1;min-height:0;height:auto;border-radius:16px; }
+    .round-report { position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:#090912ee;backdrop-filter:blur(16px);text-align:center; }
+    .round-report[hidden] { display:none; }
+    .round-report-card { width:min(100%,360px);padding:28px 22px;border:1px solid #bd9aff55;border-radius:24px;background:linear-gradient(145deg,#28203e,#12111f);box-shadow:0 0 70px #875bea33; }
+    .round-report h2 { margin:0 0 12px;font-size:24px; }
+    .round-report p { margin:8px 0;color:#d5c9ed;line-height:1.6; }
+    .round-report small { display:block;margin-top:18px;color:#a69abf; }
+    .achievements { display:grid;gap:9px; }
+    .achievement { display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,#181727dd,#11111ddd); }
+    .achievement.done { border-color:#73f0c044;background:linear-gradient(110deg,#19332c99,#171727dd); }
+    .achievement-icon { flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#ffffff0c;font-size:20px; }
+    .achievement-info { flex:1;min-width:0; }
+    .achievement-title { font-size:12px;font-weight:750; }
+    .achievement-desc { margin-top:4px;color:var(--muted);font-size:10px; }
+    .achievement-reward { flex:0 0 auto;color:#d9c3ff;font-size:11px;font-weight:700;text-align:right; }
+    .achievement.done .achievement-reward { color:var(--mint); }
+    .achievement-count { display:block;margin-top:3px;color:#85819c;font-size:9px;font-weight:500; }
+    .achievements-head { margin-top:25px; }
+    @media (prefers-reduced-motion:reduce) { .flyby { animation-duration:8s; } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand"><span class="brand-icon">✦</span> ПУЛЬСАР</div>
+      <button class="reset" id="reset" type="button">Сбросить</button>
+    </header>
+    <div class="tab-panel" id="homePanel" data-panel="home">
+    <section class="balance-card" aria-live="polite">
+      <div class="eyebrow">ЯДРО ГАЛАКТИКИ</div>
+      <div class="balance" id="balance">0</div>
+      <div class="spark-label">звёздной пыли</div>
+      <div class="rate">✦ <span id="rate">+0</span> в секунду</div>
+    </section>
+    <section class="play-area" aria-label="Сбор искр">
+      <div class="orb-wrap" id="orbWrap">
+        <button class="orb" id="tap" type="button" aria-label="Нажми, чтобы собрать искры"><span class="orb-emoji">✦</span></button>
+      </div>
+      <div class="tap-hint">Коснись ядра — зажги новую звезду</div>
+    </section>
+    <section>
+      <div class="section-head"><h2>Знаки исследователя</h2><span class="section-note">Награды за открытия 🏆</span></div>
+      <div class="achievements" id="achievements"></div>
+    </section>
+    </div>
+    <div class="tab-panel" id="gamesPanel" data-panel="games" hidden>
+    <section class="mini-game" aria-label="Мини-игра: ловля космических объектов">
+      <div class="section-head"><h2>Космический улов</h2><span class="section-note">Мини-игра 01</span></div>
+      <div class="game-lobby" id="gameLobby"><span class="lobby-icon">🪐</span><span class="lobby-copy"><span class="lobby-title">Пояс метеоров</span><span class="lobby-desc">Раунд 40 секунд · лови звёзды и планеты, избегай бомб</span></span><button class="launch-button" id="launchGame" type="button">Раунд · 40 сек</button></div>
+      <div class="game-panel" id="gamePanel" hidden><div class="game-toolbar"><span class="game-status" id="gameStatus">Лови объекты · избегай бомб и астероидов</span><button class="exit-game" id="exitGame" type="button">Выйти</button></div><div class="catch-field" id="catchField"><span class="field-label">Поймай звезду · избегай опасностей</span></div></div>
+    </section>
+    <section class="mini-game" aria-label="Мини-игра: пилотирование космолёта">
+      <div class="section-head"><h2>Звёздный пилот</h2><span class="section-note">Мини-игра 02</span></div>
+      <div class="game-lobby ship-lobby" id="shipLobby"><span class="lobby-icon">🚀</span><span class="lobby-copy"><span class="lobby-title">Прорыв сквозь пояс</span><span class="lobby-desc">Раунд 40 секунд · уклоняйся от ракет и астероидов. Рекорд: <b id="shipBestLobby">0</b></span></span><button class="launch-button" id="launchShip" type="button">Раунд · 40 сек</button></div>
+      <div class="game-panel" id="shipPanel" hidden><div class="game-toolbar"><span class="game-status" id="shipStatus">Очки: 0</span><button class="exit-game" id="exitShip" type="button">Выйти</button></div><div class="ship-field" id="shipField"><span class="ship-lane-mark" style="left:33.33%"></span><span class="ship-lane-mark" style="left:66.66%"></span><span class="ship-player" id="shipPlayer" role="img" aria-label="Космический истребитель"><svg class="fighter-svg" viewBox="0 0 64 72" aria-hidden="true"><defs><linearGradient id="hull" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4fdff"/><stop offset=".38" stop-color="#9fc6ec"/><stop offset=".72" stop-color="#526eaa"/><stop offset="1" stop-color="#27345e"/></linearGradient><linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#86eaff"/><stop offset="1" stop-color="#6274cf"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0ffff"/><stop offset=".35" stop-color="#69e5ff"/><stop offset="1" stop-color="#3272cf"/></linearGradient><linearGradient id="engine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d6ffff"/><stop offset=".45" stop-color="#5eeaff"/><stop offset="1" stop-color="#8772ff"/></linearGradient></defs><path d="M31 3 Q37 12 39 25 L59 41 L63 55 L43 49 L39 62 L32 69 L25 62 L21 49 L1 55 L5 41 L25 25 Q27 12 31 3Z" fill="url(#hull)" stroke="#d8f8ff" stroke-width="1.5" stroke-linejoin="round"/><path d="M25 31 9 45 23 43 28 35M39 31l16 14-14-2-5-8" fill="#354777" stroke="url(#wing)" stroke-width="1.5" stroke-linejoin="round"/><path d="M32 13 Q38 23 36 37 L32 43 L28 37 Q26 23 32 13Z" fill="url(#glass)" stroke="#d5fbff" stroke-width="1.3"/><path d="M24 49 28 53 25 63 20 59ZM40 49 36 53 39 63 44 59Z" fill="#26345e" stroke="#91eaff" stroke-width="1.2"/><path d="M27 64 32 71 37 64 35 70 32 72 29 70Z" fill="url(#engine)"/><path d="M11 48 18 46M53 48 46 46" stroke="#f7dc9c" stroke-width="2" stroke-linecap="round"/></svg></span></div><div class="ship-controls"><button id="shipLeft" type="button" aria-label="Влево">◀</button><button id="shipRight" type="button" aria-label="Вправо">▶</button></div><div class="ship-result" id="shipResult" hidden><div class="ship-result-title">Полёт завершён</div><div class="ship-result-score" id="shipResultScore"></div><button class="launch-button" id="replayShip" type="button">Ещё полёт</button></div></div>
+    </section>
+    <section>
+      <div class="section-head game-upgrades-head"><h2>Улучшения мини-игр</h2><span class="section-note">Только для игровых режимов</span></div>
+      <div class="shop" id="gameUpgrades"></div>
+    </section>
+    </div>
+    <div class="tab-panel shop-panel" id="systemPanel" data-panel="system" hidden>
+      <section><div class="section-head"><h2>Твоя система</h2><span class="section-note" id="assetIncomeLabel">✦ 0 / сек</span></div><div class="system-grid" id="ownedAssets"></div><div class="asset-detail" id="assetDetail" hidden></div></section>
+    </div>
+    <div class="tab-panel shop-panel" id="shipyardPanel" data-panel="shipyard" hidden>
+      <section><div class="section-head"><h2>Космическая верфь</h2><span class="section-note">Построй свою систему</span></div><div class="asset-grid" id="shipyard"></div></section>
+    </div>
+    <div class="tab-panel shop-panel" id="shopPanel" data-panel="shop" hidden>
+    <section>
+      <div class="section-head"><h2>Технологии ядра</h2><span class="section-note">Усиливай добычу ✨</span></div>
+      <div class="shop" id="shop"></div>
+    </section>
+    </div>
+    <footer>Твой космос ждёт возвращения · прогресс сохранён</footer>
+    <nav class="bottom-nav" aria-label="Разделы игры">
+      <button class="nav-tab active" data-tab="home" type="button" aria-current="page"><span class="nav-icon">🌌</span><span class="nav-label">Ядро</span></button>
+      <button class="nav-tab" data-tab="system" type="button"><span class="nav-icon">🪐</span><span class="nav-label">Система</span></button>
+      <button class="nav-tab" data-tab="shipyard" type="button"><span class="nav-icon">🛸</span><span class="nav-label">Верфь</span></button>
+      <button class="nav-tab" data-tab="shop" type="button"><span class="nav-icon">⚙️</span><span class="nav-label">Модули</span></button>
+      <button class="nav-tab" data-tab="games" type="button"><span class="nav-icon">☄️</span><span class="nav-label">Игры</span></button>
+    </nav>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <div class="round-report" id="roundReport" hidden><div class="round-report-card"><h2 id="roundReportTitle">Раунд завершён</h2><p id="roundReportText"></p><small>Возвращаемся в меню…</small></div></div>
+  <script>
+    (async () => {
+      const telegram = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+      if (telegram) {
+        try { telegram.expand(); telegram.setHeaderColor('#090912'); telegram.setBackgroundColor('#090912'); telegram.disableVerticalSwipes?.(); } catch { /* Continue if a Telegram client omits an optional method. */ }
+      }
+      document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
+      document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
+      const upgrades = [
+        { id: 'power', icon: '☄️', name: 'Импульс пульсара', desc: '+1 пыль за каждое касание', base: 15, growth: 1.55 },
+        { id: 'auto', icon: '🛰️', name: 'Дрон-собиратель', desc: '+1 звёздная пыль в секунду', base: 50, growth: 1.62 },
+        { id: 'mult', icon: '💎', name: 'Квантовый кристалл', desc: '+5 к силе каждого касания', base: 250, growth: 1.8 },
+        { id: 'forge', icon: '🌠', name: 'Звёздная кузница', desc: '+3 пыли за каждое касание', base: 180, growth: 1.72 },
+        { id: 'expedition', icon: '🚀', name: 'Экспедиционный флот', desc: '+3 звёздной пыли в секунду', base: 220, growth: 1.68 },
+        { id: 'gravity', icon: '🌀', name: 'Гравитационная линза', desc: '+25% награды за космический улов', base: 320, growth: 1.75 }
+      ];
+      const worlds = [
+        { id: 'earth', icon: '🌍', name: 'Земля', type: 'Планета', desc: 'Зелёный мир с океанами и развитой инфраструктурой.', cost: 120, income: 2 },
+        { id: 'mars', icon: '🔴', name: 'Марс', type: 'Планета', desc: 'Красная планета для первых колоний.', cost: 520, income: 7 },
+        { id: 'saturn', icon: '🪐', name: 'Сатурн', type: 'Планета', desc: 'Газовый гигант с богатыми кольцами.', cost: 2400, income: 28 },
+        { id: 'exoplanet', icon: '🟣', name: 'Эридан', type: 'Планета', desc: 'Далёкий мир с редкими кристаллическими ресурсами.', cost: 12500, income: 115 },
+        { id: 'moon', icon: '🌕', name: 'Луна', type: 'Спутник', desc: 'Ближайший спутник и удобная точка для экспедиций.', cost: 360, income: 5 },
+        { id: 'europa', icon: '🌑', name: 'Европа', type: 'Спутник', desc: 'Ледяной спутник Юпитера с запасами водяного льда.', cost: 1550, income: 20 },
+        { id: 'titan', icon: '🟠', name: 'Титан', type: 'Спутник', desc: 'Крупный спутник с плотной атмосферой.', cost: 5200, income: 58 },
+        { id: 'lunar_base', icon: '🏗️', name: 'Лунная база', type: 'Космическая база', desc: 'Автономный форпост добывает ресурсы на Луне.', cost: 1900, income: 24 },
+        { id: 'station', icon: '🛰️', name: 'Орбитальная станция', type: 'Космическая база', desc: 'Научный центр и узел межпланетной торговли.', cost: 8200, income: 92 },
+        { id: 'deep_base', icon: '🚀', name: 'Дальняя база', type: 'Космическая база', desc: 'Большой аванпост за пределами родной системы.', cost: 32000, income: 280 }
+      ];
+      const gameUpgradeDefs = [
+        { id: 'catchBonus', icon: '🧲', name: 'Магнитный улов', desc: 'На 20% больше пыли за звёзды и планеты', base: 350, growth: 1.85, max: 5, group: 'Космический улов' },
+        { id: 'salvage', icon: '🛡️', name: 'Бронированный контейнер', desc: 'Штрафы от бомб и астероидов меньше на 10', base: 500, growth: 1.9, max: 4, group: 'Космический улов' },
+        { id: 'engine', icon: '⚡', name: 'Ионный двигатель', desc: 'Ракеты и астероиды падают на 8% медленнее за уровень', base: 650, growth: 1.8, max: 5, group: 'Звёздный пилот' },
+        { id: 'shield', icon: '🔰', name: 'Щит истребителя', desc: 'Поглощает одно столкновение за уровень в каждом полёте', base: 1400, growth: 2.15, max: 3, group: 'Звёздный пилот' },
+        { id: 'magnet', icon: '🌠', name: 'Звёздный магнит', desc: 'Каждый собранный бонус даёт ещё +2 очка за уровень', base: 900, growth: 1.9, max: 5, group: 'Звёздный пилот' }
+      ];
+      const achievements = [
+        { id: 'first_tap', icon: '✨', name: 'Первый импульс', desc: 'Нажми на ядро один раз', goal: 1, reward: 15, test: s => s.stats.taps },
+        { id: 'tap_100', icon: '👆', name: 'Ритм пульсара', desc: 'Собери 100 импульсов', goal: 100, reward: 100, test: s => s.stats.taps },
+        { id: 'first_catch', icon: '🌟', name: 'Звёздный ловец', desc: 'Поймай первый объект', goal: 1, reward: 40, test: s => s.stats.catches },
+        { id: 'catch_25', icon: '🪐', name: 'Хозяин орбиты', desc: 'Поймай 25 объектов', goal: 25, reward: 250, test: s => s.stats.catches },
+        { id: 'first_upgrade', icon: '🛠️', name: 'Инженер галактики', desc: 'Купи первое улучшение', goal: 1, reward: 75, test: s => s.stats.upgradesBought },
+        { id: 'three_assets', icon: '🌌', name: 'Владыка системы', desc: 'Построй три объекта в своей системе', goal: 3, reward: 180, test: s => s.assets.length },
+        { id: 'pilot_10', icon: '🚀', name: 'Первый полёт', desc: 'Продержись в космосе 10 секунд', goal: 10, reward: 100, test: s => s.stats.shipBest },
+        { id: 'rich', icon: '💫', name: 'Звёздный магнат', desc: 'Накопи 1 000 звёздной пыли', goal: 1000, reward: 300, test: s => s.sparks }
+      ];
+      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0 }, assets: [], assetNext: 1, achievements: [], last: Date.now() };
+      let state;
+      let hasLocalSave = false;
+      try {
+        const localSave = localStorage.getItem('iskra-save');
+        hasLocalSave = Boolean(localSave);
+        state = { ...initial, ...(localSave ? JSON.parse(localSave) : {}) };
+      }
+      catch { state = { ...initial }; }
+      if (telegram && telegram.CloudStorage && telegram.CloudStorage.getItem) {
+        try {
+          const cloudSave = await new Promise(resolve => {
+            const timeout = setTimeout(() => resolve(null), 1800);
+            telegram.CloudStorage.getItem('pulsar_save', (error, value) => {
+              clearTimeout(timeout); resolve(error ? null : value || null);
+            });
+          });
+          if (cloudSave) {
+            const cloudState = JSON.parse(cloudSave);
+            if (!hasLocalSave || Number(cloudState.last) >= Number(state.last)) state = { ...initial, ...cloudState };
+          }
+        } catch { /* Keep the local save if Telegram CloudStorage is unavailable. */ }
+      }
+      state.levels = { ...initial.levels, ...(state.levels || {}) };
+      state.gameUpgrades = { ...initial.gameUpgrades, ...(state.gameUpgrades || {}) };
+      state.stats = { ...initial.stats, ...(state.stats || {}) };
+      const savedAssets = Array.isArray(state.assets) ? state.assets : [];
+      state.assets = [];
+      savedAssets.forEach(asset => {
+        if (!worlds.some(world => world.id === asset.typeId)) return;
+        asset.uid = Number(asset.uid) || state.assets.length + 1;
+        asset.level = Math.max(1, Number(asset.level) || 1);
+        const existing = state.assets.find(item => item.typeId === asset.typeId);
+        if (!existing) state.assets.push(asset);
+        else if (asset.level > existing.level) { existing.level = asset.level; existing.uid = asset.uid; }
+      });
+      state.assetNext = Math.max(Number(state.assetNext) || 1, ...state.assets.map(asset => asset.uid + 1));
+      state.achievements = Array.isArray(state.achievements) ? state.achievements : [];
+      let selectedAssetId = null;
+      state.sparks = Math.max(0, Number(state.sparks) || 0);
+      const $ = id => document.getElementById(id);
+      const haptic = (kind, value) => {
+        try {
+          if (kind === 'notify') telegram?.HapticFeedback?.notificationOccurred(value);
+          else telegram?.HapticFeedback?.impactOccurred(value || 'light');
+        } catch { /* Haptics are optional. */ }
+      };
+      const compact = n => Intl.NumberFormat('ru-RU', { maximumFractionDigits: n < 100 ? 1 : 0, notation: n >= 1e6 ? 'compact' : 'standard' }).format(n);
+      const price = u => Math.floor(u.base * Math.pow(u.growth, state.levels[u.id]));
+      const gameUpgradePrice = u => Math.floor(u.base * Math.pow(u.growth, state.gameUpgrades[u.id]));
+      const tapPower = () => 1 + state.levels.power + state.levels.mult * 5 + state.levels.forge * 3;
+      const assetType = asset => worlds.find(world => world.id === asset.typeId);
+      const assetYield = asset => { const world = assetType(asset); return world ? world.income * Math.pow(1.55, Math.max(0, asset.level - 1)) : 0; };
+      const assetIncome = () => state.assets.reduce((sum, asset) => sum + assetYield(asset), 0);
+      const perSecond = () => state.levels.auto + state.levels.expedition * 3 + assetIncome();
+      const worldPrice = world => world.cost;
+      const assetUpgradePrice = asset => { const world = assetType(asset); return Math.floor(world.cost * .72 * Math.pow(1.68, Math.max(0, asset.level - 1))); };
+      function save() {
+        state.last = Date.now();
+        const serialized = JSON.stringify(state);
+        try { localStorage.setItem('iskra-save', serialized); } catch { /* Storage may be disabled in private or embedded browsers. */ }
+        if (telegram && telegram.CloudStorage && telegram.CloudStorage.setItem && serialized.length <= 4096) {
+          try { telegram.CloudStorage.setItem('pulsar_save', serialized, () => {}); } catch { /* Cloud save is optional outside supported Telegram clients. */ }
+        }
+      }
+      function render() {
+        $('balance').textContent = compact(state.sparks);
+        $('rate').textContent = compact(perSecond());
+        $('shipBestLobby').textContent = compact(state.stats.shipBest || 0);
+        $('shop').innerHTML = upgrades.map(u => {
+          const cost = price(u), affordable = state.sparks >= cost;
+          return `<button class="upgrade ${affordable ? 'affordable' : ''}" data-upgrade="${u.id}" ${affordable ? '' : 'disabled'} type="button">
+            <span class="upgrade-icon">${u.icon}</span><span class="upgrade-info"><span class="upgrade-title">${u.name}</span><span class="upgrade-desc">${u.desc}</span></span>
+            <span class="upgrade-side"><span class="upgrade-level">ур. ${state.levels[u.id]}</span><span class="price">✦ ${compact(cost)}</span></span></button>`;
+        }).join('');
+        $('gameUpgrades').innerHTML = gameUpgradeDefs.map(u => {
+          const level = state.gameUpgrades[u.id], maxed = level >= u.max, cost = gameUpgradePrice(u), affordable = state.sparks >= cost;
+          return `<button class="upgrade ${affordable && !maxed ? 'affordable' : ''}" data-game-upgrade="${u.id}" type="button" ${affordable && !maxed ? '' : 'disabled'}><span class="upgrade-icon">${u.icon}</span><span class="upgrade-info"><span class="upgrade-title">${u.name}</span><span class="upgrade-desc">${u.group} · ${u.desc}</span></span><span class="upgrade-side"><span class="upgrade-level">ур. ${level} / ${u.max}</span><span class="price">${maxed ? 'MAX' : `✦ ${compact(cost)}`}</span></span></button>`;
+        }).join('');
+        $('achievements').innerHTML = achievements.map(a => {
+          const value = Math.min(a.goal, a.test(state)), done = state.achievements.includes(a.id);
+          return `<div class="achievement ${done ? 'done' : ''}"><span class="achievement-icon">${a.icon}</span><span class="achievement-info"><span class="achievement-title">${a.name}</span><span class="achievement-desc">${a.desc}</span></span><span class="achievement-reward">${done ? '✓ получено' : `✦ ${compact(a.reward)}`}<span class="achievement-count">${done ? 'выполнено' : `${compact(value)} / ${compact(a.goal)}`}</span></span></div>`;
+        }).join('');
+        renderAssetViews();
+      }
+      function renderAssetViews() {
+        $('assetIncomeLabel').textContent = `✦ ${compact(assetIncome())} / сек`;
+        $('shipyard').innerHTML = worlds.map(world => {
+          const cost = worldPrice(world), owned = state.assets.some(asset => asset.typeId === world.id), affordable = state.sparks >= cost;
+          return `<button class="asset-offer ${affordable && !owned ? 'affordable' : ''}" data-buy-world="${world.id}" type="button" ${affordable && !owned ? '' : 'disabled'}><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type}</span><span class="asset-name">${world.name}</span><span class="asset-desc">${world.desc}</span></span><span class="asset-side">${owned ? 'Уже куплена' : `✦ ${compact(cost)}`}<small>+${compact(world.income)} / сек</small></span></button>`;
+        }).join('');
+        const owned = $('ownedAssets');
+        if (!state.assets.length) {
+          owned.innerHTML = '<div class="empty-system">Твоя система пока пуста.<br>Загляни на <b>Верфь</b>, чтобы купить первую планету, спутник или базу.</div>';
+          $('assetDetail').hidden = true; selectedAssetId = null; return;
+        }
+        if (!state.assets.some(asset => asset.uid === selectedAssetId)) selectedAssetId = null;
+        owned.innerHTML = state.assets.map(asset => {
+          const world = assetType(asset); if (!world) return '';
+          return `<button class="asset-card ${asset.uid === selectedAssetId ? 'selected' : ''}" data-owned-asset="${asset.uid}" type="button"><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type} · ур. ${asset.level}</span><span class="asset-name">${world.name}</span></span><span class="asset-side">+${compact(assetYield(asset))}<small>/ сек</small></span></button>`;
+        }).join('');
+        const selected = state.assets.find(asset => asset.uid === selectedAssetId);
+        const detail = $('assetDetail');
+        if (!selected) { detail.hidden = true; detail.innerHTML = ''; return; }
+        const world = assetType(selected), upgradeCost = assetUpgradePrice(selected), affordable = state.sparks >= upgradeCost;
+        detail.hidden = false;
+        detail.innerHTML = `<div class="asset-detail-head"><span class="asset-symbol">${world.icon}</span><span><span class="asset-type">${world.type} · уровень ${selected.level}</span><span class="asset-name">${world.name}</span></span></div><div class="asset-desc">${world.desc}</div><div class="asset-stat-row"><span>Текущий доход</span><b>+${compact(assetYield(selected))} пыли / сек</b></div><div class="asset-stat-row"><span>Доход после улучшения</span><b>+${compact(world.income * Math.pow(1.55, selected.level))} пыли / сек</b></div><button class="asset-upgrade-button" data-upgrade-asset="${selected.uid}" type="button" ${affordable ? '' : 'disabled'}>Улучшить · ✦ ${compact(upgradeCost)}</button>`;
+      }
+      let saveTimer;
+      function changed() { render(); clearTimeout(saveTimer); saveTimer = setTimeout(save, 300); }
+      function checkAchievements() {
+        let unlocked = false;
+        achievements.forEach(a => {
+          if (!state.achievements.includes(a.id) && a.test(state) >= a.goal) {
+            state.achievements.push(a.id); state.sparks += a.reward; unlocked = true;
+          }
+        });
+        if (unlocked) {
+          $('toast').textContent = '🏆 Достижение открыто! Награда добавлена';
+          $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1800);
+        }
+      }
+      function collect(e) {
+        haptic('impact', 'light');
+        state.sparks += tapPower(); state.stats.taps++; checkAchievements(); changed();
+        const f = document.createElement('span'); f.className = 'float'; f.textContent = `+${compact(tapPower())}`;
+        const box = $('orbWrap').getBoundingClientRect(); f.style.left = `${e.clientX - box.left - 15}px`; f.style.top = `${e.clientY - box.top - 8}px`;
+        $('orbWrap').append(f); setTimeout(() => f.remove(), 850);
+      }
+      const tapButton = $('tap');
+      if ('PointerEvent' in window) {
+        tapButton.addEventListener('pointerup', e => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          e.preventDefault(); collect(e);
+        });
+        tapButton.addEventListener('click', e => {
+          // Keep keyboard activation available; pointer taps are handled on pointerup.
+          if (e.detail === 0) collect(e);
+        });
+      } else {
+        tapButton.addEventListener('click', collect);
+      }
+      $('shop').addEventListener('click', e => {
+        const button = e.target.closest('[data-upgrade]'); if (!button) return;
+        const u = upgrades.find(x => x.id === button.dataset.upgrade), cost = price(u);
+        if (state.sparks < cost) return;
+        state.sparks -= cost; state.levels[u.id]++; state.stats.upgradesBought++; checkAchievements();
+        $('toast').textContent = `${u.icon} ${u.name} улучшен!`; $('toast').classList.add('show');
+        setTimeout(() => $('toast').classList.remove('show'), 1300); changed();
+      });
+      $('gameUpgrades').addEventListener('click', e => {
+        const button = e.target.closest('[data-game-upgrade]'); if (!button) return;
+        const upgrade = gameUpgradeDefs.find(item => item.id === button.dataset.gameUpgrade); if (!upgrade) return;
+        const level = state.gameUpgrades[upgrade.id], cost = gameUpgradePrice(upgrade);
+        if (level >= upgrade.max || state.sparks < cost) return;
+        state.sparks -= cost; state.gameUpgrades[upgrade.id]++; haptic('impact', 'light');
+        $('toast').textContent = `${upgrade.icon} ${upgrade.name} · уровень ${state.gameUpgrades[upgrade.id]}`;
+        $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500);
+        changed();
+      });
+      $('shipyard').addEventListener('click', e => {
+        const button = e.target.closest('[data-buy-world]'); if (!button) return;
+        const world = worlds.find(item => item.id === button.dataset.buyWorld); if (!world) return;
+        if (state.assets.some(asset => asset.typeId === world.id)) return;
+        const cost = worldPrice(world); if (state.sparks < cost) return;
+        state.sparks -= cost; haptic('impact', 'light');
+        const asset = { uid: state.assetNext++, typeId: world.id, level: 1 };
+        state.assets.push(asset); selectedAssetId = asset.uid;
+        checkAchievements(); changed();
+        $('toast').textContent = `${world.icon} ${world.name} добавлена в систему`;
+        $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500);
+      });
+      $('ownedAssets').addEventListener('click', e => {
+        const button = e.target.closest('[data-owned-asset]'); if (!button) return;
+        selectedAssetId = Number(button.dataset.ownedAsset); renderAssetViews();
+        $('assetDetail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+      $('assetDetail').addEventListener('click', e => {
+        const button = e.target.closest('[data-upgrade-asset]'); if (!button) return;
+        const asset = state.assets.find(item => item.uid === Number(button.dataset.upgradeAsset)); if (!asset) return;
+        const cost = assetUpgradePrice(asset); if (state.sparks < cost) return;
+        state.sparks -= cost; asset.level++;
+        checkAchievements(); changed();
+        $('toast').textContent = `✨ ${assetType(asset).name} улучшена до уровня ${asset.level}`;
+        $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500);
+      });
+      const catchField = $('catchField');
+      let miniGameActive = false;
+      let spawnTimer = null, catchClockTimer = null, catchRoundPoints = 0, catchRoundEndsAt = 0, reportTimer = null;
+      let shipActive = false, shipSpawnTimer = null, shipLoopTimer = null;
+      let shipPositionX = 0, shipStartedAt = 0, shipBonus = 0, shipDrag = null;
+      let shipShieldsLeft = 0;
+      const shipLanes = [17, 50, 83];
+      function showRoundReport(title, text, panel, lobby) {
+        $('roundReportTitle').textContent = title;
+        $('roundReportText').innerHTML = text;
+        $('roundReport').hidden = false;
+        clearTimeout(reportTimer);
+        reportTimer = setTimeout(() => {
+          $('roundReport').hidden = true;
+          panel.classList.remove('round-fullscreen'); panel.hidden = true; lobby.hidden = false;
+          window.scrollTo(0, 0);
+        }, 4500);
+      }
+      function roundSecondsLeft(deadline) { return Math.max(0, Math.ceil((deadline - Date.now()) / 1000)); }
+      function setShipPosition(x) {
+        const bounds = shipField.getBoundingClientRect();
+        const edge = 30;
+        shipPositionX = Math.max(edge, Math.min(bounds.width - edge, x));
+        $('shipPlayer').style.left = `${shipPositionX}px`;
+      }
+      function spawnObject() {
+        if (!miniGameActive) return;
+        const roll = Math.random();
+        const isBomb = roll < .14, isAsteroid = roll >= .14 && roll < .32, isPlanet = roll >= .32 && roll < .62;
+        const object = document.createElement('button');
+        object.type = 'button'; object.className = `flyby ${isBomb ? 'bomb' : isAsteroid ? 'asteroid' : isPlanet ? 'planet' : ''}`;
+        object.dataset.catch = isBomb ? 'bomb' : isAsteroid ? 'asteroid' : isPlanet ? 'planet' : 'star';
+        object.setAttribute('aria-label', isBomb ? 'Бомба: не нажимать' : isAsteroid ? 'Астероид: не нажимать' : isPlanet ? 'Поймать планету' : 'Поймать звезду');
+        const symbol = isBomb ? '💣' : isAsteroid ? '☄️' : isPlanet ? ['🪐','🌍','🔴','🌕','🌎','🟣','🟠','🌑','🔵'][Math.floor(Math.random()*9)] : ['🌟','⭐','💫'][Math.floor(Math.random()*3)];
+        object.innerHTML = `<span>${symbol}</span>`;
+        const duration = isBomb
+          ? 1.0 + Math.random() * 1.0
+          : isAsteroid
+            ? 1.0 + Math.random() * 1.25
+          : isPlanet
+            ? 1.25 + Math.random() * 1.45
+            : 1.5 + Math.random() * 1.6;
+        object.style.animationDuration = `${duration}s`;
+        catchField.append(object);
+        object.style.left = `${Math.random() * Math.max(0, catchField.clientWidth - object.offsetWidth)}px`;
+        setTimeout(() => object.remove(), duration * 1000 + 100);
+      }
+      $('launchGame').addEventListener('click', () => {
+        if (shipActive || !$('shipPanel').hidden) closeShipGame();
+        clearTimeout(reportTimer); $('roundReport').hidden = true;
+        miniGameActive = true; $('gameLobby').hidden = true; $('gamePanel').hidden = false;
+        $('gamePanel').classList.add('round-fullscreen'); catchRoundPoints = 0; catchRoundEndsAt = Date.now() + 40000;
+        $('gameStatus').textContent = `Раунд · 40 сек · улов: ${state.stats.catches}`;
+        spawnObject(); spawnTimer = setInterval(spawnObject, 900);
+        catchClockTimer = setInterval(() => {
+          const seconds = roundSecondsLeft(catchRoundEndsAt);
+          $('gameStatus').textContent = `Осталось ${seconds} сек · очки раунда: ${compact(catchRoundPoints)}`;
+          if (!seconds) finishCatchRound();
+        }, 200);
+      });
+      $('exitGame').addEventListener('click', () => {
+        stopMiniGame();
+      });
+      function stopMiniGame() {
+        miniGameActive = false; clearInterval(spawnTimer); clearInterval(catchClockTimer); spawnTimer = catchClockTimer = null;
+        catchField.querySelectorAll('.flyby').forEach(object => object.remove());
+        $('gamePanel').classList.remove('round-fullscreen'); $('gamePanel').hidden = true; $('gameLobby').hidden = false;
+      }
+      function finishCatchRound() {
+        if (!miniGameActive) return;
+        miniGameActive = false; clearInterval(spawnTimer); clearInterval(catchClockTimer); spawnTimer = catchClockTimer = null;
+        catchField.querySelectorAll('.flyby').forEach(object => object.remove());
+        showRoundReport('Раунд завершён', `Очки за раунд: <b>${compact(catchRoundPoints)} ✦</b><br>Уловлено объектов: <b>${compact(state.stats.catches)}</b>`, $('gamePanel'), $('gameLobby'));
+        render(); save();
+      }
+      catchField.addEventListener('click', e => {
+        const object = e.target.closest('[data-catch]'); if (!object) return;
+        const bomb = object.dataset.catch === 'bomb';
+        const asteroid = object.dataset.catch === 'asteroid';
+        const planet = object.dataset.catch === 'planet';
+        const baseReward = planet ? 30 : 10;
+        const reward = bomb
+          ? -Math.max(10, 50 - state.gameUpgrades.salvage * 10)
+          : asteroid
+            ? -Math.max(10, 35 - state.gameUpgrades.salvage * 10)
+            : Math.round((baseReward + Math.floor(Math.random() * baseReward)) * (1 + state.levels.gravity * .25) * (1 + state.gameUpgrades.catchBonus * .2));
+        const sparksBefore = state.sparks;
+        state.sparks = Math.max(0, state.sparks + reward);
+        catchRoundPoints += state.sparks - sparksBefore;
+        if (!bomb && !asteroid) state.stats.catches++;
+        object.remove(); checkAchievements(); changed();
+        if (!bomb && !asteroid) $('gameStatus').textContent = `Улов: ${state.stats.catches} · избегай бомб и астероидов!`;
+        const f = document.createElement('span'); f.className = 'float'; f.textContent = `${reward > 0 ? '+' : ''}${compact(reward)} ✦`;
+        const field = catchField.getBoundingClientRect(); f.style.left = `${Math.max(8, e.clientX - field.left - 24)}px`; f.style.top = `${Math.max(30, e.clientY - field.top - 15)}px`;
+        catchField.append(f); setTimeout(() => f.remove(), 850);
+        if (bomb || asteroid) {
+          haptic('notify', 'warning');
+          $('toast').textContent = bomb ? `💣 Бомба! −${Math.abs(reward)} звёздной пыли` : `☄️ Астероид! −${Math.abs(reward)} звёздной пыли`; $('toast').classList.add('show');
+          setTimeout(() => $('toast').classList.remove('show'), 1500);
+        } else haptic('notify', 'success');
+      });
+      const shipField = $('shipField');
+      function moveShip(direction) {
+        if (!shipActive) return;
+        setShipPosition(shipPositionX + direction * shipField.clientWidth * .18);
+      }
+      function currentFlightScore() { return Math.floor((Date.now() - shipStartedAt) / 1000) + shipBonus; }
+      function spawnShipObject() {
+        if (!shipActive) return;
+        const pickup = Math.random() < .2;
+        const object = document.createElement('span');
+        object.className = `ship-hazard ${pickup ? 'pickup' : ''}`;
+        object.dataset.lane = String(Math.floor(Math.random() * 3));
+        object.dataset.kind = pickup ? 'pickup' : 'hazard';
+        object.textContent = pickup ? '✨' : Math.random() < .5 ? '🚀' : '☄️';
+        object.style.left = `${shipLanes[Number(object.dataset.lane)]}%`;
+        const duration = (1.35 + Math.random() * 1.1) * (1 + state.gameUpgrades.engine * .08);
+        object.style.animationDuration = `${duration}s`;
+        shipField.append(object);
+        setTimeout(() => object.remove(), duration * 1000 + 120);
+      }
+      function finishFlight() {
+        if (!shipActive) return;
+        shipActive = false;
+        clearInterval(shipSpawnTimer); clearInterval(shipLoopTimer);
+        shipSpawnTimer = null; shipLoopTimer = null;
+        const score = currentFlightScore();
+        const reward = score * 2;
+        state.stats.shipBest = Math.max(state.stats.shipBest || 0, score);
+        state.sparks += reward;
+        shipField.querySelectorAll('.ship-hazard').forEach(object => object.remove());
+        checkAchievements();
+        $('shipStatus').textContent = `Раунд завершён · ${compact(score)} очков`;
+        showRoundReport('Полёт завершён', `Очки за раунд: <b>${compact(score)}</b><br>Награда: <b>✦ ${compact(reward)} звёздной пыли</b><br>Рекорд: <b>${compact(state.stats.shipBest)}</b>`, $('shipPanel'), $('shipLobby'));
+        render(); save();
+      }
+      function startFlight() {
+        if (miniGameActive) stopMiniGame();
+        clearTimeout(reportTimer); $('roundReport').hidden = true;
+        shipActive = true; shipBonus = 0; shipStartedAt = Date.now(); shipShieldsLeft = state.gameUpgrades.shield;
+        $('shipLobby').hidden = true; $('shipPanel').hidden = false; $('shipResult').hidden = true;
+        $('shipPanel').classList.add('round-fullscreen');
+        setShipPosition(shipField.clientWidth / 2);
+        shipField.querySelectorAll('.ship-hazard').forEach(object => object.remove());
+        $('shipStatus').textContent = `Очки: 0 · Рекорд: ${compact(state.stats.shipBest || 0)}`;
+        spawnShipObject(); shipSpawnTimer = setInterval(spawnShipObject, 680);
+        shipLoopTimer = setInterval(() => {
+          if (!shipActive) return;
+          const score = currentFlightScore();
+          const seconds = Math.max(0, 40 - Math.floor((Date.now() - shipStartedAt) / 1000));
+          $('shipStatus').textContent = `Осталось ${seconds} сек · очки ${compact(score)} · 🛡 ${shipShieldsLeft}`;
+          if (!seconds) { finishFlight(); return; }
+          const player = $('shipPlayer').getBoundingClientRect();
+          for (const object of shipField.querySelectorAll('.ship-hazard')) {
+            const hazard = object.getBoundingClientRect();
+            const horizontalGap = Math.abs((hazard.left + hazard.right) / 2 - (player.left + player.right) / 2);
+            if (horizontalGap > (player.width + hazard.width) / 2 || hazard.bottom < player.top || hazard.top > player.bottom) continue;
+            if (object.dataset.kind === 'pickup') {
+              const points = 5 + state.gameUpgrades.magnet * 2;
+              shipBonus += points; object.remove();
+              haptic('notify', 'success');
+              $('shipStatus').textContent = `Очки: ${compact(currentFlightScore())} · +${points} за звёздный бонус`;
+            } else if (shipShieldsLeft > 0) {
+              shipShieldsLeft--; object.remove();
+              haptic('impact', 'medium');
+              $('shipStatus').textContent = `Щит поглотил удар · осталось: ${shipShieldsLeft}`;
+            } else {
+              shipBonus = Math.max(-Math.floor((Date.now() - shipStartedAt) / 1000), shipBonus - 5);
+              object.remove(); haptic('impact', 'medium');
+              $('shipStatus').textContent = `Столкновение · −5 очков · осталось ${seconds} сек`;
+            }
+          }
+        }, 65);
+      }
+      function closeShipGame() {
+        if (shipActive) {
+          shipActive = false; clearInterval(shipSpawnTimer); clearInterval(shipLoopTimer);
+          shipSpawnTimer = shipLoopTimer = null;
+          shipField.querySelectorAll('.ship-hazard').forEach(object => object.remove());
+        }
+        clearTimeout(reportTimer); $('roundReport').hidden = true;
+        $('shipPanel').classList.remove('round-fullscreen'); $('shipPanel').hidden = true; $('shipLobby').hidden = false;
+      }
+      $('launchShip').addEventListener('click', startFlight);
+      $('replayShip').addEventListener('click', startFlight);
+      $('exitShip').addEventListener('click', closeShipGame);
+      $('shipLeft').addEventListener('click', () => moveShip(-1));
+      $('shipRight').addEventListener('click', () => moveShip(1));
+      const shipPlayer = $('shipPlayer');
+      shipPlayer.addEventListener('pointerdown', e => {
+        if (!shipActive) return;
+        e.preventDefault(); shipDrag = { pointerId: e.pointerId, pointerX: e.clientX, shipX: shipPositionX };
+        shipPlayer.setPointerCapture(e.pointerId);
+      });
+      shipPlayer.addEventListener('pointermove', e => {
+        if (!shipDrag || shipDrag.pointerId !== e.pointerId || !shipActive) return;
+        setShipPosition(shipDrag.shipX + e.clientX - shipDrag.pointerX);
+      });
+      const releaseShipPointer = () => { shipDrag = null; };
+      shipPlayer.addEventListener('pointerup', releaseShipPointer);
+      shipPlayer.addEventListener('pointercancel', releaseShipPointer);
+      shipPlayer.addEventListener('lostpointercapture', releaseShipPointer);
+      window.addEventListener('keydown', e => {
+        if (!shipActive) return;
+        if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') moveShip(-1);
+        if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') moveShip(1);
+      });
+      let currentTab = 'home';
+      document.querySelector('.bottom-nav').addEventListener('click', e => {
+        const button = e.target.closest('[data-tab]'); if (!button) return;
+        const tab = button.dataset.tab;
+        currentTab = tab;
+        document.querySelectorAll('[data-panel]').forEach(panel => { panel.hidden = panel.dataset.panel !== tab; });
+        document.querySelectorAll('.nav-tab').forEach(navButton => {
+          const active = navButton === button;
+          navButton.classList.toggle('active', active);
+          if (active) navButton.setAttribute('aria-current', 'page'); else navButton.removeAttribute('aria-current');
+        });
+        if (telegram && telegram.BackButton) {
+          if (tab === 'home') telegram.BackButton.hide(); else telegram.BackButton.show();
+        }
+        if (tab !== 'games') {
+          clearTimeout(reportTimer); $('roundReport').hidden = true;
+          if (miniGameActive) stopMiniGame();
+          if (shipActive || !$('shipPanel').hidden) closeShipGame();
+        }
+        window.scrollTo(0, 0);
+      });
+      if (telegram && telegram.BackButton) {
+        telegram.BackButton.onClick(() => document.querySelector('[data-tab="home"]').click());
+        telegram.BackButton.hide();
+      }
+      $('reset').addEventListener('click', () => {
+        if (!confirm('Сбросить весь прогресс? Это действие нельзя отменить.')) return;
+        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, assets: [], assetNext: 1, achievements: [], last: Date.now() }; selectedAssetId = null; save(); render();
+      });
+      const elapsed = Math.min(8 * 60 * 60, Math.max(0, (Date.now() - (Number(state.last) || Date.now())) / 1000));
+      if (elapsed > 5 && perSecond()) state.sparks += elapsed * perSecond();
+      state.last = Date.now(); checkAchievements(); render(); save();
+      if (telegram) { try { telegram.ready(); } catch { /* The browser-only version has no Telegram readiness signal. */ } }
+      setInterval(() => { if (perSecond()) { state.sparks += perSecond(); checkAchievements(); render(); } }, 1000);
+      setInterval(save, 5000);
+      window.addEventListener('pagehide', save);
+    })();
+  </script>
+</body>
+</html>
