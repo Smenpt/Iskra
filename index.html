@@ -251,6 +251,15 @@
     .casino-speed { display:block;margin:10px auto;padding:9px 14px;border:1px solid #f0cb7b66;border-radius:12px;background:#f0cb7b16;color:#ffe5a4;font-size:12px;font-weight:750;cursor:pointer; }
     .casino-speed[hidden] { display:none; }
     .casino-speed[aria-pressed="true"] { border-color:#67e4ff99;background:#45cfff20;color:#a9f2ff;box-shadow:0 0 18px #45cfff24; }
+    .slot-payouts { display:none;margin:8px 0 14px;padding:14px;text-align:left;border:1px solid #71ddff2e;border-radius:16px;background:linear-gradient(145deg,#121c30,#10101c); }
+    .slots-theme .slot-payouts { display:block; }
+    .slot-payouts h3 { margin:0 0 4px;color:#d9f7ff;font-size:13px; }
+    .slot-payouts p { margin:0 0 10px;color:#999bb2;font-size:10px; }
+    .slot-payout-list { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px; }
+    .slot-payout-row { display:flex;align-items:center;justify-content:space-between;gap:5px;padding:8px;border:1px solid #ffffff0d;border-radius:10px;background:#ffffff06; }
+    .slot-combo { white-space:nowrap;font-size:14px;letter-spacing:1px; }
+    .slot-mult { color:#a9f2ff;font-size:11px;font-weight:800;white-space:nowrap; }
+    .slot-payout-foot { margin-top:9px;color:#999bb2;font-size:10px;line-height:1.45; }
     .journal-group { margin-top:16px; }
     .journal-title { margin:0 0 6px;color:#cdb6ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px; }
     .casino-result { min-height:43px;color:#e9deff;font-size:13px;line-height:1.5; }
@@ -259,7 +268,7 @@
     .casino-action:disabled { opacity:.5;cursor:default; }
     .casino-info { margin-top:12px;color:#938ba7;font-size:10px;line-height:1.55; }
     .casino-boost { margin-top:9px;color:var(--mint);font-size:11px; }
-    @media (max-width:380px) { .nav-label { font-size:8px; } .nav-tab { padding-inline:0; } .casino-modes { gap:5px; } .casino-mode { padding-inline:4px; } }
+    @media (max-width:380px) { .nav-label { font-size:8px; } .nav-tab { padding-inline:0; } .casino-modes { gap:5px; } .casino-mode { padding-inline:4px; } .slot-payout-list { grid-template-columns:1fr; } }
     @media (prefers-reduced-motion:reduce) { .flyby { animation-duration:8s; } }
   </style>
 </head>
@@ -327,6 +336,18 @@
           <div class="casino-chips casino-lower-chips" id="casinoLowerChips"><button class="casino-chip" data-bet-adjust="1000" type="button">−1 тыс.</button><button class="casino-chip" data-bet-adjust="10000" type="button">−10 тыс.</button><button class="casino-chip" data-bet-adjust="100000" type="button">−100 тыс.</button><button class="casino-chip" data-bet-adjust="1000000" type="button">−1 млн</button><button class="casino-chip" data-bet-adjust="10000000" type="button">−10 млн</button><button class="casino-chip" data-bet-reset type="button">Сбросить</button></div>
           <div class="casino-machine"><div class="slot-title">✦ ORBITAL JACKPOT ✦</div><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div><div class="slot-reels" id="slotReels" aria-label="Барабаны космического автомата" hidden><span class="slot-reel">✦</span><span class="slot-reel">🪐</span><span class="slot-reel">💎</span></div></div>
           <button class="casino-speed" id="casinoSpeed" type="button" hidden>⚡ Ускорить прокрутку ×3</button>
+          <div class="slot-payouts"><h3>Комбинации и выплаты</h3><p>Множитель применяется к размеру ставки</p><div class="slot-payout-list">
+            <div class="slot-payout-row"><span class="slot-combo">✨ 🌑 ✦</span><span class="slot-mult">×0,5</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🪐 🪐 ✦</span><span class="slot-mult">×1,25</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🚀 🚀 🚀</span><span class="slot-mult">×2</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🌟 🌟 🌟</span><span class="slot-mult">×3 + буст</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">💎 💎 💎</span><span class="slot-mult">×10</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">💠 💠 💠</span><span class="slot-mult">×100</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🔷 🔷 🔷</span><span class="slot-mult">×500</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🎆 🎆 🎆</span><span class="slot-mult">×1 000</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">👑 👑 👑</span><span class="slot-mult">×2 500</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🌌 🌌 🌌</span><span class="slot-mult">×5 000</span></div>
+          </div><div class="slot-payout-foot">☄️ 🌙 ✦ — без выигрыша. Комбинация фиксируется при запуске прокрутки.</div></div>
           <div class="casino-result" id="casinoResult">Выбери игру и сделай ставку.</div>
           <button class="casino-action" id="casinoAction" type="button">Сделать ставку · 1 000 ✦</button>
           <div class="casino-boost" id="casinoBoost"></div>
@@ -639,12 +660,12 @@
           { chance: 55, mult: 0, title: 'Комбинация не сложилась', icon: '🌑' },
           { chance: 25, mult: .5, title: 'Одна искра совпала · возврат x0,5', icon: '✨' },
           { chance: 12, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
-          { chance: 6, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🌌' },
+          { chance: 6, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🚀' },
           { chance: 1.5, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
           { chance: .4395, mult: 3, title: 'Сверхновая! Доход x2 на 5 минут', icon: '🌟', boost: 5 },
           { chance: .05, mult: 100, title: 'КОСМИЧЕСКИЙ ДЖЕКПОТ · x100!', icon: '💠', jackpot: true },
           { chance: .008, mult: 500, title: 'ЛЕГЕНДАРНЫЙ ДЖЕКПОТ · x500!', icon: '🔷', jackpot: true },
-          { chance: .002, mult: 1000, title: 'МИФИЧЕСКИЙ ДЖЕКПОТ · x1 000!', icon: '💎', jackpot: true },
+          { chance: .002, mult: 1000, title: 'МИФИЧЕСКИЙ ДЖЕКПОТ · x1 000!', icon: '🎆', jackpot: true },
           { chance: .0004, mult: 2500, title: 'СВЕРХНОВАЯ УДАЧИ · x2 500!', icon: '👑', jackpot: true },
           { chance: .0001, mult: 5000, title: 'АБСОЛЮТНЫЙ ДЖЕКПОТ · x5 000!', icon: '🌌', jackpot: true }
         ]
