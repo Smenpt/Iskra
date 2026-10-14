@@ -234,11 +234,22 @@
     .casino-reel { font-size:48px;filter:drop-shadow(0 0 16px #d5a5ff88); }
     .casino-reel.rolling { animation:casinoRoll .16s linear infinite alternate; }
     @keyframes casinoRoll { to { transform:translateY(-7px) rotate(8deg) scale(1.08);filter:drop-shadow(0 0 24px #ffa8ef); } }
+    .slot-reels { display:flex;align-items:center;justify-content:center;gap:9px;padding:8px 12px;border:1px solid #c4a4ff55;border-radius:17px;background:linear-gradient(180deg,#2c2441,#11101b);box-shadow:inset 0 0 20px #0008,0 0 24px #ac7aff22; }
+    .slot-reels[hidden] { display:none; }
+    .slot-reel { width:62px;height:66px;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffff18;border-radius:12px;background:linear-gradient(180deg,#ffffff12,#ffffff03);font-size:34px;text-shadow:0 0 16px #d5a5ff99; }
+    .slot-reel.spinning { animation:slotPulse .45s ease-in-out infinite alternate; }
+    .slot-reel.stopping { animation:slotStop .45s cubic-bezier(.12,.72,.21,1) both; }
+    @keyframes slotPulse { to { transform:translateY(-4px);filter:brightness(1.4); } }
+    @keyframes slotStop { 0% { transform:translateY(-18px) scale(.9); } 70% { transform:translateY(4px) scale(1.08); } 100% { transform:translateY(0) scale(1); } }
+    .casino-speed { margin:0 0 10px;padding:9px 14px;border:1px solid #f0cb7b66;border-radius:12px;background:#f0cb7b16;color:#ffe5a4;font-size:12px;font-weight:750;cursor:pointer; }
+    .casino-speed[hidden] { display:none; }
+    .journal-group { margin-top:16px; }
+    .journal-title { margin:0 0 6px;color:#cdb6ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px; }
     .casino-result { min-height:43px;color:#e9deff;font-size:13px;line-height:1.5; }
     .casino-result b { color:var(--mint); }
     .casino-action { width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#a75eea,#6345c5);box-shadow:0 8px 25px #8e5bea44;color:white;font-size:14px;font-weight:800;cursor:pointer; }
     .casino-action:disabled { opacity:.5;cursor:default; }
-    .casino-odds { margin-top:12px;color:#938ba7;font-size:10px;line-height:1.55; }
+    .casino-info { margin-top:12px;color:#938ba7;font-size:10px;line-height:1.55; }
     .casino-boost { margin-top:9px;color:var(--mint);font-size:11px; }
     @media (max-width:380px) { .nav-label { font-size:8px; } .nav-tab { padding-inline:0; } .casino-modes { gap:5px; } .casino-mode { padding-inline:4px; } }
     @media (prefers-reduced-motion:reduce) { .flyby { animation-duration:8s; } }
@@ -306,11 +317,12 @@
           <input class="casino-bet" id="casinoBet" type="number" inputmode="numeric" min="100" step="100" value="1000" aria-label="Размер ставки">
           <div class="casino-chips" id="casinoChips"><button class="casino-chip" data-bet="1000" type="button">+1 тыс.</button><button class="casino-chip" data-bet="10000" type="button">+10 тыс.</button><button class="casino-chip" data-bet="100000" type="button">+100 тыс.</button><button class="casino-chip" data-bet="1000000" type="button">+1 млн</button><button class="casino-chip" data-bet="10000000" type="button">+10 млн</button></div>
           <div class="casino-chips casino-lower-chips" id="casinoLowerChips"><button class="casino-chip" data-bet-adjust="1000" type="button">−1 тыс.</button><button class="casino-chip" data-bet-adjust="10000" type="button">−10 тыс.</button><button class="casino-chip" data-bet-adjust="100000" type="button">−100 тыс.</button><button class="casino-chip" data-bet-adjust="1000000" type="button">−1 млн</button><button class="casino-chip" data-bet-adjust="10000000" type="button">−10 млн</button><button class="casino-chip" data-bet-reset type="button">Сбросить</button></div>
-          <div class="casino-machine"><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div></div>
+          <div class="casino-machine"><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div><div class="slot-reels" id="slotReels" aria-label="Барабаны космического автомата" hidden><span class="slot-reel">✦</span><span class="slot-reel">🪐</span><span class="slot-reel">💎</span></div></div>
+          <button class="casino-speed" id="casinoSpeed" type="button" hidden>⚡ Ускорить прокрутку ×3</button>
           <div class="casino-result" id="casinoResult">Выбери игру и сделай ставку.</div>
           <button class="casino-action" id="casinoAction" type="button">Сделать ставку · 1 000 ✦</button>
           <div class="casino-boost" id="casinoBoost"></div>
-          <div class="casino-odds" id="casinoOdds">Шансы: проигрыш 50% · малый приз 25% · x1,25 — 15% · x2 — 8% · джекпот x8 — 2%.</div>
+          <div class="casino-info" id="casinoInfo">Собери символы и проверь, какой приз приготовила галактика.</div>
         </div>
       </section>
     </div>
@@ -320,7 +332,7 @@
         <div class="profile-switch" role="tablist" aria-label="Разделы профиля"><button class="active" data-profile-view="summary" type="button">Профиль</button><button data-profile-view="achievements" type="button">Достижения 🏆</button></div>
         <div class="profile-view" id="profileSummaryView">
           <div class="profile-card"><div class="profile-head"><div class="profile-avatar" id="profileAvatar">✦</div><div><div class="profile-name" id="profileName">Космический пилот</div><div class="profile-username" id="profileUsername">Играй в Telegram, чтобы связать профиль</div></div></div><div class="profile-balance"><div class="eyebrow">ТВОЯ ЗВЁЗДНАЯ ПЫЛЬ</div><div class="profile-balance-value" id="profileBalance">0</div><div class="profile-caption" id="profileIncome">Доход: 0 в секунду</div></div></div>
-          <div class="profile-card" style="margin-top:12px"><div class="section-head"><h2>Пилотский журнал</h2></div><div class="asset-stat-row"><span>Касания ядра</span><b id="profileTaps">0</b></div><div class="asset-stat-row"><span>Поймано объектов</span><b id="profileCatches">0</b></div><div class="asset-stat-row"><span>Пари в казино</span><b id="profileBets">0</b></div><div class="asset-stat-row"><span>Крупнейший выигрыш</span><b id="profileWin">0 ✦</b></div></div>
+          <div class="profile-card" style="margin-top:12px"><div class="section-head"><h2>Пилотский журнал</h2></div><div class="profile-caption">Финансовая история ведётся с момента обновления игры</div><div id="profileEconomy"></div><div class="journal-group"><div class="asset-stat-row"><span>Касания ядра</span><b id="profileTaps">0</b></div><div class="asset-stat-row"><span>Поймано объектов</span><b id="profileCatches">0</b></div><div class="asset-stat-row"><span>Пари в казино</span><b id="profileBets">0</b></div><div class="asset-stat-row"><span>Крупнейший выигрыш</span><b id="profileWin">0 ✦</b></div></div></div>
         </div>
         <div class="profile-view" id="profileAchievementsView" hidden><div class="section-head achievements-head"><h2>Знаки исследователя</h2><span class="section-note">Награды за открытия 🏆</span></div><div class="achievements" id="achievements"></div></div>
       </section>
@@ -384,13 +396,13 @@
         { id: 'rich', icon: '💫', name: 'Звёздный магнат', desc: 'Накопи 1 000 звёздной пыли', goal: 1000, reward: 300, test: s => s.sparks },
         { id: 'casino_first', icon: '🎲', name: 'Первое пари', desc: 'Сделай первую ставку в казино', goal: 1, reward: 100, test: s => s.stats.casinoSpins },
         { id: 'capsule_10', icon: '🪐', name: 'Коллекционер капсул', desc: 'Открой 10 звёздных капсул', goal: 10, reward: 1200, test: s => s.stats.capsulesOpened },
-        { id: 'casino_turnover', icon: '💰', name: 'Большая игра', desc: 'Поставь суммарно 500 000 пыли', goal: 500000, reward: 6000, test: s => s.stats.casinoSpent },
+        { id: 'casino_turnover', icon: '💰', name: 'Большая игра', desc: 'Потрать в казино суммарно 500 000 пыли', goal: 500000, reward: 6000, test: s => s.stats.casinoSpent },
         { id: 'casino_jackpot', icon: '🌠', name: 'Гравитация удачи', desc: 'Сорви джекпот x8 или выше', goal: 1, reward: 5000, test: s => s.stats.casinoJackpots },
         { id: 'casino_boosts', icon: '⚡', name: 'Сверхновая экономика', desc: 'Запусти временный буст дохода 3 раза', goal: 3, reward: 3500, test: s => s.stats.casinoBoosts },
         { id: 'casino_profit', icon: '👑', name: 'Казино в плюсе', desc: 'Выйди в общий плюс на 50 000 пыли', goal: 50000, reward: 10000, test: s => Math.max(0, s.stats.casinoNet) },
         { id: 'casino_highroller', icon: '💎', name: 'Повелитель стола', desc: 'Получи за один ход не менее 100 000 пыли', goal: 100000, reward: 15000, test: s => s.stats.casinoBestWin }
       ];
-      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, last: Date.now() };
+      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, economy: { earned: { clicks: 0, passive: 0, catch: 0, ship: 0, casino: 0, achievements: 0 }, spent: { casino: 0, capsules: 0, assets: 0, penalties: 0 } }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, last: Date.now() };
       let state;
       let hasLocalSave = false;
       try {
@@ -416,6 +428,9 @@
       state.levels = { ...initial.levels, ...(state.levels || {}) };
       state.gameUpgrades = { ...initial.gameUpgrades, ...(state.gameUpgrades || {}) };
       state.stats = { ...initial.stats, ...(state.stats || {}) };
+      state.economy = state.economy || {};
+      state.economy.earned = { ...initial.economy.earned, ...(state.economy.earned || {}) };
+      state.economy.spent = { ...initial.economy.spent, ...(state.economy.spent || {}) };
       const savedAssets = Array.isArray(state.assets) ? state.assets : [];
       state.assets = [];
       savedAssets.forEach(asset => {
@@ -489,6 +504,12 @@
         $('profileCatches').textContent = fullNumber(state.stats.catches);
         $('profileBets').textContent = fullNumber(state.stats.casinoSpins);
         $('profileWin').textContent = `${fullNumber(state.stats.casinoBestWin)} ✦`;
+        const earnedLabels = { clicks: 'Касания ядра', passive: 'Пассивный доход', catch: 'Космический улов', ship: 'Полёты и бонусы', casino: 'Выплаты казино', achievements: 'Награды достижений' };
+        const spentLabels = { casino: 'Ставки рулетки и автомата', capsules: 'Звёздные капсулы', assets: 'Планеты, спутники и базы', penalties: 'Потери от бомб и астероидов' };
+        const earnedTotal = Object.values(state.economy.earned).reduce((sum, value) => sum + Number(value || 0), 0);
+        const spentTotal = Object.values(state.economy.spent).reduce((sum, value) => sum + Number(value || 0), 0);
+        const journalRows = (labels, values) => Object.entries(labels).map(([key, label]) => `<div class="asset-stat-row"><span>${label}</span><b>${fullNumber(values[key])} ✦</b></div>`).join('');
+        $('profileEconomy').innerHTML = `<div class="journal-group"><h3 class="journal-title">Заработано всего · ${fullNumber(earnedTotal)} ✦</h3>${journalRows(earnedLabels, state.economy.earned)}</div><div class="journal-group"><h3 class="journal-title">Потрачено и потеряно · ${fullNumber(spentTotal)} ✦</h3>${journalRows(spentLabels, state.economy.spent)}<div class="profile-caption">Покупки улучшений в расходах не учитываются</div></div>`;
         const avatar = $('profileAvatar');
         if (user?.photo_url) {
           if (avatar.dataset.photo !== user.photo_url) {
@@ -537,7 +558,7 @@
         let unlocked = false;
         achievements.forEach(a => {
           if (!state.achievements.includes(a.id) && a.test(state) >= a.goal) {
-            state.achievements.push(a.id); state.sparks += a.reward; unlocked = true;
+            state.achievements.push(a.id); state.sparks += a.reward; state.economy.earned.achievements += a.reward; unlocked = true;
           }
         });
         if (unlocked) {
@@ -547,7 +568,7 @@
       }
       function collect(e) {
         haptic('impact', 'light');
-        state.sparks += tapPower(); state.stats.taps++; checkAchievements(); changed();
+        state.sparks += tapPower(); state.economy.earned.clicks += tapPower(); state.stats.taps++; checkAchievements(); changed();
         const f = document.createElement('span'); f.className = 'float'; f.textContent = `+${compact(tapPower())}`;
         const box = $('orbWrap').getBoundingClientRect(); f.style.left = `${e.clientX - box.left - 15}px`; f.style.top = `${e.clientY - box.top - 8}px`;
         $('orbWrap').append(f); setTimeout(() => f.remove(), 850);
@@ -602,25 +623,101 @@
         ],
         slots: [
           { chance: 55, mult: 0, title: 'Комбинация не сложилась', icon: '🌑' },
-          { chance: 22, mult: .5, title: 'Одна искра совпала · возврат x0,5', icon: '✨' },
-          { chance: 14, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
-          { chance: 7, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🌌' },
-          { chance: 1.8, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
-          { chance: .2, mult: 3, title: 'Сверхновая! Доход x2 на 5 минут', icon: '🌟', boost: 5 }
+          { chance: 25, mult: .5, title: 'Одна искра совпала · возврат x0,5', icon: '✨' },
+          { chance: 12, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
+          { chance: 6, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🌌' },
+          { chance: 1.5, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
+          { chance: .4395, mult: 3, title: 'Сверхновая! Доход x2 на 5 минут', icon: '🌟', boost: 5 },
+          { chance: .05, mult: 100, title: 'КОСМИЧЕСКИЙ ДЖЕКПОТ · x100!', icon: '💠', jackpot: true },
+          { chance: .008, mult: 500, title: 'ЛЕГЕНДАРНЫЙ ДЖЕКПОТ · x500!', icon: '🔷', jackpot: true },
+          { chance: .002, mult: 1000, title: 'МИФИЧЕСКИЙ ДЖЕКПОТ · x1 000!', icon: '💎', jackpot: true },
+          { chance: .0004, mult: 2500, title: 'СВЕРХНОВАЯ УДАЧИ · x2 500!', icon: '👑', jackpot: true },
+          { chance: .0001, mult: 5000, title: 'АБСОЛЮТНЫЙ ДЖЕКПОТ · x5 000!', icon: '🌌', jackpot: true }
         ]
       };
-      const casinoOddsText = {
-        roulette: 'Шансы: проигрыш 50% · возврат 0,5x — 25% · выигрыш x1,25 — 15% · x2 — 8% · джекпот x8 — 1,8% · доход x2 на 5 минут — 0,2%.',
-        capsule: 'Капсула стоит 5 000 ✦. Шанс пустой капсулы — 48% · редкий артефакт x2,5 — 7% · легендарный x12 — 1,8% · доход x2 на 8 минут — 0,2%.',
-        slots: 'Шансы: пусто — 55% · возврат 0,5x — 22% · пара x1,25 — 14% · тройка x2 — 7% · джекпот x10 — 1,8% · доход x2 на 5 минут — 0,2%.'
+      const casinoModeInfo = {
+        roulette: 'Прокрути колесо и поймай удачный сектор.',
+        capsule: 'Капсула стоит 5 000 ✦. Внутри могут попасться пыль, артефакт или временный буст.',
+        slots: 'Совпадающие символы дают множитель к ставке. Попробуй собрать редкую комбинацию.'
       };
+      let slotRollInterval = null, slotStopTimers = [], slotStopDeadlines = [], slotActive = [], slotIndexes = [], slotSpinSpeed = 1, slotFinals = [], pendingSlotPrize = null, pendingSlotWager = 0;
+      const slotSymbols = ['✦', '🪐', '💎', '☄️', '🌙', '⭐', '🚀', '🌌', '🔮'];
+      function drawCasinoPrize(mode) {
+        const outcomes = casinoTables[mode]; let total = 0, draw = Math.random() * 100;
+        return outcomes.find(item => { total += item.chance; return draw < total; }) || outcomes[outcomes.length - 1];
+      }
+      function settleCasinoPrize(prize, wager) {
+        const payout = Math.floor(wager * prize.mult), net = payout - wager;
+        state.sparks += payout; state.economy.earned.casino += payout; state.stats.casinoNet += net;
+        state.stats.casinoBestWin = Math.max(state.stats.casinoBestWin, net);
+        if (payout > wager) state.stats.casinoWins++;
+        if (prize.jackpot) state.stats.casinoJackpots++;
+        if (prize.boost) {
+          state.casinoBoostUntil = Math.max(Date.now(), Number(state.casinoBoostUntil) || 0) + prize.boost * 60 * 1000;
+          state.stats.casinoBoosts++;
+        }
+        $('casinoResult').innerHTML = `${prize.title}<br>Выплата: <b>${fullNumber(payout)} ✦</b> · ${net >= 0 ? 'прибыль' : 'итог'}: <b>${net >= 0 ? '+' : '−'}${fullNumber(Math.abs(net))} ✦</b>`;
+        casinoBusy = false; $('casinoSpeed').hidden = true; checkAchievements(); changed(); save(); haptic(prize.jackpot || prize.boost ? 'notify' : 'impact', prize.jackpot || prize.boost ? 'success' : 'light');
+      }
+      function finalSlotSymbols(prize) {
+        if (prize.jackpot || prize.boost) return [prize.icon, prize.icon, prize.icon];
+        if (prize.mult >= 2) return [prize.icon, prize.icon, prize.icon];
+        if (prize.mult > 1) return [prize.icon, prize.icon, '✦'];
+        if (prize.mult > 0) return [prize.icon, '🌑', '✦'];
+        return ['☄️', '🌙', '✦'];
+      }
+      function startSlotAnimation(prize, wager) {
+        const reels = [...$('slotReels').querySelectorAll('.slot-reel')];
+        slotFinals = finalSlotSymbols(prize); pendingSlotPrize = prize; pendingSlotWager = wager;
+        const stopDelays = [1900, 3550, 5200];
+        $('casinoWheel').hidden = true; $('casinoReel').hidden = true; $('slotReels').hidden = false;
+        $('casinoSpeed').hidden = false; $('casinoSpeed').textContent = '⚡ Ускорить прокрутку ×3';
+        slotSpinSpeed = 1; slotIndexes = reels.map((_, i) => (i * 3) % slotSymbols.length); slotActive = reels.map(() => true);
+        reels.forEach((reel, i) => { reel.dataset.finalSymbol = slotFinals[i]; reel.classList.remove('stopping'); reel.classList.add('spinning'); reel.textContent = slotSymbols[slotIndexes[i]]; });
+        const beginTicker = () => {
+          clearInterval(slotRollInterval);
+          slotRollInterval = setInterval(() => reels.forEach((reel, i) => {
+            if (!slotActive[i]) return;
+            slotIndexes[i] = (slotIndexes[i] + 1) % slotSymbols.length; reel.textContent = slotSymbols[slotIndexes[i]];
+          }), Math.max(48, 135 / slotSpinSpeed));
+        };
+        const scheduleStops = () => reels.forEach((reel, i) => {
+          clearTimeout(slotStopTimers[i]);
+          const remaining = Math.max(100, slotStopDeadlines[i] - Date.now());
+          slotStopTimers[i] = setTimeout(() => {
+            slotActive[i] = false; reel.classList.remove('spinning'); reel.classList.add('stopping'); reel.textContent = results[i];
+            if (i === reels.length - 1) {
+              clearInterval(slotRollInterval); slotRollInterval = null;
+              setTimeout(() => { $('slotReels').hidden = true; $('casinoReel').hidden = true; settleCasinoPrize(prize, wager); pendingSlotPrize = null; }, 450);
+            }
+          }, remaining);
+        });
+        slotStopDeadlines = stopDelays.map(delay => Date.now() + delay); beginTicker(); scheduleStops();
+      }
+      $('casinoSpeed').addEventListener('click', () => {
+        if (!casinoBusy || casinoMode !== 'slots' || slotSpinSpeed >= 3) return;
+        slotSpinSpeed = 3;
+        const now = Date.now(); slotStopDeadlines = slotStopDeadlines.map((deadline, i) => slotActive[i] ? now + Math.max(100, (deadline - now) / 3) : deadline);
+        $('casinoSpeed').textContent = '⚡ Ускорение включено ×3'; $('casinoSpeed').disabled = true;
+        slotStopTimers.forEach(clearTimeout); slotStopTimers = []; clearInterval(slotRollInterval);
+        const reels = [...$('slotReels').querySelectorAll('.slot-reel')];
+        slotRollInterval = setInterval(() => reels.forEach((reel, i) => { if (slotActive[i]) { slotIndexes[i] = (slotIndexes[i] + 1) % slotSymbols.length; reel.textContent = slotSymbols[slotIndexes[i]]; } }), 45);
+        reels.forEach((reel, i) => { if (!slotActive[i]) return; slotStopTimers[i] = setTimeout(() => {
+          slotActive[i] = false; reel.classList.remove('spinning'); reel.classList.add('stopping');
+          reel.textContent = reel.dataset.finalSymbol || '✦';
+          if (i === reels.length - 1 || slotActive.every(active => !active)) {
+            clearInterval(slotRollInterval); slotRollInterval = null;
+            setTimeout(() => { $('slotReels').hidden = true; settleCasinoPrize(pendingSlotPrize, pendingSlotWager); pendingSlotPrize = null; }, 450);
+          }
+        }, Math.max(100, slotStopDeadlines[i] - Date.now())); });
+      });
       document.querySelector('.casino-modes').addEventListener('click', e => {
         const button = e.target.closest('[data-casino-mode]'); if (!button || casinoBusy) return;
         casinoMode = button.dataset.casinoMode;
         document.querySelectorAll('.casino-mode').forEach(item => item.classList.toggle('active', item === button));
-        $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoReel').hidden = casinoMode === 'roulette';
-        $('casinoReel').textContent = casinoMode === 'capsule' ? '🪐' : '✦ ✦ ✦';
-        $('casinoOdds').textContent = casinoOddsText[casinoMode];
+        $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoReel').hidden = casinoMode === 'roulette' || casinoMode === 'slots'; $('slotReels').hidden = casinoMode !== 'slots';
+        $('casinoReel').textContent = casinoMode === 'capsule' ? '🪐' : '';
+        $('casinoInfo').textContent = casinoModeInfo[casinoMode];
         $('casinoResult').textContent = 'Сделай ход — и узнай, что скрывает космос.';
         renderCasino();
       });
@@ -643,41 +740,31 @@
         if (!Number.isSafeInteger(wager) || wager < 100 || wager > state.sparks) {
           $('casinoResult').textContent = casinoMode === 'capsule' ? 'Нужно накопить 5 000 ✦ на капсулу.' : 'Укажи ставку от 100 ✦ и не выше своего баланса.'; return;
         }
-        casinoBusy = true; state.sparks -= wager; state.stats.casinoSpins++; state.stats.casinoSpent += wager;
+        casinoBusy = true; state.sparks -= wager;
+        state.economy.spent[casinoMode === 'capsule' ? 'capsules' : 'casino'] += wager;
+        state.stats.casinoSpins++; state.stats.casinoSpent += wager;
         if (casinoMode === 'capsule') state.stats.capsulesOpened++;
         haptic('impact', 'medium');
-        const reel = $('casinoReel');
+        const prize = drawCasinoPrize(casinoMode), reel = $('casinoReel');
+        $('casinoSpeed').disabled = false; $('slotReels').hidden = true;
         $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoWheel').classList.toggle('spinning', casinoMode === 'roulette');
-        reel.hidden = casinoMode === 'roulette'; reel.classList.add('rolling'); reel.textContent = casinoMode === 'capsule' ? '🪐' : '✦ · 🌌 · ✦';
+        reel.hidden = casinoMode === 'roulette' || casinoMode === 'slots'; reel.classList.add('rolling'); reel.textContent = '🪐';
         $('casinoResult').textContent = 'Сигналы перемешиваются…';
-        changed();
-        setTimeout(() => {
-          const outcomes = casinoTables[casinoMode];
-          const draw = Math.random() * 100; let total = 0;
-          const prize = outcomes.find(item => { total += item.chance; return draw < total; }) || outcomes[outcomes.length - 1];
-          const payout = Math.floor(wager * prize.mult), net = payout - wager;
-          state.sparks += payout; state.stats.casinoNet += net;
-          state.stats.casinoBestWin = Math.max(state.stats.casinoBestWin, net);
-          if (payout > wager) state.stats.casinoWins++;
-          if (prize.jackpot) state.stats.casinoJackpots++;
-          if (prize.boost) {
-            state.casinoBoostUntil = Math.max(Date.now(), Number(state.casinoBoostUntil) || 0) + prize.boost * 60 * 1000;
-            state.stats.casinoBoosts++;
-          }
+        changed(); save();
+        if (casinoMode === 'slots') {
+          startSlotAnimation(prize, wager);
+        } else setTimeout(() => {
           reel.classList.remove('rolling'); $('casinoWheel').classList.remove('spinning');
-          reel.hidden = false; $('casinoWheel').hidden = true;
-          if (casinoMode === 'slots') reel.textContent = prize.jackpot ? '💎 💎 💎' : prize.mult >= 2 ? `${prize.icon} ${prize.icon} ${prize.icon}` : `${prize.icon} 🌑 ✨`;
-          else reel.textContent = prize.icon;
-          $('casinoResult').innerHTML = `${prize.title}<br>Выплата: <b>${fullNumber(payout)} ✦</b> · ${net >= 0 ? 'прибыль' : 'итог'}: <b>${net >= 0 ? '+' : '−'}${fullNumber(Math.abs(net))} ✦</b>`;
-          casinoBusy = false; checkAchievements(); changed(); save(); haptic(prize.jackpot || prize.boost ? 'notify' : 'impact', prize.jackpot || prize.boost ? 'success' : 'light');
-        }, 1050);
+          reel.hidden = false; $('casinoWheel').hidden = true; reel.textContent = prize.icon;
+          settleCasinoPrize(prize, wager);
+        }, casinoMode === 'capsule' ? 1900 : 1300);
       });
       $('shipyard').addEventListener('click', e => {
         const button = e.target.closest('[data-buy-world]'); if (!button) return;
         const world = worlds.find(item => item.id === button.dataset.buyWorld); if (!world) return;
         if (state.assets.some(asset => asset.typeId === world.id)) return;
         const cost = worldPrice(world); if (state.sparks < cost) return;
-        state.sparks -= cost; haptic('impact', 'light');
+        state.sparks -= cost; state.economy.spent.assets += cost; haptic('impact', 'light');
         const asset = { uid: state.assetNext++, typeId: world.id, level: 1 };
         state.assets.push(asset); selectedAssetId = asset.uid;
         checkAchievements(); changed();
@@ -785,7 +872,11 @@
             ? -Math.max(10, 35 - state.gameUpgrades.salvage * 10)
             : Math.round((baseReward + Math.floor(Math.random() * baseReward)) * (1 + state.levels.gravity * .25) * (1 + state.gameUpgrades.catchBonus * .2));
         const sparksBefore = state.sparks;
+        const previousBalance = state.sparks;
         state.sparks = Math.max(0, state.sparks + reward);
+        const actualChange = state.sparks - previousBalance;
+        if (actualChange >= 0) state.economy.earned.catch += actualChange;
+        else state.economy.spent.penalties += Math.abs(actualChange);
         catchRoundPoints += state.sparks - sparksBefore;
         if (!bomb && !asteroid) state.stats.catches++;
         object.remove(); checkAchievements(); changed();
@@ -827,7 +918,7 @@
         const score = currentFlightScore();
         const reward = score * 2;
         state.stats.shipBest = Math.max(state.stats.shipBest || 0, score);
-        state.sparks += reward;
+        state.sparks += reward; state.economy.earned.ship += reward;
         shipField.querySelectorAll('.ship-hazard').forEach(object => object.remove());
         checkAchievements();
         $('shipStatus').textContent = `Раунд завершён · ${compact(score)} очков`;
@@ -939,13 +1030,15 @@
       $('reset').addEventListener('click', () => {
         if (casinoBusy) { $('toast').textContent = 'Дождись результата текущего хода'; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500); return; }
         if (!confirm('Сбросить весь прогресс? Это действие нельзя отменить.')) return;
-        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, assets: [], assetNext: 1, achievements: [], last: Date.now() }; selectedAssetId = null; save(); render();
+        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, economy: { earned: { ...initial.economy.earned }, spent: { ...initial.economy.spent } }, assets: [], assetNext: 1, achievements: [], last: Date.now() }; selectedAssetId = null; save(); render();
       });
       const elapsed = Math.min(8 * 60 * 60, Math.max(0, (Date.now() - (Number(state.last) || Date.now())) / 1000));
-      if (elapsed > 5 && perSecond()) state.sparks += elapsed * perSecond();
+      if (elapsed > 5 && perSecond()) {
+        const offlineIncome = elapsed * perSecond(); state.sparks += offlineIncome; state.economy.earned.passive += offlineIncome;
+      }
       state.last = Date.now(); checkAchievements(); render(); save();
       if (telegram) { try { telegram.ready(); } catch { /* The browser-only version has no Telegram readiness signal. */ } }
-      setInterval(() => { if (perSecond()) { state.sparks += perSecond(); checkAchievements(); render(); } }, 1000);
+      setInterval(() => { const income = perSecond(); if (income) { state.sparks += income; state.economy.earned.passive += income; checkAchievements(); render(); } }, 1000);
       setInterval(renderCasino, 1000);
       setInterval(save, 5000);
       window.addEventListener('pagehide', save);
