@@ -234,13 +234,14 @@
     .slot-title { display:none;position:absolute;top:17px;color:#aeeeff;font-size:10px;font-weight:800;letter-spacing:2.4px;text-shadow:0 0 13px #58cfff; }
     .slots-theme .slot-title { display:block; }
     .roulette-stage { display:none;position:relative;width:min(100%,320px);aspect-ratio:1;margin:25px auto 12px; }
-    .roulette-wheel { position:absolute;inset:0;border:7px solid #6ee7ff;border-radius:50%;background:#10172a;box-shadow:0 0 0 5px #132742,0 0 0 8px #4fd9ff66,0 0 34px #32cfff55,inset 0 0 0 5px #09101f;transition:filter .3s; }
+    .roulette-wheel { position:absolute;inset:0;overflow:hidden;border:7px solid #6ee7ff;border-radius:50%;background:#10172a;box-shadow:0 0 0 5px #132742,0 0 0 8px #4fd9ff66,0 0 34px #32cfff55,inset 0 0 0 5px #09101f;transition:filter .3s; }
+    .roulette-disc { position:absolute;inset:0;width:100%;height:100%; }
     .roulette-wheel::after { content:"✦";position:absolute;left:50%;top:50%;z-index:2;display:grid;place-items:center;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #83edff;border-radius:50%;background:radial-gradient(circle,#344367,#0b1020 72%);box-shadow:0 0 20px #48dfff88;color:#fff;font-size:clamp(22px,7vw,34px);text-shadow:0 0 12px #fff; }
-    .roulette-symbol { position:absolute;left:50%;top:50%;z-index:1;display:grid;place-items:center;width:12%;aspect-ratio:1;margin:0;font-size:clamp(16px,5.5vw,25px);line-height:1;text-shadow:0 0 12px currentColor; }
+    .roulette-symbol { position:absolute;left:50%;top:50%;z-index:1;display:grid;place-items:center;width:9%;aspect-ratio:1;margin:0;font-size:clamp(15px,4.8vw,21px);line-height:1;text-shadow:0 0 12px currentColor; }
     .roulette-pointer { position:absolute;top:-16px;left:50%;z-index:4;width:0;height:0;transform:translateX(-50%);border-left:12px solid transparent;border-right:12px solid transparent;border-top:25px solid #ffda76;filter:drop-shadow(0 0 8px #ffc94d); }
     .roulette-stage[hidden] { display:none; }
     .roulette-theme .roulette-stage:not([hidden]) { display:block; }
-    .roulette-wheel.spinning { animation:wheelSpin 4.1s cubic-bezier(.12,.72,.12,1) both; }
+    .roulette-wheel.spinning { animation:wheelSpin var(--wheel-duration,4100ms) cubic-bezier(.12,.72,.12,1) both; }
     @keyframes wheelSpin { to { transform:rotate(var(--wheel-target)); } }
     .roulette-payouts { display:none;margin:8px 0 14px;padding:14px;text-align:left;border:1px solid #dcae5660;border-radius:16px;background:linear-gradient(145deg,#241d32,#11101b); }
     .roulette-theme .roulette-payouts { display:block; }
@@ -347,10 +348,11 @@
           <div class="casino-chips" id="casinoChips"><button class="casino-chip" data-bet="1000" type="button">+1 тыс.</button><button class="casino-chip" data-bet="10000" type="button">+10 тыс.</button><button class="casino-chip" data-bet="100000" type="button">+100 тыс.</button><button class="casino-chip" data-bet="1000000" type="button">+1 млн</button><button class="casino-chip" data-bet="10000000" type="button">+10 млн</button></div>
           <div class="casino-chips casino-lower-chips" id="casinoLowerChips"><button class="casino-chip" data-bet-adjust="1000" type="button">−1 тыс.</button><button class="casino-chip" data-bet-adjust="10000" type="button">−10 тыс.</button><button class="casino-chip" data-bet-adjust="100000" type="button">−100 тыс.</button><button class="casino-chip" data-bet-adjust="1000000" type="button">−1 млн</button><button class="casino-chip" data-bet-adjust="10000000" type="button">−10 млн</button><button class="casino-chip" data-bet-reset type="button">Сбросить</button></div>
           <div class="casino-machine"><div class="slot-title">✦ ORBITAL JACKPOT ✦</div><div class="roulette-stage" id="rouletteStage" hidden><div class="roulette-pointer" aria-hidden="true"></div><div class="roulette-wheel" id="casinoWheel" aria-label="Колесо рулетки с секторами наград"></div></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div><div class="slot-reels" id="slotReels" aria-label="Барабаны космического автомата" hidden><span class="slot-reel">✦</span><span class="slot-reel">🪐</span><span class="slot-reel">💎</span></div></div>
+          <button class="casino-speed" id="rouletteSpeed" type="button" hidden aria-label="Изменить скорость рулетки" title="Нажимай, чтобы переключать скорость ×1, ×2 и ×3">⏱ Скорость ×1 · нажми для смены</button>
           <button class="casino-speed" id="casinoSpeed" type="button" hidden>⚡ Ускорить прокрутку ×3</button>
           <div class="casino-result" id="casinoResult">Выбери игру и сделай ставку.</div>
           <button class="casino-action" id="casinoAction" type="button">Сделать ставку · 1 000 ✦</button>
-          <div class="roulette-payouts"><h3>Сектора рулетки</h3><p>Множитель применяется к ставке, символ под указателем показывает исход</p><div class="slot-payout-list">
+          <div class="roulette-payouts"><h3>Сектора рулетки</h3><p>У каждого приза свой сектор. Размер сектора не показывает шанс выпадения: приз разыгрывается по вероятности.</p><div class="slot-payout-list">
             <div class="slot-payout-row"><span class="slot-combo">🕳️ Чёрная дыра</span><span class="slot-mult">×0</span></div>
             <div class="slot-payout-row"><span class="slot-combo">☄️ Метеорит</span><span class="slot-mult">×0</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🌑 Тёмная луна</span><span class="slot-mult">×0,5</span></div>
@@ -579,8 +581,10 @@
           }
         } else if (!avatar.dataset.photo) avatar.textContent = [...name][0]?.toUpperCase() || '✦';
       }
-      let casinoMode = 'roulette', casinoBusy = false, slotFastMode = false;
+      let casinoMode = 'roulette', casinoBusy = false, slotFastMode = false, rouletteSpeed = 1;
       try { slotFastMode = localStorage.getItem('spark_slot_fast') === '1'; } catch (_) {}
+      try { rouletteSpeed = Number(localStorage.getItem('spark_roulette_speed')) || 1; } catch (_) {}
+      if (![1, 2, 3].includes(rouletteSpeed)) rouletteSpeed = 1;
       const capsuleCost = 5000;
       function renderCasino() {
         $('casinoBalance').textContent = fullNumber(state.sparks);
@@ -588,6 +592,9 @@
         $('casinoCard').classList.toggle('roulette-theme', casinoMode === 'roulette');
         $('casinoCard').classList.toggle('slots-theme', casinoMode === 'slots');
         $('rouletteStage').hidden = casinoMode !== 'roulette';
+        $('rouletteSpeed').hidden = casinoMode !== 'roulette';
+        $('rouletteSpeed').disabled = casinoBusy;
+        $('rouletteSpeed').textContent = `⏱ Скорость ×${rouletteSpeed} · нажми для смены`;
         $('casinoWheel').hidden = false;
         $('casinoReel').hidden = casinoMode === 'roulette' || casinoMode === 'slots';
         $('slotReels').hidden = casinoMode !== 'slots';
@@ -725,7 +732,7 @@
         ]
       };
       const casinoModeInfo = {
-        roulette: 'В колесе 13 секторов и крупные награды до x2 500. Символ под указателем показывает выигрыш или потерю ставки.',
+        roulette: 'У каждого символа свой сектор. Приз выбирается по вероятности, а сектор под стрелкой показывает результат.',
         capsule: 'Капсула стоит 5 000 ✦. Бонусы: x20 на 5 минут, x5 на 10 минут, x50 на минуту или x100 на 30 секунд. Одновременно действует самый сильный множитель.',
         slots: 'Совпадающие символы дают множитель к ставке. Попробуй собрать редкую комбинацию.'
       };
@@ -733,43 +740,58 @@
       const slotSymbols = ['✦', '🪐', '💎', '☄️', '🌙', '⭐', '🚀', '🌌', '🔮'];
       function buildRouletteWheel() {
         const wheel = $('casinoWheel'), outcomes = casinoTables.roulette;
-        const total = outcomes.reduce((sum, item) => sum + item.chance, 0), firstWidth = outcomes[0].chance / total * 360;
-        let passed = 0;
-        const segments = outcomes.map(item => {
-          const start = passed / total * 360; passed += item.chance;
-          const end = passed / total * 360, borderStart = end - Math.min(.8, (end - start) * .18);
-          return item === outcomes[outcomes.length - 1]
-            ? `${item.color} ${start}deg ${end}deg`
-            : `${item.color} ${start}deg ${borderStart}deg,#bdf7ff ${borderStart}deg ${end}deg`;
-        }).join(',');
-        wheel.style.background = `conic-gradient(from -${firstWidth / 2}deg,${segments})`;
+        const ns = 'http://www.w3.org/2000/svg';
+        const disc = document.createElementNS(ns, 'svg');
+        disc.setAttribute('viewBox', '0 0 100 100');
+        disc.setAttribute('class', 'roulette-disc');
+        disc.setAttribute('aria-hidden', 'true');
         wheel.replaceChildren();
-        passed = 0;
-        outcomes.forEach(item => {
-          const symbol = document.createElement('span'), width = item.chance / total * 360;
-          const angle = (passed / total * 360 + width / 2) * Math.PI / 180;
-          const radius = 36;
+        const sectorWidth = 360 / outcomes.length;
+        outcomes.forEach((item, index) => {
+          const startAngle = index * sectorWidth - sectorWidth / 2;
+          const endAngle = startAngle + sectorWidth;
+          const centerAngle = index * sectorWidth;
+          const point = angle => {
+            const radians = (angle - 90) * Math.PI / 180;
+            return [50 + Math.cos(radians) * 47, 50 + Math.sin(radians) * 47];
+          };
+          const [sx, sy] = point(startAngle), [ex, ey] = point(endAngle);
+          const path = document.createElementNS(ns, 'path');
+          path.setAttribute('d', `M 50 50 L ${sx} ${sy} A 47 47 0 0 1 ${ex} ${ey} Z`);
+          path.setAttribute('fill', item.color);
+          path.setAttribute('stroke', '#bdf7ff');
+          path.setAttribute('stroke-width', '.45');
+          disc.append(path);
+          const symbol = document.createElement('span');
           symbol.className = 'roulette-symbol'; symbol.textContent = item.icon;
           symbol.setAttribute('aria-hidden', 'true');
-          symbol.style.left = `${50 + Math.sin(angle) * radius}%`; symbol.style.top = `${50 - Math.cos(angle) * radius}%`;
-          if (item.chance <= 2) symbol.style.fontSize = 'clamp(10px,3.5vw,16px)';
+          const angle = centerAngle * Math.PI / 180;
+          symbol.style.left = `${50 + Math.sin(angle) * 36}%`; symbol.style.top = `${50 - Math.cos(angle) * 36}%`;
           symbol.style.transform = 'translate(-50%,-50%)';
           wheel.append(symbol);
-          passed += item.chance;
         });
+        wheel.prepend(disc);
       }
       buildRouletteWheel();
       function startRouletteAnimation(prize) {
         const wheel = $('casinoWheel'), outcomes = casinoTables.roulette, index = outcomes.indexOf(prize);
-        const total = outcomes.reduce((sum, item) => sum + item.chance, 0);
-        const centerAngle = (outcomes.slice(0, index).reduce((sum, item) => sum + item.chance, 0) + prize.chance / 2) / total * 360;
+        const centerAngle = index * (360 / outcomes.length);
         const target = 360 * 6 + (360 - centerAngle) % 360;
+        const duration = Math.round(6200 / rouletteSpeed);
         wheel.classList.remove('spinning'); wheel.style.transform = 'rotate(0deg)';
         void wheel.offsetWidth;
         wheel.style.setProperty('--wheel-target', `${target}deg`);
+        wheel.style.setProperty('--wheel-duration', `${duration}ms`);
         wheel.classList.add('spinning');
-        return target;
+        return { target, duration };
       }
+      $('rouletteSpeed').addEventListener('click', () => {
+        if (casinoBusy) return;
+        rouletteSpeed = rouletteSpeed % 3 + 1;
+        try { localStorage.setItem('spark_roulette_speed', String(rouletteSpeed)); } catch (_) {}
+        $('rouletteSpeed').textContent = `⏱ Скорость ×${rouletteSpeed} · нажми для смены`;
+        haptic('impact', 'light');
+      });
       function drawCasinoPrize(mode) {
         const outcomes = casinoTables[mode];
         let total = 0, draw = Math.random() * 100;
@@ -894,11 +916,11 @@
         if (casinoMode === 'slots') {
           startSlotAnimation(prize, wager);
         } else if (casinoMode === 'roulette') {
-          const target = startRouletteAnimation(prize);
+          const spin = startRouletteAnimation(prize);
           setTimeout(() => {
-            const wheel = $('casinoWheel'); wheel.style.transform = `rotate(${target}deg)`;
+            const wheel = $('casinoWheel'); wheel.style.transform = `rotate(${spin.target}deg)`;
             wheel.classList.remove('spinning'); settleCasinoPrize(prize, wager);
-          }, 4300);
+          }, spin.duration + 100);
         } else setTimeout(() => {
           reel.classList.remove('rolling'); $('casinoWheel').classList.remove('spinning');
           reel.hidden = false; reel.textContent = prize.icon;
