@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#090912">
-  <meta name="description" content="ПУЛЬСАР — космический кликер. Собирай звёздную пыль, открывай улучшения и разжигай галактику.">
-  <title>ПУЛЬСАР — космический кликер</title>
+  <meta name="description" content="Искра — космический кликер. Собирай звёздную пыль, открывай улучшения и разжигай галактику.">
+  <title>Искра — космический кликер</title>
   <script src="https://telegram.org/js/telegram-web-app.js?64"></script>
   <style>
     :root {
@@ -75,7 +75,7 @@
     footer { color:#69697d; text-align:center; font-size:11px; padding-top:18px; }
     @media (min-height:850px) { .play-area { padding:34px 0; } .balance-card { padding-top:26px; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; } }
-    /* ПУЛЬСАР: новый космический интерфейс */
+    /* Искра: космический интерфейс */
     :root { --bg:#090912; --panel:rgba(20,20,35,.88); --muted:#9898b4; --text:#f8f6ff; --purple:#a879ff; --pink:#ff74c8; --mint:#9bf7d3; --line:rgba(200,180,255,.12); }
     body { background:radial-gradient(ellipse at 50% 28%,#30214f 0,#171326 34%,#090912 76%); }
     body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.42; background-image:radial-gradient(1px 1px at 8% 18%,#fff 99%,transparent),radial-gradient(1px 1px at 79% 13%,#d8c5ff 99%,transparent),radial-gradient(1.5px 1.5px at 91% 48%,#fff 99%,transparent),radial-gradient(1px 1px at 19% 65%,#d8c5ff 99%,transparent),radial-gradient(1px 1px at 68% 82%,#fff 99%,transparent),radial-gradient(1px 1px at 38% 9%,#fff 99%,transparent); background-size:360px 320px; }
@@ -83,7 +83,7 @@
     .tab-panel { min-height:calc(100dvh - 142px); }
     .tab-panel[hidden] { display:none; }
     .shop-panel { min-height:calc(100dvh - 150px); }
-    .bottom-nav { position:fixed;z-index:10;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,520px);display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:9px 8px max(10px,env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom, 0px));background:linear-gradient(180deg,#11101cdd,#0d0c16f5);border-top:1px solid #c4a4ff1a;backdrop-filter:blur(18px); }
+    .bottom-nav { position:fixed;z-index:10;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,520px);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;padding:9px 6px max(10px,env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom, 0px));background:linear-gradient(180deg,#11101cdd,#0d0c16f5);border-top:1px solid #c4a4ff1a;backdrop-filter:blur(18px); }
     .nav-tab { display:grid;justify-items:center;gap:4px;border:1px solid transparent;border-radius:13px;padding:8px 2px;background:transparent;color:#89849f;cursor:pointer;touch-action:manipulation; }
     .nav-tab.active { color:#f4eaff;background:#a879ff1b;border-color:#c39bff22; }
     .nav-icon { font-size:19px;line-height:1; }
@@ -202,13 +202,52 @@
     .achievement.done .achievement-reward { color:var(--mint); }
     .achievement-count { display:block;margin-top:3px;color:#85819c;font-size:9px;font-weight:500; }
     .achievements-head { margin-top:25px; }
+    .profile-card,.casino-card { padding:18px;border:1px solid #c4a4ff2b;border-radius:22px;background:linear-gradient(140deg,#211c35ed,#11111eee);box-shadow:0 12px 32px #0003; }
+    .profile-head { display:flex;align-items:center;gap:14px; }
+    .profile-avatar { width:64px;height:64px;flex:0 0 64px;display:grid;place-items:center;overflow:hidden;border:2px solid #c8a4ff88;border-radius:50%;background:linear-gradient(145deg,#ff85cc,#7552df);font-size:24px;font-weight:800; }
+    .profile-avatar img { width:100%;height:100%;object-fit:cover; }
+    .profile-name { font-size:17px;font-weight:800;overflow-wrap:anywhere; }
+    .profile-username,.profile-caption { margin-top:4px;color:var(--muted);font-size:11px; }
+    .profile-balance { margin-top:19px;padding-top:15px;border-top:1px solid #ffffff12; }
+    .profile-balance-value { margin-top:5px;color:#f5eaff;font-size:clamp(23px,7vw,34px);font-weight:850;overflow-wrap:anywhere;font-variant-numeric:tabular-nums; }
+    .profile-switch,.casino-modes,.casino-chips { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0; }
+    .profile-switch button,.casino-mode,.casino-chip { border:1px solid #bd9aff2e;border-radius:13px;padding:11px 9px;background:#ffffff08;color:#c9bddf;font-size:12px;font-weight:700;cursor:pointer; }
+    .profile-switch button.active,.casino-mode.active { border-color:#bd9aff80;background:#9b73ff25;color:#fff; }
+    .profile-view[hidden] { display:none; }
+    .casino-modes { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .casino-mode { min-height:94px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center; }
+    .casino-mode span:first-child { font-size:23px; }
+    .casino-mode small { color:var(--muted);font-size:9px;font-weight:500; }
+    .casino-card { margin-top:14px;text-align:center; }
+    .casino-balance { color:#b8a4df;font-size:12px; }
+    .casino-balance strong { color:#fff;font-variant-numeric:tabular-nums; }
+    .casino-bet-label { display:block;margin:17px 0 7px;text-align:left;color:#c9bddf;font-size:12px; }
+    .casino-bet { width:100%;padding:12px;border:1px solid #bd9aff3b;border-radius:12px;background:#0c0c16;color:#fff;font:inherit;font-variant-numeric:tabular-nums; }
+    .casino-chips { grid-template-columns:repeat(3,minmax(0,1fr));margin:8px 0 14px; }
+    .casino-chip { padding:9px 4px;font-size:10px; }
+    .casino-machine { min-height:148px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative;margin:12px 0;padding:18px;border:1px solid #bd9aff22;border-radius:18px;background:radial-gradient(ellipse,#7045a833,transparent 70%),#0d0c18; }
+    .roulette-wheel { width:94px;height:94px;border:5px solid #f2d58a;border-radius:50%;background:conic-gradient(#df4569 0 30deg,#281e49 30deg 60deg,#ecb845 60deg 90deg,#281e49 90deg 120deg,#df4569 120deg 150deg,#281e49 150deg 180deg,#ecb845 180deg 210deg,#281e49 210deg 240deg,#df4569 240deg 270deg,#281e49 270deg 300deg,#ecb845 300deg 330deg,#281e49 330deg);box-shadow:0 0 24px #d59bff55,inset 0 0 0 5px #100e1b; }
+    .roulette-wheel::after { content:"✦";display:grid;place-items:center;width:100%;height:100%;color:#fff5cc;font-size:23px;text-shadow:0 0 12px #fff; }
+    .roulette-wheel[hidden] { display:none; }
+    .roulette-wheel.spinning { animation:wheelSpin 1s cubic-bezier(.15,.72,.24,1) both; }
+    @keyframes wheelSpin { to { transform:rotate(1260deg); } }
+    .casino-reel { font-size:48px;filter:drop-shadow(0 0 16px #d5a5ff88); }
+    .casino-reel.rolling { animation:casinoRoll .16s linear infinite alternate; }
+    @keyframes casinoRoll { to { transform:translateY(-7px) rotate(8deg) scale(1.08);filter:drop-shadow(0 0 24px #ffa8ef); } }
+    .casino-result { min-height:43px;color:#e9deff;font-size:13px;line-height:1.5; }
+    .casino-result b { color:var(--mint); }
+    .casino-action { width:100%;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#a75eea,#6345c5);box-shadow:0 8px 25px #8e5bea44;color:white;font-size:14px;font-weight:800;cursor:pointer; }
+    .casino-action:disabled { opacity:.5;cursor:default; }
+    .casino-odds { margin-top:12px;color:#938ba7;font-size:10px;line-height:1.55; }
+    .casino-boost { margin-top:9px;color:var(--mint);font-size:11px; }
+    @media (max-width:380px) { .nav-label { font-size:8px; } .nav-tab { padding-inline:0; } .casino-modes { gap:5px; } .casino-mode { padding-inline:4px; } }
     @media (prefers-reduced-motion:reduce) { .flyby { animation-duration:8s; } }
   </style>
 </head>
 <body>
   <main class="app">
     <header>
-      <div class="brand"><span class="brand-icon">✦</span> ПУЛЬСАР</div>
+      <div class="brand"><span class="brand-icon">✦</span> ИСКРА</div>
       <button class="reset" id="reset" type="button">Сбросить</button>
     </header>
     <div class="tab-panel" id="homePanel" data-panel="home">
@@ -223,10 +262,6 @@
         <button class="orb" id="tap" type="button" aria-label="Нажми, чтобы собрать искры"><span class="orb-emoji">✦</span></button>
       </div>
       <div class="tap-hint">Коснись ядра — зажги новую звезду</div>
-    </section>
-    <section>
-      <div class="section-head"><h2>Знаки исследователя</h2><span class="section-note">Награды за открытия 🏆</span></div>
-      <div class="achievements" id="achievements"></div>
     </section>
     </div>
     <div class="tab-panel" id="gamesPanel" data-panel="games" hidden>
@@ -257,6 +292,39 @@
       <div class="shop" id="shop"></div>
     </section>
     </div>
+    <div class="tab-panel shop-panel" id="casinoPanel" data-panel="casino" hidden>
+      <section>
+        <div class="section-head"><h2>Галактическое казино</h2><span class="section-note">Рискни частью пыли</span></div>
+        <div class="casino-modes" role="group" aria-label="Игровой режим казино">
+          <button class="casino-mode active" data-casino-mode="roulette" type="button"><span>🎡</span><b>Рулетка</b><small>Крути колесо</small></button>
+          <button class="casino-mode" data-casino-mode="capsule" type="button"><span>🪐</span><b>Капсула</b><small>Редкий артефакт</small></button>
+          <button class="casino-mode" data-casino-mode="slots" type="button"><span>🎰</span><b>Автомат</b><small>Три символа</small></button>
+        </div>
+        <div class="casino-card">
+          <div class="casino-balance">Твой баланс: <strong id="casinoBalance">0</strong> ✦</div>
+          <label class="casino-bet-label" id="casinoBetLabel" for="casinoBet">Ставка</label>
+          <input class="casino-bet" id="casinoBet" type="number" inputmode="numeric" min="100" step="100" value="1000" aria-label="Размер ставки">
+          <div class="casino-chips" id="casinoChips"><button class="casino-chip" data-bet="1000" type="button">+1 тыс.</button><button class="casino-chip" data-bet="10000" type="button">+10 тыс.</button><button class="casino-chip" data-bet="100000" type="button">+100 тыс.</button><button class="casino-chip" data-bet="1000000" type="button">+1 млн</button><button class="casino-chip" data-bet="10000000" type="button">+10 млн</button></div>
+          <div class="casino-chips casino-lower-chips" id="casinoLowerChips"><button class="casino-chip" data-bet-adjust="1000" type="button">−1 тыс.</button><button class="casino-chip" data-bet-adjust="10000" type="button">−10 тыс.</button><button class="casino-chip" data-bet-adjust="100000" type="button">−100 тыс.</button><button class="casino-chip" data-bet-adjust="1000000" type="button">−1 млн</button><button class="casino-chip" data-bet-adjust="10000000" type="button">−10 млн</button><button class="casino-chip" data-bet-reset type="button">Сбросить</button></div>
+          <div class="casino-machine"><div class="roulette-wheel" id="casinoWheel" aria-hidden="true"></div><div class="casino-reel" id="casinoReel" aria-live="polite" hidden></div></div>
+          <div class="casino-result" id="casinoResult">Выбери игру и сделай ставку.</div>
+          <button class="casino-action" id="casinoAction" type="button">Сделать ставку · 1 000 ✦</button>
+          <div class="casino-boost" id="casinoBoost"></div>
+          <div class="casino-odds" id="casinoOdds">Шансы: проигрыш 50% · малый приз 25% · x1,25 — 15% · x2 — 8% · джекпот x8 — 2%.</div>
+        </div>
+      </section>
+    </div>
+    <div class="tab-panel shop-panel" id="profilePanel" data-panel="profile" hidden>
+      <section>
+        <div class="section-head"><h2>Профиль пилота</h2><span class="section-note">Твоя статистика</span></div>
+        <div class="profile-switch" role="tablist" aria-label="Разделы профиля"><button class="active" data-profile-view="summary" type="button">Профиль</button><button data-profile-view="achievements" type="button">Достижения 🏆</button></div>
+        <div class="profile-view" id="profileSummaryView">
+          <div class="profile-card"><div class="profile-head"><div class="profile-avatar" id="profileAvatar">✦</div><div><div class="profile-name" id="profileName">Космический пилот</div><div class="profile-username" id="profileUsername">Играй в Telegram, чтобы связать профиль</div></div></div><div class="profile-balance"><div class="eyebrow">ТВОЯ ЗВЁЗДНАЯ ПЫЛЬ</div><div class="profile-balance-value" id="profileBalance">0</div><div class="profile-caption" id="profileIncome">Доход: 0 в секунду</div></div></div>
+          <div class="profile-card" style="margin-top:12px"><div class="section-head"><h2>Пилотский журнал</h2></div><div class="asset-stat-row"><span>Касания ядра</span><b id="profileTaps">0</b></div><div class="asset-stat-row"><span>Поймано объектов</span><b id="profileCatches">0</b></div><div class="asset-stat-row"><span>Пари в казино</span><b id="profileBets">0</b></div><div class="asset-stat-row"><span>Крупнейший выигрыш</span><b id="profileWin">0 ✦</b></div></div>
+        </div>
+        <div class="profile-view" id="profileAchievementsView" hidden><div class="section-head achievements-head"><h2>Знаки исследователя</h2><span class="section-note">Награды за открытия 🏆</span></div><div class="achievements" id="achievements"></div></div>
+      </section>
+    </div>
     <footer>Твой космос ждёт возвращения · прогресс сохранён</footer>
     <nav class="bottom-nav" aria-label="Разделы игры">
       <button class="nav-tab active" data-tab="home" type="button" aria-current="page"><span class="nav-icon">🌌</span><span class="nav-label">Ядро</span></button>
@@ -264,6 +332,8 @@
       <button class="nav-tab" data-tab="shipyard" type="button"><span class="nav-icon">🛸</span><span class="nav-label">Верфь</span></button>
       <button class="nav-tab" data-tab="shop" type="button"><span class="nav-icon">⚙️</span><span class="nav-label">Модули</span></button>
       <button class="nav-tab" data-tab="games" type="button"><span class="nav-icon">☄️</span><span class="nav-label">Игры</span></button>
+      <button class="nav-tab" data-tab="casino" type="button"><span class="nav-icon">🎰</span><span class="nav-label">Казино</span></button>
+      <button class="nav-tab" data-tab="profile" type="button"><span class="nav-icon">👤</span><span class="nav-label">Профиль</span></button>
     </nav>
   </main>
   <div class="toast" id="toast" role="status"></div>
@@ -311,9 +381,16 @@
         { id: 'first_upgrade', icon: '🛠️', name: 'Инженер галактики', desc: 'Купи первое улучшение', goal: 1, reward: 75, test: s => s.stats.upgradesBought },
         { id: 'three_assets', icon: '🌌', name: 'Владыка системы', desc: 'Построй три объекта в своей системе', goal: 3, reward: 180, test: s => s.assets.length },
         { id: 'pilot_10', icon: '🚀', name: 'Первый полёт', desc: 'Продержись в космосе 10 секунд', goal: 10, reward: 100, test: s => s.stats.shipBest },
-        { id: 'rich', icon: '💫', name: 'Звёздный магнат', desc: 'Накопи 1 000 звёздной пыли', goal: 1000, reward: 300, test: s => s.sparks }
+        { id: 'rich', icon: '💫', name: 'Звёздный магнат', desc: 'Накопи 1 000 звёздной пыли', goal: 1000, reward: 300, test: s => s.sparks },
+        { id: 'casino_first', icon: '🎲', name: 'Первое пари', desc: 'Сделай первую ставку в казино', goal: 1, reward: 100, test: s => s.stats.casinoSpins },
+        { id: 'capsule_10', icon: '🪐', name: 'Коллекционер капсул', desc: 'Открой 10 звёздных капсул', goal: 10, reward: 1200, test: s => s.stats.capsulesOpened },
+        { id: 'casino_turnover', icon: '💰', name: 'Большая игра', desc: 'Поставь суммарно 500 000 пыли', goal: 500000, reward: 6000, test: s => s.stats.casinoSpent },
+        { id: 'casino_jackpot', icon: '🌠', name: 'Гравитация удачи', desc: 'Сорви джекпот x8 или выше', goal: 1, reward: 5000, test: s => s.stats.casinoJackpots },
+        { id: 'casino_boosts', icon: '⚡', name: 'Сверхновая экономика', desc: 'Запусти временный буст дохода 3 раза', goal: 3, reward: 3500, test: s => s.stats.casinoBoosts },
+        { id: 'casino_profit', icon: '👑', name: 'Казино в плюсе', desc: 'Выйди в общий плюс на 50 000 пыли', goal: 50000, reward: 10000, test: s => Math.max(0, s.stats.casinoNet) },
+        { id: 'casino_highroller', icon: '💎', name: 'Повелитель стола', desc: 'Получи за один ход не менее 100 000 пыли', goal: 100000, reward: 15000, test: s => s.stats.casinoBestWin }
       ];
-      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0 }, assets: [], assetNext: 1, achievements: [], last: Date.now() };
+      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, last: Date.now() };
       let state;
       let hasLocalSave = false;
       try {
@@ -361,13 +438,15 @@
         } catch { /* Haptics are optional. */ }
       };
       const compact = n => Intl.NumberFormat('ru-RU', { maximumFractionDigits: n < 100 ? 1 : 0, notation: n >= 1e6 ? 'compact' : 'standard' }).format(n);
+      const fullNumber = n => Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(n) || 0);
       const price = u => Math.floor(u.base * Math.pow(u.growth, state.levels[u.id]));
       const gameUpgradePrice = u => Math.floor(u.base * Math.pow(u.growth, state.gameUpgrades[u.id]));
       const tapPower = () => 1 + state.levels.power + state.levels.mult * 5 + state.levels.forge * 3;
       const assetType = asset => worlds.find(world => world.id === asset.typeId);
       const assetYield = asset => { const world = assetType(asset); return world ? world.income * Math.pow(1.55, Math.max(0, asset.level - 1)) : 0; };
       const assetIncome = () => state.assets.reduce((sum, asset) => sum + assetYield(asset), 0);
-      const perSecond = () => state.levels.auto + state.levels.expedition * 3 + assetIncome();
+      const incomeMultiplier = () => Date.now() < (Number(state.casinoBoostUntil) || 0) ? 2 : 1;
+      const perSecond = () => (state.levels.auto + state.levels.expedition * 3 + assetIncome()) * incomeMultiplier();
       const worldPrice = world => world.cost;
       const assetUpgradePrice = asset => { const world = assetType(asset); return Math.floor(world.cost * .72 * Math.pow(1.68, Math.max(0, asset.level - 1))); };
       function save() {
@@ -382,6 +461,7 @@
         $('balance').textContent = compact(state.sparks);
         $('rate').textContent = compact(perSecond());
         $('shipBestLobby').textContent = compact(state.stats.shipBest || 0);
+        renderProfile(); renderCasino();
         $('shop').innerHTML = upgrades.map(u => {
           const cost = price(u), affordable = state.sparks >= cost;
           return `<button class="upgrade ${affordable ? 'affordable' : ''}" data-upgrade="${u.id}" ${affordable ? '' : 'disabled'} type="button">
@@ -393,10 +473,40 @@
           return `<button class="upgrade ${affordable && !maxed ? 'affordable' : ''}" data-game-upgrade="${u.id}" type="button" ${affordable && !maxed ? '' : 'disabled'}><span class="upgrade-icon">${u.icon}</span><span class="upgrade-info"><span class="upgrade-title">${u.name}</span><span class="upgrade-desc">${u.group} · ${u.desc}</span></span><span class="upgrade-side"><span class="upgrade-level">ур. ${level} / ${u.max}</span><span class="price">${maxed ? 'MAX' : `✦ ${compact(cost)}`}</span></span></button>`;
         }).join('');
         $('achievements').innerHTML = achievements.map(a => {
-          const value = Math.min(a.goal, a.test(state)), done = state.achievements.includes(a.id);
+          const value = Math.max(0, Math.min(a.goal, a.test(state))), done = state.achievements.includes(a.id);
           return `<div class="achievement ${done ? 'done' : ''}"><span class="achievement-icon">${a.icon}</span><span class="achievement-info"><span class="achievement-title">${a.name}</span><span class="achievement-desc">${a.desc}</span></span><span class="achievement-reward">${done ? '✓ получено' : `✦ ${compact(a.reward)}`}<span class="achievement-count">${done ? 'выполнено' : `${compact(value)} / ${compact(a.goal)}`}</span></span></div>`;
         }).join('');
         renderAssetViews();
+      }
+      function renderProfile() {
+        const user = telegram?.initDataUnsafe?.user;
+        const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Космический пилот' : 'Космический пилот';
+        $('profileName').textContent = name;
+        $('profileUsername').textContent = user?.username ? `@${user.username}` : user ? 'Пилот Telegram' : 'Открой игру через Telegram, чтобы показать ник';
+        $('profileBalance').textContent = fullNumber(state.sparks);
+        $('profileIncome').textContent = `Доход: ${fullNumber(perSecond())} пыли в секунду`;
+        $('profileTaps').textContent = fullNumber(state.stats.taps);
+        $('profileCatches').textContent = fullNumber(state.stats.catches);
+        $('profileBets').textContent = fullNumber(state.stats.casinoSpins);
+        $('profileWin').textContent = `${fullNumber(state.stats.casinoBestWin)} ✦`;
+        const avatar = $('profileAvatar');
+        if (user?.photo_url) {
+          if (avatar.dataset.photo !== user.photo_url) {
+            const image = document.createElement('img'); image.src = user.photo_url; image.alt = `Аватар ${name}`;
+            avatar.replaceChildren(image); avatar.dataset.photo = user.photo_url;
+          }
+        } else if (!avatar.dataset.photo) avatar.textContent = [...name][0]?.toUpperCase() || '✦';
+      }
+      let casinoMode = 'roulette', casinoBusy = false;
+      const capsuleCost = 5000;
+      function renderCasino() {
+        $('casinoBalance').textContent = fullNumber(state.sparks);
+        const capsule = casinoMode === 'capsule';
+        $('casinoBetLabel').hidden = capsule; $('casinoBet').hidden = capsule; $('casinoChips').hidden = capsule; $('casinoLowerChips').hidden = capsule;
+        $('casinoAction').textContent = capsule ? `Купить капсулу · ${fullNumber(capsuleCost)} ✦` : `${casinoMode === 'slots' ? 'Крутить' : 'Сделать ставку'} · ${fullNumber(Math.floor(Number($('casinoBet').value) || 0))} ✦`;
+        $('casinoAction').disabled = casinoBusy || state.sparks < (capsule ? capsuleCost : Math.max(100, Math.floor(Number($('casinoBet').value) || 0)));
+        const boostSeconds = Math.max(0, Math.ceil((state.casinoBoostUntil - Date.now()) / 1000));
+        $('casinoBoost').textContent = boostSeconds ? `⚡ Доход x2 ещё ${Math.floor(boostSeconds / 60)}:${String(boostSeconds % 60).padStart(2, '0')}` : '';
       }
       function renderAssetViews() {
         $('assetIncomeLabel').textContent = `✦ ${compact(assetIncome())} / сек`;
@@ -472,6 +582,95 @@
         $('toast').textContent = `${upgrade.icon} ${upgrade.name} · уровень ${state.gameUpgrades[upgrade.id]}`;
         $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500);
         changed();
+      });
+      const casinoTables = {
+        roulette: [
+          { chance: 50, mult: 0, title: 'Чёрная дыра забрала ставку', icon: '🕳️' },
+          { chance: 25, mult: .5, title: 'Утешительный осколок · возврат половины', icon: '🌑' },
+          { chance: 15, mult: 1.25, title: 'Небольшой выигрыш · x1,25', icon: '✨' },
+          { chance: 8, mult: 2, title: 'Удачная орбита · x2', icon: '🪐' },
+          { chance: 1.8, mult: 8, title: 'ДЖЕКПОТ · x8!', icon: '💎', jackpot: true },
+          { chance: .2, mult: 3, title: 'Сверхновая! Пыль добывает вдвое больше 5 минут', icon: '🌟', boost: 5 }
+        ],
+        capsule: [
+          { chance: 48, mult: 0, title: 'Капсула оказалась пустой', icon: '🫙' },
+          { chance: 27, mult: .4, title: 'Внутри только немного пыли · x0,4', icon: '🌘' },
+          { chance: 16, mult: 1, title: 'Нашёлся древний артефакт · возврат x1', icon: '🔮' },
+          { chance: 7, mult: 2.5, title: 'Редкий артефакт · x2,5', icon: '🧿' },
+          { chance: 1.8, mult: 12, title: 'ЛЕГЕНДАРНЫЙ АРТЕФАКТ · x12!', icon: '👑', jackpot: true },
+          { chance: .2, mult: 2, title: 'Ядро капсулы удваивает доход на 8 минут', icon: '🌟', boost: 8 }
+        ],
+        slots: [
+          { chance: 55, mult: 0, title: 'Комбинация не сложилась', icon: '🌑' },
+          { chance: 22, mult: .5, title: 'Одна искра совпала · возврат x0,5', icon: '✨' },
+          { chance: 14, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
+          { chance: 7, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🌌' },
+          { chance: 1.8, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
+          { chance: .2, mult: 3, title: 'Сверхновая! Доход x2 на 5 минут', icon: '🌟', boost: 5 }
+        ]
+      };
+      const casinoOddsText = {
+        roulette: 'Шансы: проигрыш 50% · возврат 0,5x — 25% · выигрыш x1,25 — 15% · x2 — 8% · джекпот x8 — 1,8% · доход x2 на 5 минут — 0,2%.',
+        capsule: 'Капсула стоит 5 000 ✦. Шанс пустой капсулы — 48% · редкий артефакт x2,5 — 7% · легендарный x12 — 1,8% · доход x2 на 8 минут — 0,2%.',
+        slots: 'Шансы: пусто — 55% · возврат 0,5x — 22% · пара x1,25 — 14% · тройка x2 — 7% · джекпот x10 — 1,8% · доход x2 на 5 минут — 0,2%.'
+      };
+      document.querySelector('.casino-modes').addEventListener('click', e => {
+        const button = e.target.closest('[data-casino-mode]'); if (!button || casinoBusy) return;
+        casinoMode = button.dataset.casinoMode;
+        document.querySelectorAll('.casino-mode').forEach(item => item.classList.toggle('active', item === button));
+        $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoReel').hidden = casinoMode === 'roulette';
+        $('casinoReel').textContent = casinoMode === 'capsule' ? '🪐' : '✦ ✦ ✦';
+        $('casinoOdds').textContent = casinoOddsText[casinoMode];
+        $('casinoResult').textContent = 'Сделай ход — и узнай, что скрывает космос.';
+        renderCasino();
+      });
+      $('casinoChips').addEventListener('click', e => {
+        const chip = e.target.closest('[data-bet]'); if (!chip) return;
+        $('casinoBet').value = Math.max(100, Math.floor(Number($('casinoBet').value) || 0) + Number(chip.dataset.bet)); renderCasino();
+      });
+      $('casinoLowerChips').addEventListener('click', e => {
+        if (e.target.closest('[data-bet-reset]')) $('casinoBet').value = 1000;
+        else {
+          const chip = e.target.closest('[data-bet-adjust]'); if (!chip) return;
+          $('casinoBet').value = Math.max(100, Math.floor(Number($('casinoBet').value) || 0) - Number(chip.dataset.betAdjust));
+        }
+        renderCasino();
+      });
+      $('casinoBet').addEventListener('input', renderCasino);
+      $('casinoAction').addEventListener('click', () => {
+        if (casinoBusy) return;
+        const wager = casinoMode === 'capsule' ? capsuleCost : Math.floor(Number($('casinoBet').value));
+        if (!Number.isSafeInteger(wager) || wager < 100 || wager > state.sparks) {
+          $('casinoResult').textContent = casinoMode === 'capsule' ? 'Нужно накопить 5 000 ✦ на капсулу.' : 'Укажи ставку от 100 ✦ и не выше своего баланса.'; return;
+        }
+        casinoBusy = true; state.sparks -= wager; state.stats.casinoSpins++; state.stats.casinoSpent += wager;
+        if (casinoMode === 'capsule') state.stats.capsulesOpened++;
+        haptic('impact', 'medium');
+        const reel = $('casinoReel');
+        $('casinoWheel').hidden = casinoMode !== 'roulette'; $('casinoWheel').classList.toggle('spinning', casinoMode === 'roulette');
+        reel.hidden = casinoMode === 'roulette'; reel.classList.add('rolling'); reel.textContent = casinoMode === 'capsule' ? '🪐' : '✦ · 🌌 · ✦';
+        $('casinoResult').textContent = 'Сигналы перемешиваются…';
+        changed();
+        setTimeout(() => {
+          const outcomes = casinoTables[casinoMode];
+          const draw = Math.random() * 100; let total = 0;
+          const prize = outcomes.find(item => { total += item.chance; return draw < total; }) || outcomes[outcomes.length - 1];
+          const payout = Math.floor(wager * prize.mult), net = payout - wager;
+          state.sparks += payout; state.stats.casinoNet += net;
+          state.stats.casinoBestWin = Math.max(state.stats.casinoBestWin, net);
+          if (payout > wager) state.stats.casinoWins++;
+          if (prize.jackpot) state.stats.casinoJackpots++;
+          if (prize.boost) {
+            state.casinoBoostUntil = Math.max(Date.now(), Number(state.casinoBoostUntil) || 0) + prize.boost * 60 * 1000;
+            state.stats.casinoBoosts++;
+          }
+          reel.classList.remove('rolling'); $('casinoWheel').classList.remove('spinning');
+          reel.hidden = false; $('casinoWheel').hidden = true;
+          if (casinoMode === 'slots') reel.textContent = prize.jackpot ? '💎 💎 💎' : prize.mult >= 2 ? `${prize.icon} ${prize.icon} ${prize.icon}` : `${prize.icon} 🌑 ✨`;
+          else reel.textContent = prize.icon;
+          $('casinoResult').innerHTML = `${prize.title}<br>Выплата: <b>${fullNumber(payout)} ✦</b> · ${net >= 0 ? 'прибыль' : 'итог'}: <b>${net >= 0 ? '+' : '−'}${fullNumber(Math.abs(net))} ✦</b>`;
+          casinoBusy = false; checkAchievements(); changed(); save(); haptic(prize.jackpot || prize.boost ? 'notify' : 'impact', prize.jackpot || prize.boost ? 'success' : 'light');
+        }, 1050);
       });
       $('shipyard').addEventListener('click', e => {
         const button = e.target.closest('[data-buy-world]'); if (!button) return;
@@ -687,6 +886,12 @@
       $('exitShip').addEventListener('click', closeShipGame);
       $('shipLeft').addEventListener('click', () => moveShip(-1));
       $('shipRight').addEventListener('click', () => moveShip(1));
+      document.querySelector('.profile-switch').addEventListener('click', e => {
+        const button = e.target.closest('[data-profile-view]'); if (!button) return;
+        document.querySelectorAll('.profile-switch button').forEach(item => item.classList.toggle('active', item === button));
+        const showAchievements = button.dataset.profileView === 'achievements';
+        $('profileSummaryView').hidden = showAchievements; $('profileAchievementsView').hidden = !showAchievements;
+      });
       const shipPlayer = $('shipPlayer');
       shipPlayer.addEventListener('pointerdown', e => {
         if (!shipActive) return;
@@ -732,6 +937,7 @@
         telegram.BackButton.hide();
       }
       $('reset').addEventListener('click', () => {
+        if (casinoBusy) { $('toast').textContent = 'Дождись результата текущего хода'; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500); return; }
         if (!confirm('Сбросить весь прогресс? Это действие нельзя отменить.')) return;
         state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, assets: [], assetNext: 1, achievements: [], last: Date.now() }; selectedAssetId = null; save(); render();
       });
@@ -740,6 +946,7 @@
       state.last = Date.now(); checkAchievements(); render(); save();
       if (telegram) { try { telegram.ready(); } catch { /* The browser-only version has no Telegram readiness signal. */ } }
       setInterval(() => { if (perSecond()) { state.sparks += perSecond(); checkAchievements(); render(); } }, 1000);
+      setInterval(renderCasino, 1000);
       setInterval(save, 5000);
       window.addEventListener('pagehide', save);
     })();
