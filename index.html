@@ -340,8 +340,11 @@
             <div class="slot-payout-row"><span class="slot-combo">✨ 🌑 ✦</span><span class="slot-mult">×0,5</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🪐 🪐 ✦</span><span class="slot-mult">×1,25</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🚀 🚀 🚀</span><span class="slot-mult">×2</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🛰️ 🛰️ 🛰️</span><span class="slot-mult">×5</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🌟 🌟 🌟</span><span class="slot-mult">×3 + буст</span></div>
             <div class="slot-payout-row"><span class="slot-combo">💎 💎 💎</span><span class="slot-mult">×10</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">🛸 🛸 🛸</span><span class="slot-mult">×25</span></div>
+            <div class="slot-payout-row"><span class="slot-combo">☀️ ☀️ ☀️</span><span class="slot-mult">×50</span></div>
             <div class="slot-payout-row"><span class="slot-combo">💠 💠 💠</span><span class="slot-mult">×100</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🔷 🔷 🔷</span><span class="slot-mult">×500</span></div>
             <div class="slot-payout-row"><span class="slot-combo">🎆 🎆 🎆</span><span class="slot-mult">×1 000</span></div>
@@ -431,7 +434,7 @@
         { id: 'casino_profit', icon: '👑', name: 'Казино в плюсе', desc: 'Выйди в общий плюс на 50 000 пыли', goal: 50000, reward: 10000, test: s => Math.max(0, s.stats.casinoNet) },
         { id: 'casino_highroller', icon: '💎', name: 'Повелитель стола', desc: 'Получи за один ход не менее 100 000 пыли', goal: 100000, reward: 15000, test: s => s.stats.casinoBestWin }
       ];
-      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, economy: { earned: { clicks: 0, passive: 0, catch: 0, ship: 0, casino: 0, achievements: 0 }, spent: { casino: 0, capsules: 0, assets: 0, penalties: 0 } }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, last: Date.now() };
+      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, economy: { earned: { clicks: 0, passive: 0, catch: 0, ship: 0, casino: 0, achievements: 0 }, spent: { casino: 0, capsules: 0, assets: 0, penalties: 0 } }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, passiveBoosts: [], last: Date.now() };
       let state;
       let hasLocalSave = false;
       try {
@@ -457,6 +460,7 @@
       state.levels = { ...initial.levels, ...(state.levels || {}) };
       state.gameUpgrades = { ...initial.gameUpgrades, ...(state.gameUpgrades || {}) };
       state.stats = { ...initial.stats, ...(state.stats || {}) };
+      state.passiveBoosts = Array.isArray(state.passiveBoosts) ? state.passiveBoosts.filter(boost => Number(boost.until) > Date.now() && Number(boost.multiplier) > 1) : [];
       state.economy = state.economy || {};
       state.economy.earned = { ...initial.economy.earned, ...(state.economy.earned || {}) };
       state.economy.spent = { ...initial.economy.spent, ...(state.economy.spent || {}) };
@@ -490,7 +494,8 @@
       const assetYield = asset => { const world = assetType(asset); return world ? world.income * Math.pow(1.55, Math.max(0, asset.level - 1)) : 0; };
       const assetIncome = () => state.assets.reduce((sum, asset) => sum + assetYield(asset), 0);
       const incomeMultiplier = () => Date.now() < (Number(state.casinoBoostUntil) || 0) ? 2 : 1;
-      const perSecond = () => (state.levels.auto + state.levels.expedition * 3 + assetIncome()) * incomeMultiplier();
+      const passiveIncomeMultiplier = () => Math.max(1, ...state.passiveBoosts.filter(boost => boost.until > Date.now()).map(boost => boost.multiplier));
+      const perSecond = () => (state.levels.auto + state.levels.expedition * 3 + assetIncome()) * incomeMultiplier() * passiveIncomeMultiplier();
       const worldPrice = world => world.cost;
       const assetUpgradePrice = asset => { const world = assetType(asset); return Math.floor(world.cost * .72 * Math.pow(1.68, Math.max(0, asset.level - 1))); };
       function save() {
@@ -561,8 +566,12 @@
         $('casinoBetLabel').hidden = capsule; $('casinoBet').hidden = capsule; $('casinoChips').hidden = capsule; $('casinoLowerChips').hidden = capsule;
         $('casinoAction').textContent = capsule ? `Купить капсулу · ${fullNumber(capsuleCost)} ✦` : `${casinoMode === 'slots' ? 'Крутить' : 'Сделать ставку'} · ${fullNumber(Math.floor(Number($('casinoBet').value) || 0))} ✦`;
         $('casinoAction').disabled = casinoBusy || state.sparks < (capsule ? capsuleCost : Math.max(100, Math.floor(Number($('casinoBet').value) || 0)));
-        const boostSeconds = Math.max(0, Math.ceil((state.casinoBoostUntil - Date.now()) / 1000));
-        $('casinoBoost').textContent = boostSeconds ? `⚡ Доход x2 ещё ${Math.floor(boostSeconds / 60)}:${String(boostSeconds % 60).padStart(2, '0')}` : '';
+        const now = Date.now(), boostSeconds = Math.max(0, Math.ceil((state.casinoBoostUntil - now) / 1000));
+        const passiveBoost = state.passiveBoosts.filter(boost => boost.until > now).sort((a, b) => b.multiplier - a.multiplier)[0];
+        const effects = [];
+        if (boostSeconds) effects.push(`⚡ Доход x2 ещё ${Math.floor(boostSeconds / 60)}:${String(boostSeconds % 60).padStart(2, '0')}`);
+        if (passiveBoost) { const left = Math.ceil((passiveBoost.until - now) / 1000); effects.push(`🌠 Пассивный доход x${passiveBoost.multiplier} ещё ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`); }
+        $('casinoBoost').textContent = effects.join(' · ');
       }
       function renderAssetViews() {
         $('assetIncomeLabel').textContent = `✦ ${compact(assetIncome())} / сек`;
@@ -641,27 +650,33 @@
       });
       const casinoTables = {
         roulette: [
-          { chance: 50, mult: 0, title: 'Чёрная дыра забрала ставку', icon: '🕳️' },
+          { chance: 40, mult: 0, title: 'Чёрная дыра забрала ставку', icon: '🕳️' },
           { chance: 25, mult: .5, title: 'Утешительный осколок · возврат половины', icon: '🌑' },
-          { chance: 15, mult: 1.25, title: 'Небольшой выигрыш · x1,25', icon: '✨' },
-          { chance: 8, mult: 2, title: 'Удачная орбита · x2', icon: '🪐' },
-          { chance: 1.8, mult: 8, title: 'ДЖЕКПОТ · x8!', icon: '💎', jackpot: true },
-          { chance: .2, mult: 3, title: 'Сверхновая! Пыль добывает вдвое больше 5 минут', icon: '🌟', boost: 5 }
+          { chance: 18, mult: 1.25, title: 'Небольшой выигрыш · x1,25', icon: '✨' },
+          { chance: 12, mult: 2, title: 'Удачная орбита · x2', icon: '🪐' },
+          { chance: 4, mult: 8, title: 'ДЖЕКПОТ · x8!', icon: '💎', jackpot: true },
+          { chance: 1, mult: 3, title: 'Сверхновая! Пыль добывает вдвое больше 5 минут', icon: '🌟', boost: 5 }
         ],
         capsule: [
-          { chance: 48, mult: 0, title: 'Капсула оказалась пустой', icon: '🫙' },
-          { chance: 27, mult: .4, title: 'Внутри только немного пыли · x0,4', icon: '🌘' },
-          { chance: 16, mult: 1, title: 'Нашёлся древний артефакт · возврат x1', icon: '🔮' },
-          { chance: 7, mult: 2.5, title: 'Редкий артефакт · x2,5', icon: '🧿' },
-          { chance: 1.8, mult: 12, title: 'ЛЕГЕНДАРНЫЙ АРТЕФАКТ · x12!', icon: '👑', jackpot: true },
-          { chance: .2, mult: 2, title: 'Ядро капсулы удваивает доход на 8 минут', icon: '🌟', boost: 8 }
+          { chance: 35, mult: 0, title: 'Капсула оказалась пустой', icon: '🫙' },
+          { chance: 20, mult: .4, title: 'Внутри немного пыли · возврат x0,4', icon: '🌘' },
+          { chance: 18, mult: 1, title: 'Древний артефакт · возврат x1', icon: '🔮' },
+          { chance: 10, mult: 2.5, title: 'Редкий артефакт · x2,5', icon: '🧿' },
+          { chance: 3, mult: 12, title: 'ЛЕГЕНДАРНЫЙ АРТЕФАКТ · x12!', icon: '👑', jackpot: true },
+          { chance: 8, mult: 0, title: 'Звёздный катализатор: пассивный доход x20 на 5 минут!', icon: '🌠', passiveMultiplier: 20, passiveMinutes: 5 },
+          { chance: 4, mult: 0, title: 'Туманность изобилия: пассивный доход x5 на 10 минут!', icon: '🌀', passiveMultiplier: 5, passiveMinutes: 10 },
+          { chance: 1.5, mult: 0, title: 'Пульсарный всплеск: пассивный доход x50 на 1 минуту!', icon: '💫', passiveMultiplier: 50, passiveMinutes: 1 },
+          { chance: .5, mult: 0, title: 'Сингулярность: пассивный доход x100 на 30 секунд!', icon: '🕳️', passiveMultiplier: 100, passiveMinutes: .5 }
         ],
         slots: [
-          { chance: 55, mult: 0, title: 'Комбинация не сложилась', icon: '🌑' },
+          { chance: 40, mult: 0, title: 'Комбинация не сложилась', icon: '🌑' },
           { chance: 25, mult: .5, title: 'Одна искра совпала · возврат x0,5', icon: '✨' },
-          { chance: 12, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
-          { chance: 6, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🚀' },
-          { chance: 1.5, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
+          { chance: 15, mult: 1.25, title: 'Пара совпадений · x1,25', icon: '🪐' },
+          { chance: 10, mult: 2, title: 'Три орбиты выстроились · x2', icon: '🚀' },
+          { chance: 5, mult: 5, title: 'Три спутника · x5!', icon: '🛰️', jackpot: true },
+          { chance: 3, mult: 10, title: 'ТРИ КОСМИЧЕСКИХ КРИСТАЛЛА · x10!', icon: '💎', jackpot: true },
+          { chance: 1, mult: 25, title: 'Тройная летающая тарелка · x25!', icon: '🛸', jackpot: true },
+          { chance: .5, mult: 50, title: 'Три солнца · x50!', icon: '☀️', jackpot: true },
           { chance: .4395, mult: 3, title: 'Сверхновая! Доход x2 на 5 минут', icon: '🌟', boost: 5 },
           { chance: .05, mult: 100, title: 'КОСМИЧЕСКИЙ ДЖЕКПОТ · x100!', icon: '💠', jackpot: true },
           { chance: .008, mult: 500, title: 'ЛЕГЕНДАРНЫЙ ДЖЕКПОТ · x500!', icon: '🔷', jackpot: true },
@@ -672,7 +687,7 @@
       };
       const casinoModeInfo = {
         roulette: 'Прокрути колесо и поймай удачный сектор.',
-        capsule: 'Капсула стоит 5 000 ✦. Внутри могут попасться пыль, артефакт или временный буст.',
+        capsule: 'Капсула стоит 5 000 ✦. Бонусы: x20 на 5 минут, x5 на 10 минут, x50 на минуту или x100 на 30 секунд. Одновременно действует самый сильный множитель.',
         slots: 'Совпадающие символы дают множитель к ставке. Попробуй собрать редкую комбинацию.'
       };
       let slotRollInterval = null, slotStopTimers = [], slotStopDeadlines = [], slotActive = [], slotIndexes = [], slotSpinSpeed = 1, slotFinals = [], pendingSlotPrize = null, pendingSlotWager = 0;
@@ -689,6 +704,13 @@
         if (prize.jackpot) state.stats.casinoJackpots++;
         if (prize.boost) {
           state.casinoBoostUntil = Math.max(Date.now(), Number(state.casinoBoostUntil) || 0) + prize.boost * 60 * 1000;
+          state.stats.casinoBoosts++;
+        }
+        if (prize.passiveMultiplier && prize.passiveMinutes) {
+          const duration = prize.passiveMinutes * 60 * 1000, now = Date.now();
+          const existing = state.passiveBoosts.find(boost => boost.multiplier === prize.passiveMultiplier && boost.until > now);
+          if (existing) existing.until = Math.max(now, existing.until) + duration;
+          else state.passiveBoosts.push({ multiplier: prize.passiveMultiplier, until: now + duration });
           state.stats.casinoBoosts++;
         }
         $('casinoResult').innerHTML = `${prize.title}<br>Выплата: <b>${fullNumber(payout)} ✦</b> · ${net >= 0 ? 'прибыль' : 'итог'}: <b>${net >= 0 ? '+' : '−'}${fullNumber(Math.abs(net))} ✦</b>`;
@@ -1072,7 +1094,7 @@
       $('reset').addEventListener('click', () => {
         if (casinoBusy) { $('toast').textContent = 'Дождись результата текущего хода'; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500); return; }
         if (!confirm('Сбросить весь прогресс? Это действие нельзя отменить.')) return;
-        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, economy: { earned: { ...initial.economy.earned }, spent: { ...initial.economy.spent } }, assets: [], assetNext: 1, achievements: [], last: Date.now() }; selectedAssetId = null; save(); render();
+        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, economy: { earned: { ...initial.economy.earned }, spent: { ...initial.economy.spent } }, assets: [], assetNext: 1, achievements: [], passiveBoosts: [], last: Date.now() }; selectedAssetId = null; save(); render();
       });
       const elapsed = Math.min(8 * 60 * 60, Math.max(0, (Date.now() - (Number(state.last) || Date.now())) / 1000));
       if (elapsed > 5 && perSecond()) {
