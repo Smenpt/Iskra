@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
@@ -183,6 +183,41 @@
     .ship-result-title { font-weight:800;font-size:17px; }
     .ship-result-score { color:#cdb6ff;font-size:13px;margin:8px 0 13px;line-height:1.6; }
     .ship-result[hidden] { display:none; }
+    .game-lock { margin-top:10px;padding:11px 13px;border:1px solid #91dfff30;border-radius:13px;background:#4ecaff0b;color:#b9d9ed;font-size:12px;line-height:1.45; }
+    .game-lock[hidden] { display:none; }
+    .mines-controls { display:grid;gap:12px;margin-bottom:12px; }
+    .mines-controls[hidden] { display:none; }
+    .mines-label { display:block;margin-bottom:6px;color:#b9b3cf;font-size:11px;font-weight:750; }
+    .mines-choice-row { display:grid;grid-template-columns:repeat(3,1fr);gap:7px; }
+    .mines-choice,.mines-size,.mines-action { min-height:40px;padding:9px;border:1px solid #78dfff25;border-radius:12px;background:#81ddff0b;color:#dcecff;font-size:12px;font-weight:750;cursor:pointer; }
+    .mines-choice.active,.mines-size.active { border-color:#7fe9ff99;background:linear-gradient(130deg,#30a8d333,#8b70ff30);box-shadow:0 0 16px #48dfff18; }
+    .mines-input-row { display:grid;grid-template-columns:1fr 1fr;gap:9px; }
+    .mines-input { width:100%;min-height:42px;padding:9px 11px;border:1px solid #ffffff1c;border-radius:12px;background:#0e1220;color:white;font-size:14px;font-weight:750; }
+    .mines-status { min-height:38px;margin:8px 0;color:#b9d9ed;text-align:center;font-size:12px;line-height:1.5; }
+    .mines-board { display:grid;gap:4px;width:min(100%,400px);margin:8px auto 12px;padding:9px;border:1px solid #52dfff44;border-radius:18px;background:radial-gradient(circle at 50% 0,#24456988,#0d1120 70%);box-shadow:inset 0 0 26px #53dfff12,0 0 28px #268dff12; }
+    .mines-board[hidden] { display:none; }
+    .mine-cell { display:grid;place-items:center;aspect-ratio:1;min-width:0;padding:0;border:1px solid #88cfff28;border-radius:9px;background:linear-gradient(145deg,#1b2b45,#111827);font-size:clamp(13px,5vw,25px);cursor:pointer;transition:transform .12s,border-color .12s,background .12s; }
+    .mine-cell:not(:disabled):active { transform:scale(.9); }
+    .mine-cell:disabled { cursor:default; }
+    .mine-cell.planet { border-color:#85f5db88;background:radial-gradient(circle,#4bdfa833,#1b3544);box-shadow:0 0 13px #51e9c433; }
+    .mine-cell.asteroid { border-color:#ff917a99;background:radial-gradient(circle,#fd654244,#321b2b);animation:mineBoom .36s ease-out; }
+    @keyframes mineBoom { 50% { transform:scale(1.14);filter:brightness(1.8); } }
+    .mines-actions { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+    .mines-action.primary { border:0;background:linear-gradient(120deg,#27b5ce,#7358d5);color:white; }
+    .mines-action:disabled { opacity:.43;cursor:default; }
+    .mines-result { min-height:20px;margin-top:8px;color:#a8f5e1;text-align:center;font-size:12px;font-weight:750; }
+    .comet-field { position:relative;flex:1;min-height:280px;overflow:hidden;border:1px solid #57dfff36;border-radius:18px;background:radial-gradient(ellipse at 50% 100%,#126b8d30,transparent 65%),linear-gradient(160deg,#101a31,#111021);isolation:isolate; }
+    .comet-field::before { content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1px 1px at 20% 30%,#fff 99%,transparent),radial-gradient(1px 1px at 70% 72%,#9beaff 99%,transparent),radial-gradient(1px 1px at 88% 20%,#fff 99%,transparent);opacity:.5; }
+    .comet-target { position:absolute;z-index:1;top:-50px;width:48px;height:48px;display:grid;place-items:center;border:1px solid #80eaff55;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff4,#67dfff20 70%,#0c1120);box-shadow:0 0 20px #5bdfff66;font-size:26px;cursor:pointer;animation:cometDrop 2.5s linear forwards; }
+    .comet-target.danger { border-color:#ff9c7c99;background:radial-gradient(circle,#ff613633,#29101a);box-shadow:0 0 22px #ff684477; }
+    @keyframes cometDrop { to { top:calc(100% + 55px);transform:rotate(280deg); } }
+    .signal-board { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:min(100%,340px);margin:auto; }
+    .signal-pad { aspect-ratio:1;border:1px solid #b99bff44;border-radius:22px;background:linear-gradient(145deg,#30204b,#151629);box-shadow:inset 0 0 24px #ab7aff12,0 10px 22px #0004;font-size:clamp(38px,12vw,64px);cursor:pointer;transition:transform .15s,filter .15s,box-shadow .15s; }
+    .signal-pad.lit { transform:scale(.96);filter:brightness(1.8);box-shadow:0 0 34px #a277ffbb,inset 0 0 22px #ffffff44; }
+    .round-fullscreen .mines-board { flex:1;align-content:center;min-height:0;margin-block:0; }
+    .round-fullscreen .mine-cell { font-size:clamp(12px,5vw,25px); }
+    .round-fullscreen .comet-field { min-height:0; }
+    .round-fullscreen .signal-board { width:min(88vw,440px); }
     .round-fullscreen { position:fixed!important;inset:0!important;z-index:30;display:flex;flex-direction:column;gap:10px;padding:max(12px,env(safe-area-inset-top),var(--tg-safe-area-inset-top,0px)) 12px max(12px,env(safe-area-inset-bottom),var(--tg-safe-area-inset-bottom,0px));border:0;border-radius:0;overflow:hidden; }
     .round-fullscreen .catch-field,.round-fullscreen .ship-field { flex:1;min-height:0;height:auto;border-radius:16px; }
     .round-report { position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;background:#090912ee;backdrop-filter:blur(16px);text-align:center; }
@@ -214,7 +249,7 @@
     .profile-switch button,.casino-mode,.casino-chip { border:1px solid #bd9aff2e;border-radius:13px;padding:11px 9px;background:#ffffff08;color:#c9bddf;font-size:12px;font-weight:700;cursor:pointer; }
     .profile-switch button.active,.casino-mode.active { border-color:#bd9aff80;background:#9b73ff25;color:#fff; }
     .profile-view[hidden] { display:none; }
-    .casino-modes { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .casino-modes { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .casino-mode { min-height:94px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center; }
     .casino-mode span:first-child { font-size:23px; }
     .casino-mode small { color:var(--muted);font-size:9px;font-weight:500; }
@@ -281,6 +316,37 @@
     .casino-action:disabled { opacity:.5;cursor:default; }
     .casino-info { margin-top:12px;color:#938ba7;font-size:10px;line-height:1.55; }
     .casino-boost { margin-top:9px;color:var(--mint);font-size:11px; }
+    .rank-card { margin:0 2px 10px;padding:14px;border:1px solid #a879ff40;border-radius:18px;background:linear-gradient(135deg,#211b35dd,#121321ed);box-shadow:0 10px 28px #08071055; }
+    .rank-top { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+    .rank-title { font-size:14px;font-weight:850; }
+    .rank-level { color:#cbb7ff;font-size:11px;font-weight:750; }
+    .rank-progress { height:7px;margin:11px 0 7px;overflow:hidden;border-radius:99px;background:#ffffff12; }
+    .rank-progress span { display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#8f62ff,#5de4ff);transition:width .35s ease; }
+    .rank-note { color:var(--muted);font-size:11px;line-height:1.45; }
+    .rank-advance { display:none;width:100%;margin-top:10px;padding:11px;border:1px solid #aaf4ff55;border-radius:12px;background:linear-gradient(100deg,#8a5cff,#3b92c7);color:white;font-weight:850;cursor:pointer;box-shadow:0 5px 20px #57d9ff25; }
+    .rank-advance.ready { display:block;animation:rankPulse 1.8s ease-in-out infinite; }
+    @keyframes rankPulse { 50% { box-shadow:0 0 24px #67eaff66; } }
+    .modal-backdrop { position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:#070711c9;backdrop-filter:blur(8px); }
+    .modal-backdrop[hidden] { display:none; }
+    .rank-dialog { width:min(100%,390px);padding:22px;border:1px solid #ac8aff55;border-radius:22px;background:linear-gradient(155deg,#27203b,#11111d 75%);box-shadow:0 24px 80px #000a,0 0 36px #9d6aff20; }
+    .rank-dialog-icon { width:48px;height:48px;display:grid;place-items:center;margin-bottom:13px;border-radius:16px;background:linear-gradient(145deg,#ff76c8,#8c62ff);font-size:25px;box-shadow:0 5px 24px #a879ff55; }
+    .rank-dialog h2 { margin:0 0 7px;font-size:20px; }
+    .rank-dialog-copy { margin:0;color:#c8c3d8;font-size:13px;line-height:1.55; }
+    .rank-dialog-list { display:grid;gap:7px;margin:15px 0;padding:12px;border:1px solid #ffffff12;border-radius:13px;background:#ffffff06;color:#ddd7ef;font-size:12px;line-height:1.4; }
+    .rank-dialog-list b { color:#aaf1ff; }
+    .rank-dialog-actions { display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px; }
+    .rank-dialog-actions button { min-height:44px;border:1px solid #ffffff20;border-radius:13px;background:#ffffff0a;font-weight:750;cursor:pointer; }
+    .rank-dialog-actions .confirm-rank { border:0;background:linear-gradient(110deg,#965cf0,#367db7);box-shadow:0 6px 20px #6847ca55; }
+    body.rank-2 { background:radial-gradient(ellipse at 50% 28%,#193c54 0,#171326 38%,#080d18 78%); }
+    body.rank-3 { background:radial-gradient(ellipse at 50% 28%,#4b2c21 0,#211627 38%,#100b17 78%); }
+    body.rank-4 { background:radial-gradient(ellipse at 50% 28%,#173b39 0,#171326 38%,#080e15 78%); }
+    body.rank-5 { background:radial-gradient(ellipse at 50% 28%,#3e2359 0,#1b1630 38%,#080814 78%); }
+    body.rank-6 { background:radial-gradient(ellipse at 50% 28%,#563d18 0,#211a2a 38%,#0c0915 78%); }
+    body.rank-2 .brand-icon, body.rank-2 .orb { filter:hue-rotate(42deg); }
+    body.rank-3 .brand-icon, body.rank-3 .orb { filter:hue-rotate(105deg); }
+    body.rank-4 .brand-icon, body.rank-4 .orb { filter:hue-rotate(155deg); }
+    body.rank-5 .brand-icon, body.rank-5 .orb { filter:hue-rotate(220deg); }
+    body.rank-6 .brand-icon, body.rank-6 .orb { filter:hue-rotate(285deg); }
     @media (max-width:380px) { .nav-label { font-size:8px; } .nav-tab { padding-inline:0; } .casino-modes { gap:5px; } .casino-mode { padding-inline:4px; } .slot-payout-list { grid-template-columns:1fr; } }
     @media (prefers-reduced-motion:reduce) { .flyby { animation-duration:8s; } }
   </style>
@@ -297,6 +363,12 @@
       <div class="balance" id="balance">0</div>
       <div class="spark-label">звёздной пыли</div>
       <div class="rate">✦ <span id="rate">+0</span> в секунду</div>
+    </section>
+    <section class="rank-card" aria-label="Уровень галактики">
+      <div class="rank-top"><span class="rank-title" id="rankTitle">Искра · Уровень 1</span><span class="rank-level" id="rankName">Звёздный очаг</span></div>
+      <div class="rank-progress"><span id="rankProgress"></span></div>
+      <div class="rank-note" id="rankNote"></div>
+      <button class="rank-advance" id="rankAdvance" type="button">Перейти на следующий уровень</button>
     </section>
     <section class="play-area" aria-label="Сбор искр">
       <div class="orb-wrap" id="orbWrap">
@@ -316,6 +388,18 @@
       <div class="game-lobby ship-lobby" id="shipLobby"><span class="lobby-icon">🚀</span><span class="lobby-copy"><span class="lobby-title">Прорыв сквозь пояс</span><span class="lobby-desc">Раунд 40 секунд · уклоняйся от ракет и астероидов. Рекорд: <b id="shipBestLobby">0</b></span></span><button class="launch-button" id="launchShip" type="button">Раунд · 40 сек</button></div>
       <div class="game-panel" id="shipPanel" hidden><div class="game-toolbar"><span class="game-status" id="shipStatus">Очки: 0</span><button class="exit-game" id="exitShip" type="button">Выйти</button></div><div class="ship-field" id="shipField"><span class="ship-lane-mark" style="left:33.33%"></span><span class="ship-lane-mark" style="left:66.66%"></span><span class="ship-player" id="shipPlayer" role="img" aria-label="Космический истребитель"><svg class="fighter-svg" viewBox="0 0 64 72" aria-hidden="true"><defs><linearGradient id="hull" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4fdff"/><stop offset=".38" stop-color="#9fc6ec"/><stop offset=".72" stop-color="#526eaa"/><stop offset="1" stop-color="#27345e"/></linearGradient><linearGradient id="wing" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#86eaff"/><stop offset="1" stop-color="#6274cf"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0ffff"/><stop offset=".35" stop-color="#69e5ff"/><stop offset="1" stop-color="#3272cf"/></linearGradient><linearGradient id="engine" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d6ffff"/><stop offset=".45" stop-color="#5eeaff"/><stop offset="1" stop-color="#8772ff"/></linearGradient></defs><path d="M31 3 Q37 12 39 25 L59 41 L63 55 L43 49 L39 62 L32 69 L25 62 L21 49 L1 55 L5 41 L25 25 Q27 12 31 3Z" fill="url(#hull)" stroke="#d8f8ff" stroke-width="1.5" stroke-linejoin="round"/><path d="M25 31 9 45 23 43 28 35M39 31l16 14-14-2-5-8" fill="#354777" stroke="url(#wing)" stroke-width="1.5" stroke-linejoin="round"/><path d="M32 13 Q38 23 36 37 L32 43 L28 37 Q26 23 32 13Z" fill="url(#glass)" stroke="#d5fbff" stroke-width="1.3"/><path d="M24 49 28 53 25 63 20 59ZM40 49 36 53 39 63 44 59Z" fill="#26345e" stroke="#91eaff" stroke-width="1.2"/><path d="M27 64 32 71 37 64 35 70 32 72 29 70Z" fill="url(#engine)"/><path d="M11 48 18 46M53 48 46 46" stroke="#f7dc9c" stroke-width="2" stroke-linecap="round"/></svg></span></div><div class="ship-controls"><button id="shipLeft" type="button" aria-label="Влево">◀</button><button id="shipRight" type="button" aria-label="Вправо">▶</button></div><div class="ship-result" id="shipResult" hidden><div class="ship-result-title">Полёт завершён</div><div class="ship-result-score" id="shipResultScore"></div><button class="launch-button" id="replayShip" type="button">Ещё полёт</button></div></div>
     </section>
+    <section class="mini-game" data-minigame-rank="3" aria-label="Мини-игра: охота за кометами">
+      <div class="section-head"><h2>Охота за кометами</h2><span class="section-note">Раунд 40 секунд</span></div>
+      <div class="game-lock" id="cometLock">🔒 Откроется на уровне 3 · Межзвёздный рубеж</div>
+      <div class="game-lobby" id="cometLobby"><span class="lobby-icon">☄️</span><span class="lobby-copy"><span class="lobby-title">Перехват в хвосте кометы</span><span class="lobby-desc">Лови светящиеся планеты и кометы, уворачивайся от астероидов. Награда зависит от точности.</span></span><button class="launch-button" id="launchComet" type="button">Раунд · 40 сек</button></div>
+      <div class="game-panel" id="cometPanel" hidden><div class="game-toolbar"><span class="game-status" id="cometStatus">Очки: 0</span><button class="exit-game" id="exitComet" type="button">Выйти</button></div><div class="comet-field" id="cometField"></div></div>
+    </section>
+    <section class="mini-game" data-minigame-rank="5" aria-label="Мини-игра: сигналы пульсара">
+      <div class="section-head"><h2>Сигналы пульсара</h2><span class="section-note">Раунд на память · 40 секунд</span></div>
+      <div class="game-lock" id="signalLock">🔒 Откроется на уровне 5 · Сердце галактики</div>
+      <div class="game-lobby" id="signalLobby"><span class="lobby-icon">📡</span><span class="lobby-copy"><span class="lobby-title">Повтори код далёкой цивилизации</span><span class="lobby-desc">Запоминай последовательности импульсов. Каждый верный код повышает сложность и награду.</span></span><button class="launch-button" id="launchSignal" type="button">Раунд · 40 сек</button></div>
+      <div class="game-panel" id="signalPanel" hidden><div class="game-toolbar"><span class="game-status" id="signalStatus">Запоминай последовательность</span><button class="exit-game" id="exitSignal" type="button">Выйти</button></div><div class="signal-board" id="signalBoard"><button class="signal-pad" data-pad="0" type="button">🔵</button><button class="signal-pad" data-pad="1" type="button">🟣</button><button class="signal-pad" data-pad="2" type="button">🟢</button><button class="signal-pad" data-pad="3" type="button">🟡</button></div></div>
+    </section>
     <section>
       <div class="section-head game-upgrades-head"><h2>Улучшения мини-игр</h2><span class="section-note">Только для игровых режимов</span></div>
       <div class="shop" id="gameUpgrades"></div>
@@ -325,7 +409,7 @@
       <section><div class="section-head"><h2>Твоя система</h2><span class="section-note" id="assetIncomeLabel">✦ 0 / сек</span></div><div class="system-grid" id="ownedAssets"></div><div class="asset-detail" id="assetDetail" hidden></div></section>
     </div>
     <div class="tab-panel shop-panel" id="shipyardPanel" data-panel="shipyard" hidden>
-      <section><div class="section-head"><h2>Космическая верфь</h2><span class="section-note">Построй свою систему</span></div><div class="asset-grid" id="shipyard"></div></section>
+      <section><div class="section-head"><h2>Космическая верфь</h2><span class="section-note" id="shipyardRankNote">Построй свою систему</span></div><div class="asset-grid" id="shipyard"></div></section>
     </div>
     <div class="tab-panel shop-panel" id="shopPanel" data-panel="shop" hidden>
     <section>
@@ -340,7 +424,23 @@
           <button class="casino-mode active" data-casino-mode="roulette" type="button"><span>🎡</span><b>Рулетка</b><small>Крути колесо</small></button>
           <button class="casino-mode" data-casino-mode="capsule" type="button"><span>🪐</span><b>Капсула</b><small>Редкий артефакт</small></button>
           <button class="casino-mode" data-casino-mode="slots" type="button"><span>🎰</span><b>Автомат</b><small>Три символа</small></button>
+          <button class="casino-mode" data-casino-mode="mines" type="button"><span>☄️</span><b>Экспедиция</b><small>Планеты и астероиды</small></button>
         </div>
+        <section class="casino-card mines-casino-card" id="minesCasinoCard" aria-label="Казино: минная экспедиция">
+      <div class="section-head"><h2>Минная экспедиция</h2><span class="section-note">Казино · риск и награда</span></div>
+      <div class="casino-balance">Твой баланс: <strong id="minesCasinoBalance">0</strong> ✦</div>
+      <div id="minesContent">
+        <div class="game-lobby"><span class="lobby-icon">🛰️</span><span class="lobby-copy"><span class="lobby-title">Ищи планеты, обходи астероиды</span><span class="lobby-desc">Чем больше мин и больше безопасных находок — тем выше множитель. Забери выигрыш до столкновения.</span></span></div>
+        <div class="mines-controls" id="minesControls">
+          <div><span class="mines-label">Размер сектора</span><div class="mines-choice-row" id="minesSizes"><button class="mines-size active" data-size="3" type="button">3 × 3</button><button class="mines-size" data-size="5" type="button">5 × 5</button><button class="mines-size" data-size="10" type="button">10 × 10</button></div></div>
+          <div class="mines-input-row"><label><span class="mines-label">Астероиды</span><input class="mines-input" id="minesCount" type="number" min="1" max="8" value="2" inputmode="numeric"></label><label><span class="mines-label">Ставка ✦</span><input class="mines-input" id="minesBet" type="number" min="100" step="100" value="1000" inputmode="numeric"></label></div>
+          <button class="mines-action primary" id="minesStart" type="button">Начать экспедицию</button>
+        </div>
+        <div class="mines-result" id="minesSummary">Выбери поле, число астероидов и размер ставки.</div>
+        <div class="game-panel" id="minesPlayPanel" hidden><div class="game-toolbar"><span class="game-status" id="minesStatus">Выбери планету</span><button class="exit-game" id="minesExit" type="button">Завершить</button></div><div class="mines-status" id="minesOdds"></div><div class="mines-board" id="minesBoard" hidden></div><button class="mines-action primary" id="minesCashout" type="button" disabled>Забрать выигрыш · ✦ 0</button><div class="mines-result" id="minesResult"></div></div>
+      </div>
+    </section>
+    
         <div class="casino-card" id="casinoCard">
           <div class="casino-balance">Твой баланс: <strong id="casinoBalance">0</strong> ✦</div>
           <label class="casino-bet-label" id="casinoBetLabel" for="casinoBet">Ставка</label>
@@ -409,7 +509,16 @@
       <button class="nav-tab" data-tab="profile" type="button"><span class="nav-icon">👤</span><span class="nav-label">Профиль</span></button>
     </nav>
   </main>
-  <div class="toast" id="toast" role="status"></div>
+    <div class="modal-backdrop" id="rankConfirm" hidden>
+      <section class="rank-dialog" role="dialog" aria-modal="true" aria-labelledby="rankDialogTitle" aria-describedby="rankDialogCopy">
+        <div class="rank-dialog-icon" id="rankDialogIcon">🌠</div>
+        <h2 id="rankDialogTitle">Новый рубеж</h2>
+        <p class="rank-dialog-copy" id="rankDialogCopy"></p>
+        <div class="rank-dialog-list"><span>Будет потрачено: <b>вся накопленная звёздная пыль</b></span><span>Сохранится: <b>планеты, их уровни, доход и улучшения</b></span><span>Откроется: <b>новая планетная система в верфи</b></span></div>
+        <div class="rank-dialog-actions"><button id="cancelRank" type="button">Остаться</button><button class="confirm-rank" id="confirmRank" type="button">Перейти дальше</button></div>
+      </section>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
   <div class="round-report" id="roundReport" hidden><div class="round-report-card"><h2 id="roundReportTitle">Раунд завершён</h2><p id="roundReportText"></p><small>Возвращаемся в меню…</small></div></div>
   <script>
     (async () => {
@@ -425,7 +534,17 @@
         { id: 'mult', icon: '💎', name: 'Квантовый кристалл', desc: '+5 к силе каждого касания', base: 250, growth: 1.8 },
         { id: 'forge', icon: '🌠', name: 'Звёздная кузница', desc: '+3 пыли за каждое касание', base: 180, growth: 1.72 },
         { id: 'expedition', icon: '🚀', name: 'Экспедиционный флот', desc: '+3 звёздной пыли в секунду', base: 220, growth: 1.68 },
-        { id: 'gravity', icon: '🌀', name: 'Гравитационная линза', desc: '+25% награды за космический улов', base: 320, growth: 1.75 }
+        { id: 'gravity', icon: '🌀', name: 'Гравитационная линза', desc: '+25% награды за космический улов', base: 320, growth: 1.75 },
+        { id: 'stellarCore', icon: '🔆', name: 'Сердце сверхновой', desc: '+20 пыли за касание', base: 25000, growth: 1.9, unlockLevel: 2 },
+        { id: 'terraforming', icon: '🪴', name: 'Терраформирование', desc: '+18% дохода от планет за уровень', base: 60000, growth: 1.95, unlockLevel: 2 },
+        { id: 'deepSpaceLogistics', icon: '🛸', name: 'Логистика дальнего космоса', desc: '+12% дохода от планет за уровень', base: 600000, growth: 2, unlockLevel: 3 },
+        { id: 'quantumNetwork', icon: '🪐', name: 'Квантовая сеть', desc: '+35 пыли за касание и +25% дохода планет', base: 8000000, growth: 2.05, unlockLevel: 4 },
+        { id: 'stellarFoundry', icon: '🌌', name: 'Звёздная мегаструктура', desc: '+55 пыли за касание и +30% дохода планет', base: 120000000, growth: 2.1, unlockLevel: 5 },
+        { id: 'nebulaEngine', icon: '🌠', name: 'Двигатель туманностей', desc: '+80 пыли за касание и +35% дохода планет', base: 2000000000, growth: 2.1, unlockLevel: 6 },
+        { id: 'galaxyConduit', icon: '🌌', name: 'Галактический энергоканал', desc: '+45% дохода планет', base: 18000000000, growth: 2.15, unlockLevel: 7 },
+        { id: 'quasarCore', icon: '💫', name: 'Ядро квазара', desc: '+140 пыли за касание и +50% дохода планет', base: 220000000000, growth: 2.2, unlockLevel: 8 },
+        { id: 'clusterNetwork', icon: '✨', name: 'Сеть сверхскоплений', desc: '+60% дохода планет', base: 2400000000000, growth: 2.2, unlockLevel: 9 },
+        { id: 'sparkAscendant', icon: '👑', name: 'Восхождение Искры', desc: '+250 пыли за касание и +80% дохода планет', base: 28000000000000, growth: 2.25, unlockLevel: 10 }
       ];
       const worlds = [
         { id: 'earth', icon: '🌍', name: 'Земля', type: 'Планета', desc: 'Зелёный мир с океанами и развитой инфраструктурой.', cost: 120, income: 2 },
@@ -437,7 +556,26 @@
         { id: 'titan', icon: '🟠', name: 'Титан', type: 'Спутник', desc: 'Крупный спутник с плотной атмосферой.', cost: 5200, income: 58 },
         { id: 'lunar_base', icon: '🏗️', name: 'Лунная база', type: 'Космическая база', desc: 'Автономный форпост добывает ресурсы на Луне.', cost: 1900, income: 24 },
         { id: 'station', icon: '🛰️', name: 'Орбитальная станция', type: 'Космическая база', desc: 'Научный центр и узел межпланетной торговли.', cost: 8200, income: 92 },
-        { id: 'deep_base', icon: '🚀', name: 'Дальняя база', type: 'Космическая база', desc: 'Большой аванпост за пределами родной системы.', cost: 32000, income: 280 }
+        { id: 'deep_base', icon: '🚀', name: 'Дальняя база', type: 'Космическая база', desc: 'Большой аванпост за пределами родной системы.', cost: 32000, income: 280 },
+        { id: 'jupiter', icon: '🟠', name: 'Юпитер', type: 'Планета', desc: 'Газовый гигант открывает путь к внешним мирам.', cost: 240000, income: 620, unlockLevel: 2 },
+        { id: 'neptune', icon: '🔵', name: 'Нептун', type: 'Планета', desc: 'Ледяной гигант с редкими атмосферными ресурсами.', cost: 420000, income: 980, unlockLevel: 2 },
+        { id: 'titan_station', icon: '🛰️', name: 'Станция Титана', type: 'Космическая база', desc: 'Автоматическая станция осваивает дальние орбиты.', cost: 780000, income: 1700, unlockLevel: 2 },
+        { id: 'kepler', icon: '🪐', name: 'Кеплер-186f', type: 'Планета', desc: 'Обитаемый экзомир с богатой биосферой.', cost: 3800000, income: 6800, unlockLevel: 3 },
+        { id: 'nebula_base', icon: '🏙️', name: 'База в туманности', type: 'Космическая база', desc: 'Добывает пыль из ярких газовых облаков.', cost: 7200000, income: 12500, unlockLevel: 3 },
+        { id: 'proxima', icon: '🔴', name: 'Проксима b', type: 'Планета', desc: 'Колония у ближайшей звезды за пределами системы.', cost: 48000000, income: 92000, unlockLevel: 4 },
+        { id: 'dyson_node', icon: '☀️', name: 'Узел сферы Дайсона', type: 'Космическая база', desc: 'Собирает энергию молодой звезды.', cost: 88000000, income: 168000, unlockLevel: 4 },
+        { id: 'pulsar_world', icon: '💠', name: 'Планета Пульсара', type: 'Планета', desc: 'Кристаллический мир в сиянии нейтронной звезды.', cost: 620000000, income: 1350000, unlockLevel: 5 },
+        { id: 'singularity_hub', icon: '🕳️', name: 'Хаб сингулярности', type: 'Космическая база', desc: 'Передовой узел добычи у края чёрной дыры.', cost: 1100000000, income: 2450000, unlockLevel: 5 },
+        { id: 'nebula_world', icon: '🌀', name: 'Мир Пепельной туманности', type: 'Планета', desc: 'Планета, рождённая в облаке остатков сверхновой.', cost: 2600000000, income: 6300000, unlockLevel: 6 },
+        { id: 'nebula_forge', icon: '🏭', name: 'Кузница туманностей', type: 'Космическая база', desc: 'Перерабатывает звёздный газ в чистую пыль.', cost: 4800000000, income: 11800000, unlockLevel: 6 },
+        { id: 'andromeda_world', icon: '🌌', name: 'Андромеда-1', type: 'Планета', desc: 'Обитаемый мир соседней галактики.', cost: 26000000000, income: 68000000, unlockLevel: 7 },
+        { id: 'galaxy_gate', icon: '🌀', name: 'Врата Андромеды', type: 'Космическая база', desc: 'Связывают галактики и ускоряют добычу.', cost: 48000000000, income: 128000000, unlockLevel: 7 },
+        { id: 'quasar_world', icon: '💜', name: 'Мир Квазара', type: 'Планета', desc: 'Редкая колония выдерживает сияние квазара.', cost: 280000000000, income: 780000000, unlockLevel: 8 },
+        { id: 'quasar_array', icon: '📡', name: 'Массив квазара', type: 'Космическая база', desc: 'Улавливает энергию самого яркого ядра галактики.', cost: 520000000000, income: 1580000000, unlockLevel: 8 },
+        { id: 'cluster_world', icon: '💎', name: 'Сапфировый кластер', type: 'Планета', desc: 'Целая цепь кристаллических миров под единым управлением.', cost: 3200000000000, income: 9400000000, unlockLevel: 9 },
+        { id: 'cluster_hub', icon: '🏙️', name: 'Узел сверхскопления', type: 'Космическая база', desc: 'Координирует добычу сразу в тысячах систем.', cost: 5800000000000, income: 18800000000, unlockLevel: 9 },
+        { id: 'spark_world', icon: '🌟', name: 'Мир Искры', type: 'Планета', desc: 'Легендарная планета в самом сердце сияния.', cost: 38000000000000, income: 118000000000, unlockLevel: 10 },
+        { id: 'spark_citadel', icon: '👑', name: 'Цитадель Искры', type: 'Космическая база', desc: 'Величайший центр цивилизации в известной вселенной.', cost: 68000000000000, income: 228000000000, unlockLevel: 10 }
       ];
       const gameUpgradeDefs = [
         { id: 'catchBonus', icon: '🧲', name: 'Магнитный улов', desc: 'На 20% больше пыли за звёзды и планеты', base: 350, growth: 1.85, max: 5, group: 'Космический улов' },
@@ -461,9 +599,17 @@
         { id: 'casino_jackpot', icon: '🌠', name: 'Гравитация удачи', desc: 'Сорви джекпот x8 или выше', goal: 1, reward: 5000, test: s => s.stats.casinoJackpots },
         { id: 'casino_boosts', icon: '⚡', name: 'Сверхновая экономика', desc: 'Запусти временный буст дохода 3 раза', goal: 3, reward: 3500, test: s => s.stats.casinoBoosts },
         { id: 'casino_profit', icon: '👑', name: 'Казино в плюсе', desc: 'Выйди в общий плюс на 50 000 пыли', goal: 50000, reward: 10000, test: s => Math.max(0, s.stats.casinoNet) },
-        { id: 'casino_highroller', icon: '💎', name: 'Повелитель стола', desc: 'Получи за один ход не менее 100 000 пыли', goal: 100000, reward: 15000, test: s => s.stats.casinoBestWin }
+        { id: 'casino_highroller', icon: '💎', name: 'Повелитель стола', desc: 'Получи за один ход не менее 100 000 пыли', goal: 100000, reward: 15000, test: s => s.stats.casinoBestWin },
+        { id: 'rank_2', icon: '🚀', name: 'За пределы системы', desc: 'Открой вторую ступень галактики', goal: 2, reward: 2500, test: s => s.rank || 1 },
+        { id: 'rank_5', icon: '🌌', name: 'Повелитель звёздных путей', desc: 'Достигни пятой ступени галактики', goal: 5, reward: 100000, test: s => s.rank || 1 }
       ];
-      const initial = { sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, economy: { earned: { clicks: 0, passive: 0, catch: 0, ship: 0, casino: 0, achievements: 0 }, spent: { casino: 0, capsules: 0, assets: 0, penalties: 0 } }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, passiveBoosts: [], last: Date.now() };
+      const rankNames = ['Звёздный очаг', 'Орбитальная колония', 'Межзвёздный рубеж', 'Империя сверхновых', 'Сердце галактики', 'Владыка туманностей', 'Архитектор созвездий', 'Хранитель квазаров', 'Сверхскопление', 'Легенда Искры'];
+      const rankIcons = ['✦', '☄️', '💠', '🌌', '🌀', '🌟', '🪐', '🔮', '☀️', '👑'];
+      const rankName = rank => rank > rankNames.length ? `Легенда Искры ${rank - rankNames.length + 1}` : rankNames[Math.max(0, rank - 1)];
+      const rankIcon = rank => rankIcons[Math.min(rank - 1, rankIcons.length - 1)];
+      const rankThreshold = nextRank => Math.floor(1e6 * Math.pow(10, Math.max(0, nextRank - 2)));
+      const rankIncomeMultiplier = () => Math.pow(1.3, Math.max(0, (Number(state?.rank) || 1) - 1));
+      const initial = { rank: 1, sparks: 0, levels: { power: 0, auto: 0, mult: 0, forge: 0, expedition: 0, gravity: 0, stellarCore: 0, terraforming: 0, deepSpaceLogistics: 0, quantumNetwork: 0, stellarFoundry: 0, nebulaEngine: 0, galaxyConduit: 0, quasarCore: 0, clusterNetwork: 0, sparkAscendant: 0 }, gameUpgrades: { catchBonus: 0, salvage: 0, engine: 0, shield: 0, magnet: 0 }, stats: { taps: 0, catches: 0, upgradesBought: 0, shipBest: 0, casinoSpins: 0, capsulesOpened: 0, casinoSpent: 0, casinoNet: 0, casinoJackpots: 0, casinoBoosts: 0, casinoBestWin: 0, casinoWins: 0 }, economy: { earned: { clicks: 0, passive: 0, catch: 0, ship: 0, casino: 0, achievements: 0, mines: 0, arcade: 0 }, spent: { casino: 0, capsules: 0, assets: 0, penalties: 0, prestige: 0, mines: 0 } }, assets: [], assetNext: 1, achievements: [], casinoBoostUntil: 0, passiveBoosts: [], last: Date.now() };
       let state;
       let hasLocalSave = false;
       try {
@@ -487,6 +633,7 @@
         } catch { /* Keep the local save if Telegram CloudStorage is unavailable. */ }
       }
       state.levels = { ...initial.levels, ...(state.levels || {}) };
+      state.rank = Math.max(1, Math.floor(Number(state.rank) || 1));
       state.gameUpgrades = { ...initial.gameUpgrades, ...(state.gameUpgrades || {}) };
       state.stats = { ...initial.stats, ...(state.stats || {}) };
       state.passiveBoosts = Array.isArray(state.passiveBoosts) ? state.passiveBoosts.filter(boost => Number(boost.until) > Date.now() && Number(boost.multiplier) > 1) : [];
@@ -498,7 +645,7 @@
       savedAssets.forEach(asset => {
         if (!worlds.some(world => world.id === asset.typeId)) return;
         asset.uid = Number(asset.uid) || state.assets.length + 1;
-        asset.level = Math.max(1, Number(asset.level) || 1);
+        asset.level = Math.max(1, Math.min(10, Number(asset.level) || 1));
         const existing = state.assets.find(item => item.typeId === asset.typeId);
         if (!existing) state.assets.push(asset);
         else if (asset.level > existing.level) { existing.level = asset.level; existing.uid = asset.uid; }
@@ -518,9 +665,10 @@
       const fullNumber = n => Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(Number(n) || 0);
       const price = u => Math.floor(u.base * Math.pow(u.growth, state.levels[u.id]));
       const gameUpgradePrice = u => Math.floor(u.base * Math.pow(u.growth, state.gameUpgrades[u.id]));
-      const tapPower = () => 1 + state.levels.power + state.levels.mult * 5 + state.levels.forge * 3;
+      const tapPower = () => 1 + state.levels.power + state.levels.mult * 5 + state.levels.forge * 3 + state.levels.stellarCore * 20 + state.levels.quantumNetwork * 35 + state.levels.stellarFoundry * 55 + state.levels.nebulaEngine * 80 + state.levels.quasarCore * 140 + state.levels.sparkAscendant * 250;
       const assetType = asset => worlds.find(world => world.id === asset.typeId);
-      const assetYield = asset => { const world = assetType(asset); return world ? world.income * Math.pow(1.55, Math.max(0, asset.level - 1)) : 0; };
+      const planetYieldMultiplier = () => rankIncomeMultiplier() * (1 + state.levels.terraforming * .18 + state.levels.deepSpaceLogistics * .12 + state.levels.quantumNetwork * .25 + state.levels.stellarFoundry * .3 + state.levels.nebulaEngine * .35 + state.levels.galaxyConduit * .45 + state.levels.quasarCore * .5 + state.levels.clusterNetwork * .6 + state.levels.sparkAscendant * .8);
+      const assetYield = asset => { const world = assetType(asset); return world ? world.income * planetYieldMultiplier() * Math.pow(1.32, Math.max(0, Math.min(10, asset.level) - 1)) : 0; };
       const assetIncome = () => state.assets.reduce((sum, asset) => sum + assetYield(asset), 0);
       const incomeMultiplier = () => Date.now() < (Number(state.casinoBoostUntil) || 0) ? 2 : 1;
       const passiveIncomeMultiplier = () => Math.max(1, ...state.passiveBoosts.filter(boost => boost.until > Date.now()).map(boost => boost.multiplier));
@@ -535,12 +683,31 @@
           try { telegram.CloudStorage.setItem('pulsar_save', serialized, () => {}); } catch { /* Cloud save is optional outside supported Telegram clients. */ }
         }
       }
-      function render() {
+      function render(light = false) {
         $('balance').textContent = compact(state.sparks);
         $('rate').textContent = compact(perSecond());
+        const rank = state.rank || 1, threshold = rankThreshold(rank + 1), eligible = state.sparks >= threshold;
+        const themeClass = `rank-${Math.min(rank, 6)}`;
+        if (document.body.dataset.rankTheme !== themeClass) { document.body.className = themeClass; document.body.dataset.rankTheme = themeClass; }
+        document.querySelector('.brand-icon').textContent = rankIcon(rank);
+        $('tap').querySelector('.orb-emoji').textContent = rankIcon(rank);
+        $('rankTitle').textContent = `Искра · Уровень ${rank}`;
+        $('rankName').textContent = rankName(rank);
+        $('rankNote').textContent = eligible ? `Порог достигнут · следующий уровень: ${rankName(rank + 1)}. Пыль будет потрачена, а колонии, их уровни и доход сохранятся.` : `До следующего уровня «${rankName(rank + 1)}» · ${compact(state.sparks)} / ${compact(threshold)} пыли. Планеты и их доход сохраняются после перехода.`;
+        $('rankProgress').style.width = `${Math.min(100, state.sparks / threshold * 100)}%`;
+        $('rankAdvance').classList.toggle('ready', eligible);
+        $('rankAdvance').textContent = `🌠 Перейти на уровень ${rank + 1} · ${rankName(rank + 1)}`;
+        $('cometLock').hidden = rank >= 3; $('launchComet').disabled = rank < 3;
+        $('signalLock').hidden = rank >= 5; $('launchSignal').disabled = rank < 5;
+        if (light) {
+          const gameRunning = miniGameActive || shipActive || cometActive || signalRound || minesRound;
+          if (['shop', 'shipyard', 'system'].includes(currentTab) || (currentTab === 'games' && !gameRunning)) { render(false); return; }
+          if (currentTab === 'profile') renderProfile();
+          return;
+        }
         $('shipBestLobby').textContent = compact(state.stats.shipBest || 0);
         renderProfile(); renderCasino();
-        $('shop').innerHTML = upgrades.map(u => {
+        $('shop').innerHTML = upgrades.filter(u => (u.unlockLevel || 1) <= rank).map(u => {
           const cost = price(u), affordable = state.sparks >= cost;
           return `<button class="upgrade ${affordable ? 'affordable' : ''}" data-upgrade="${u.id}" ${affordable ? '' : 'disabled'} type="button">
             <span class="upgrade-icon">${u.icon}</span><span class="upgrade-info"><span class="upgrade-title">${u.name}</span><span class="upgrade-desc">${u.desc}</span></span>
@@ -562,13 +729,13 @@
         $('profileName').textContent = name;
         $('profileUsername').textContent = user?.username ? `@${user.username}` : user ? 'Пилот Telegram' : 'Открой игру через Telegram, чтобы показать ник';
         $('profileBalance').textContent = fullNumber(state.sparks);
-        $('profileIncome').textContent = `Доход: ${fullNumber(perSecond())} пыли в секунду`;
+        $('profileIncome').textContent = `Уровень ${state.rank} · ${rankName(state.rank)} · доход ${fullNumber(perSecond())} пыли в секунду`;
         $('profileTaps').textContent = fullNumber(state.stats.taps);
         $('profileCatches').textContent = fullNumber(state.stats.catches);
         $('profileBets').textContent = fullNumber(state.stats.casinoSpins);
         $('profileWin').textContent = `${fullNumber(state.stats.casinoBestWin)} ✦`;
-        const earnedLabels = { clicks: 'Касания ядра', passive: 'Пассивный доход', catch: 'Космический улов', ship: 'Полёты и бонусы', casino: 'Выплаты казино', achievements: 'Награды достижений' };
-        const spentLabels = { casino: 'Ставки рулетки и автомата', capsules: 'Звёздные капсулы', assets: 'Планеты, спутники и базы', penalties: 'Потери от бомб и астероидов' };
+        const earnedLabels = { clicks: 'Касания ядра', passive: 'Пассивный доход', catch: 'Космический улов', ship: 'Полёты и бонусы', casino: 'Выплаты казино', achievements: 'Награды достижений', mines: 'Минная экспедиция', arcade: 'Новые мини-игры' };
+        const spentLabels = { casino: 'Ставки рулетки и автомата', capsules: 'Звёздные капсулы', assets: 'Планеты, спутники и базы', penalties: 'Потери от бомб и астероидов', prestige: 'Переходы между уровнями', mines: 'Ставки минной экспедиции' };
         const earnedTotal = Object.values(state.economy.earned).reduce((sum, value) => sum + Number(value || 0), 0);
         const spentTotal = Object.values(state.economy.spent).reduce((sum, value) => sum + Number(value || 0), 0);
         const journalRows = (labels, values) => Object.entries(labels).map(([key, label]) => `<div class="asset-stat-row"><span>${label}</span><b>${fullNumber(values[key])} ✦</b></div>`).join('');
@@ -588,6 +755,12 @@
       const capsuleCost = 5000;
       function renderCasino() {
         $('casinoBalance').textContent = fullNumber(state.sparks);
+        $('minesCasinoBalance').textContent = fullNumber(state.sparks);
+        const mines = casinoMode === 'mines';
+        $('casinoCard').hidden = mines;
+        $('minesCasinoCard').hidden = !mines;
+        $('minesStart').disabled = Boolean(minesRound) || state.sparks < 100;
+        if (mines) return;
         const capsule = casinoMode === 'capsule';
         $('casinoCard').classList.toggle('roulette-theme', casinoMode === 'roulette');
         $('casinoCard').classList.toggle('slots-theme', casinoMode === 'slots');
@@ -614,9 +787,10 @@
       }
       function renderAssetViews() {
         $('assetIncomeLabel').textContent = `✦ ${compact(assetIncome())} / сек`;
-        $('shipyard').innerHTML = worlds.map(world => {
+        $('shipyardRankNote').textContent = `Уровень ${state.rank} · новые миры открываются с рангом`;
+        $('shipyard').innerHTML = worlds.filter(world => (world.unlockLevel || 1) <= state.rank).map(world => {
           const cost = worldPrice(world), owned = state.assets.some(asset => asset.typeId === world.id), affordable = state.sparks >= cost;
-          return `<button class="asset-offer ${affordable && !owned ? 'affordable' : ''}" data-buy-world="${world.id}" type="button" ${affordable && !owned ? '' : 'disabled'}><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type}</span><span class="asset-name">${world.name}</span><span class="asset-desc">${world.desc}</span></span><span class="asset-side">${owned ? 'Уже куплена' : `✦ ${compact(cost)}`}<small>+${compact(world.income)} / сек</small></span></button>`;
+          return `<button class="asset-offer ${affordable && !owned ? 'affordable' : ''}" data-buy-world="${world.id}" type="button" ${affordable && !owned ? '' : 'disabled'}><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type}</span><span class="asset-name">${world.name}</span><span class="asset-desc">${world.desc}</span></span><span class="asset-side">${owned ? 'Уже куплена' : `✦ ${compact(cost)}`}<small>+${compact(world.income * planetYieldMultiplier())} / сек</small></span></button>`;
         }).join('');
         const owned = $('ownedAssets');
         if (!state.assets.length) {
@@ -626,14 +800,14 @@
         if (!state.assets.some(asset => asset.uid === selectedAssetId)) selectedAssetId = null;
         owned.innerHTML = state.assets.map(asset => {
           const world = assetType(asset); if (!world) return '';
-          return `<button class="asset-card ${asset.uid === selectedAssetId ? 'selected' : ''}" data-owned-asset="${asset.uid}" type="button"><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type} · ур. ${asset.level}</span><span class="asset-name">${world.name}</span></span><span class="asset-side">+${compact(assetYield(asset))}<small>/ сек</small></span></button>`;
+          return `<button class="asset-card ${asset.uid === selectedAssetId ? 'selected' : ''}" data-owned-asset="${asset.uid}" type="button"><span class="asset-symbol">${world.icon}</span><span class="asset-copy"><span class="asset-type">${world.type} · ур. ${asset.level}/10</span><span class="asset-name">${world.name}</span></span><span class="asset-side">+${compact(assetYield(asset))}<small>/ сек</small></span></button>`;
         }).join('');
         const selected = state.assets.find(asset => asset.uid === selectedAssetId);
         const detail = $('assetDetail');
         if (!selected) { detail.hidden = true; detail.innerHTML = ''; return; }
-        const world = assetType(selected), upgradeCost = assetUpgradePrice(selected), affordable = state.sparks >= upgradeCost;
+        const world = assetType(selected), upgradeCost = assetUpgradePrice(selected), maxed = selected.level >= 10, affordable = state.sparks >= upgradeCost;
         detail.hidden = false;
-        detail.innerHTML = `<div class="asset-detail-head"><span class="asset-symbol">${world.icon}</span><span><span class="asset-type">${world.type} · уровень ${selected.level}</span><span class="asset-name">${world.name}</span></span></div><div class="asset-desc">${world.desc}</div><div class="asset-stat-row"><span>Текущий доход</span><b>+${compact(assetYield(selected))} пыли / сек</b></div><div class="asset-stat-row"><span>Доход после улучшения</span><b>+${compact(world.income * Math.pow(1.55, selected.level))} пыли / сек</b></div><button class="asset-upgrade-button" data-upgrade-asset="${selected.uid}" type="button" ${affordable ? '' : 'disabled'}>Улучшить · ✦ ${compact(upgradeCost)}</button>`;
+        detail.innerHTML = `<div class="asset-detail-head"><span class="asset-symbol">${world.icon}</span><span><span class="asset-type">${world.type} · уровень ${selected.level}/10</span><span class="asset-name">${world.name}</span></span></div><div class="asset-desc">${world.desc}</div><div class="asset-stat-row"><span>Текущий доход</span><b>+${compact(assetYield(selected))} пыли / сек</b></div><div class="asset-stat-row"><span>${maxed ? 'Максимальный уровень' : 'Доход после улучшения'}</span><b>${maxed ? '10 / 10' : `+${compact(world.income * planetYieldMultiplier() * Math.pow(1.32, selected.level))} пыли / сек`}</b></div><button class="asset-upgrade-button" data-upgrade-asset="${selected.uid}" type="button" ${!maxed && affordable ? '' : 'disabled'}>${maxed ? 'Максимум · 10 / 10' : `Улучшить · ✦ ${compact(upgradeCost)}`}</button>`;
       }
       let saveTimer;
       function changed() { render(); clearTimeout(saveTimer); saveTimer = setTimeout(save, 300); }
@@ -672,6 +846,7 @@
       $('shop').addEventListener('click', e => {
         const button = e.target.closest('[data-upgrade]'); if (!button) return;
         const u = upgrades.find(x => x.id === button.dataset.upgrade), cost = price(u);
+        if (!u || (u.unlockLevel || 1) > state.rank) return;
         if (state.sparks < cost) return;
         state.sparks -= cost; state.levels[u.id]++; state.stats.upgradesBought++; checkAchievements();
         $('toast').textContent = `${u.icon} ${u.name} улучшен!`; $('toast').classList.add('show');
@@ -734,7 +909,8 @@
       const casinoModeInfo = {
         roulette: 'У каждого символа свой сектор. Приз выбирается по вероятности, а сектор под стрелкой показывает результат.',
         capsule: 'Капсула стоит 5 000 ✦. Бонусы: x20 на 5 минут, x5 на 10 минут, x50 на минуту или x100 на 30 секунд. Одновременно действует самый сильный множитель.',
-        slots: 'Совпадающие символы дают множитель к ставке. Попробуй собрать редкую комбинацию.'
+        slots: 'Совпадающие символы дают множитель к ставке. Попробуй собрать редкую комбинацию.',
+        mines: 'Выбери поле и ставку, открывай безопасные планеты и забери выигрыш до столкновения с астероидом. Больше астероидов — выше потенциальный множитель.'
       };
       let slotRollInterval = null, slotStopTimers = [], slotStopDeadlines = [], slotActive = [], slotIndexes = [], slotSpinSpeed = 1, slotFinals = [], pendingSlotPrize = null, pendingSlotWager = 0;
       const slotSymbols = ['✦', '🪐', '💎', '☄️', '🌙', '⭐', '🚀', '🌌', '🔮'];
@@ -930,6 +1106,7 @@
       $('shipyard').addEventListener('click', e => {
         const button = e.target.closest('[data-buy-world]'); if (!button) return;
         const world = worlds.find(item => item.id === button.dataset.buyWorld); if (!world) return;
+        if ((world.unlockLevel || 1) > state.rank) return;
         if (state.assets.some(asset => asset.typeId === world.id)) return;
         const cost = worldPrice(world); if (state.sparks < cost) return;
         state.sparks -= cost; state.economy.spent.assets += cost; haptic('impact', 'light');
@@ -947,6 +1124,7 @@
       $('assetDetail').addEventListener('click', e => {
         const button = e.target.closest('[data-upgrade-asset]'); if (!button) return;
         const asset = state.assets.find(item => item.uid === Number(button.dataset.upgradeAsset)); if (!asset) return;
+        if (asset.level >= 10) return;
         const cost = assetUpgradePrice(asset); if (state.sparks < cost) return;
         state.sparks -= cost; asset.level++;
         checkAchievements(); changed();
@@ -1001,6 +1179,7 @@
         setTimeout(() => object.remove(), duration * 1000 + 100);
       }
       $('launchGame').addEventListener('click', () => {
+        if (cometActive) cancelCometRound(); if (signalRound) cancelSignalRound();
         if (shipActive || !$('shipPanel').hidden) closeShipGame();
         clearTimeout(reportTimer); $('roundReport').hidden = true;
         miniGameActive = true; $('gameLobby').hidden = true; $('gamePanel').hidden = false;
@@ -1094,6 +1273,7 @@
         render(); save();
       }
       function startFlight() {
+        if (cometActive) cancelCometRound(); if (signalRound) cancelSignalRound();
         if (miniGameActive) stopMiniGame();
         clearTimeout(reportTimer); $('roundReport').hidden = true;
         shipActive = true; shipBonus = 0; shipStartedAt = Date.now(); shipShieldsLeft = state.gameUpgrades.shield;
@@ -1145,6 +1325,225 @@
       $('exitShip').addEventListener('click', closeShipGame);
       $('shipLeft').addEventListener('click', () => moveShip(-1));
       $('shipRight').addEventListener('click', () => moveShip(1));
+      let minesSize = 3, minesRound = null, minesFinishTimer = null;
+      const planetFinds = ['🌍', '🪐', '🌕', '💎', '🔮', '💠', '🌌', '☀️'];
+      const minesBoard = $('minesBoard');
+      function clampMineCount() {
+        const cells = minesSize * minesSize, maxMines = cells - 1;
+        $('minesCount').max = maxMines;
+        $('minesCount').value = Math.max(1, Math.min(maxMines, Math.floor(Number($('minesCount').value) || 1)));
+      }
+      function updateMinesSetup() {
+        clampMineCount();
+        const cells = minesSize * minesSize, mines = Number($('minesCount').value), chance = (cells - mines) / cells;
+        const nextMultiplier = .97 / chance;
+        $('minesOdds').textContent = `Шанс первого безопасного шага: ${Math.round(chance * 100)}% · потенциальный множитель: ×${nextMultiplier.toFixed(2)}`;
+      }
+      function minesChance(round) {
+        return Math.max(0, (round.cells - round.mineCount - round.safeCount) / (round.cells - round.safeCount));
+      }
+      function minesMultiplier(round) {
+        let survival = 1;
+        for (let i = 0; i < round.safeCount; i++) survival *= (round.cells - round.mineCount - i) / (round.cells - i);
+        return survival > 0 ? .97 / survival : 0;
+      }
+      function revealMinefield(hitIndex = -1) {
+        minesBoard.querySelectorAll('.mine-cell').forEach((cell, index) => {
+          if (minesRound?.mineIndexes.has(index)) { cell.textContent = index === hitIndex ? '💥' : '☄️'; cell.classList.add('asteroid'); }
+          cell.disabled = true;
+        });
+      }
+      function finishMines(cashout, hitIndex = -1) {
+        const round = minesRound; if (!round || round.finished) return;
+        round.finished = true;
+        if (cashout && round.safeCount > 0) {
+          const multiplier = minesMultiplier(round), payout = Math.floor(round.bet * multiplier);
+          state.sparks += payout; state.economy.earned.mines += payout;
+          $('minesResult').textContent = `Планеты найдены · выплата ${fullNumber(payout)} ✦ · ×${multiplier.toFixed(2)}`;
+          $('minesSummary').textContent = `Успешная экспедиция · выплата ${fullNumber(payout)} ✦ (×${multiplier.toFixed(2)})`;
+          haptic('notify', 'success');
+        } else {
+          $('minesResult').textContent = hitIndex >= 0 ? 'Астероид! Ставка потеряна.' : 'Экспедиция завершена без находок · ставка потеряна.';
+          $('minesSummary').textContent = hitIndex >= 0 ? '☄️ Астероид разрушил экспедицию · ставка потеряна.' : 'Экспедиция завершена · ставка потеряна.';
+          haptic('notify', 'warning');
+        }
+        revealMinefield(hitIndex);
+        minesRound = null;
+        $('minesStatus').textContent = 'Экспедиция завершена';
+        $('minesOdds').textContent = 'Найденные планеты остаются в поле до закрытия.';
+        $('minesCashout').disabled = true; $('minesCashout').textContent = 'Экспедиция завершена';
+        $('minesExit').textContent = 'Закрыть поле';
+        $('minesControls').hidden = false;
+        $('minesStart').disabled = true;
+        clearTimeout(minesFinishTimer);
+        minesFinishTimer = setTimeout(() => { $('minesPlayPanel').classList.remove('round-fullscreen'); $('minesPlayPanel').hidden = true; minesBoard.hidden = true; $('minesStart').disabled = state.sparks < 100; $('minesExit').textContent = 'Завершить'; }, 1800);
+        checkAchievements(); render(); save();
+      }
+      function startMines() {
+        if (minesRound || state.sparks < 100) return;
+        clampMineCount();
+        const bet = Math.floor(Number($('minesBet').value)), mineCount = Number($('minesCount').value), cells = minesSize * minesSize;
+        if (!Number.isSafeInteger(bet) || bet < 100 || bet > state.sparks || mineCount < 1 || mineCount >= cells) {
+          $('minesSummary').textContent = 'Проверь ставку и число астероидов. Ставка: от 100 ✦.'; return;
+        }
+        clearTimeout(minesFinishTimer); $('minesSummary').textContent = '';
+        state.sparks -= bet; state.economy.spent.mines += bet;
+        const mineIndexes = new Set(); while (mineIndexes.size < mineCount) mineIndexes.add(Math.floor(Math.random() * cells));
+        minesRound = { bet, mineCount, cells, mineIndexes, safeCount: 0, finished: false };
+        minesBoard.replaceChildren(); minesBoard.style.gridTemplateColumns = `repeat(${minesSize}, minmax(0, 1fr))`;
+        for (let index = 0; index < cells; index++) {
+          const button = document.createElement('button'); button.type = 'button'; button.className = 'mine-cell'; button.dataset.mineCell = String(index); button.textContent = '✧';
+          button.setAttribute('aria-label', `Сектор ${index + 1}, не исследован`); minesBoard.append(button);
+        }
+        $('minesControls').hidden = true; $('minesPlayPanel').hidden = false; $('minesPlayPanel').classList.add('round-fullscreen'); minesBoard.hidden = false;
+        $('minesStatus').textContent = `Ставка ${fullNumber(bet)} ✦ · найдены 0 планет`;
+        $('minesOdds').textContent = `Шанс следующей безопасной клетки: ${Math.round(minesChance(minesRound) * 100)}%`;
+        $('minesResult').textContent = ''; $('minesCashout').disabled = true; $('minesCashout').textContent = 'Забрать выигрыш · сначала найди планету'; $('minesExit').textContent = 'Завершить';
+        render(); save();
+      }
+      $('minesSizes').addEventListener('click', e => {
+        const button = e.target.closest('[data-size]'); if (!button || minesRound) return;
+        minesSize = Number(button.dataset.size);
+        $('minesSizes').querySelectorAll('[data-size]').forEach(item => item.classList.toggle('active', item === button));
+        updateMinesSetup();
+      });
+      $('minesCount').addEventListener('input', updateMinesSetup);
+      $('minesStart').addEventListener('click', startMines);
+      minesBoard.addEventListener('click', e => {
+        const cell = e.target.closest('[data-mine-cell]'); if (!cell || !minesRound || minesRound.finished || cell.disabled) return;
+        const index = Number(cell.dataset.mineCell), round = minesRound;
+        if (round.mineIndexes.has(index)) { finishMines(false, index); return; }
+        round.safeCount++;
+        cell.textContent = planetFinds[Math.floor(Math.random() * planetFinds.length)]; cell.classList.add('planet'); cell.disabled = true;
+        cell.setAttribute('aria-label', `Найдена планета в секторе ${index + 1}`);
+        const multiplier = minesMultiplier(round), payout = Math.floor(round.bet * multiplier), chance = minesChance(round);
+        $('minesStatus').textContent = `Планет найдено: ${round.safeCount} · ставка ${fullNumber(round.bet)} ✦`;
+        $('minesOdds').textContent = `Следующий безопасный сектор: ${Math.round(chance * 100)}% · забрать сейчас: ${fullNumber(payout)} ✦ (×${multiplier.toFixed(2)})`;
+        $('minesCashout').disabled = false; $('minesCashout').textContent = `Забрать · ✦ ${fullNumber(payout)}`;
+        haptic('impact', 'light');
+        if (round.safeCount === round.cells - round.mineCount) finishMines(true);
+      });
+      $('minesCashout').addEventListener('click', () => finishMines(true));
+      $('minesExit').addEventListener('click', () => {
+        if (minesRound) finishMines(minesRound.safeCount > 0);
+        clearTimeout(minesFinishTimer); $('minesPlayPanel').classList.remove('round-fullscreen'); $('minesPlayPanel').hidden = true;
+        minesBoard.hidden = true; $('minesControls').hidden = false; $('minesStart').disabled = state.sparks < 100; $('minesExit').textContent = 'Завершить';
+      });
+      updateMinesSetup();
+      let cometActive = false, cometPoints = 0, cometStartedAt = 0, cometSpawnTimer = null, cometClockTimer = null;
+      const cometField = $('cometField');
+      const cometKinds = [
+        { icon: '✨', points: 5 }, { icon: '🌍', points: 12 }, { icon: '🪐', points: 16 },
+        { icon: '💎', points: 22 }, { icon: '☄️', points: 8 }, { icon: '🪨', points: -10, danger: true }
+      ];
+      function spawnCometTarget() {
+        if (!cometActive) return;
+        const prize = cometKinds[Math.random() < .24 ? 5 : Math.floor(Math.random() * 5)];
+        const target = document.createElement('button'); target.type = 'button'; target.className = `comet-target ${prize.danger ? 'danger' : ''}`;
+        target.textContent = prize.icon; target.dataset.points = String(prize.points); target.style.left = `${5 + Math.random() * 84}%`;
+        target.style.animationDuration = `${1.8 + Math.random() * 1.1}s`;
+        cometField.append(target); setTimeout(() => target.remove(), 3200);
+      }
+      function finishCometRound() {
+        if (!cometActive) return;
+        cometActive = false; clearInterval(cometSpawnTimer); clearInterval(cometClockTimer); cometSpawnTimer = cometClockTimer = null;
+        cometField.replaceChildren();
+        const reward = Math.max(0, cometPoints) * 25;
+        state.sparks += reward; state.economy.earned.arcade += reward;
+        $('cometStatus').textContent = `Раунд завершён · ${cometPoints} очков`;
+        showRoundReport('Перехват завершён', `Очки: <b>${cometPoints}</b><br>Награда: <b>✦ ${fullNumber(reward)} звёздной пыли</b>`, $('cometPanel'), $('cometLobby'));
+        checkAchievements(); render(); save();
+      }
+      function cancelCometRound() {
+        if (!cometActive) return;
+        cometActive = false; clearInterval(cometSpawnTimer); clearInterval(cometClockTimer); cometSpawnTimer = cometClockTimer = null;
+        cometField.replaceChildren(); $('cometPanel').classList.remove('round-fullscreen'); $('cometPanel').hidden = true; $('cometLobby').hidden = false;
+      }
+      function startCometRound() {
+        if (state.rank < 3) return;
+        if (miniGameActive) stopMiniGame(); if (shipActive) closeShipGame(); if (signalRound) cancelSignalRound();
+        clearTimeout(reportTimer); $('roundReport').hidden = true;
+        cometActive = true; cometPoints = 0; cometStartedAt = Date.now();
+        $('cometLobby').hidden = true; $('cometPanel').hidden = false; $('cometPanel').classList.add('round-fullscreen');
+        $('cometStatus').textContent = '40 сек · Очки: 0 · лови планеты и кометы'; cometField.replaceChildren(); spawnCometTarget();
+        cometSpawnTimer = setInterval(spawnCometTarget, 520);
+        cometClockTimer = setInterval(() => {
+          if (!cometActive) return;
+          const left = Math.max(0, 40 - Math.floor((Date.now() - cometStartedAt) / 1000));
+          $('cometStatus').textContent = `${left} сек · Очки: ${cometPoints} · астероиды отнимают очки`;
+          if (!left) finishCometRound();
+        }, 250);
+      }
+      cometField.addEventListener('click', e => {
+        const target = e.target.closest('.comet-target'); if (!target || !cometActive) return;
+        const value = Number(target.dataset.points) || 0; cometPoints += value; target.remove();
+        $('cometStatus').textContent = `${value > 0 ? '+' : ''}${value} · всего ${cometPoints} очков`;
+        haptic(value < 0 ? 'impact' : 'notify', value < 0 ? 'medium' : 'success');
+      });
+      $('launchComet').addEventListener('click', startCometRound);
+      $('exitComet').addEventListener('click', finishCometRound);
+
+      let signalRound = null, signalBusy = false, signalPoints = 0, signalPattern = [], signalInput = 0, signalStartedAt = 0, signalClockTimer = null, signalTimeouts = [];
+      const signalIcons = ['🔵', '🟣', '🟢', '🟡'];
+      function clearSignalTimers() { clearInterval(signalClockTimer); signalClockTimer = null; signalTimeouts.forEach(clearTimeout); signalTimeouts = []; document.querySelectorAll('.signal-pad').forEach(pad => pad.classList.remove('lit')); }
+      function playSignalPattern() {
+        if (!signalRound) return;
+        signalBusy = true; signalInput = 0; $('signalStatus').textContent = `Запомни ${signalPattern.length} импульса · ${signalPoints} очков`;
+        let step = 0;
+        const flashNext = () => {
+          if (!signalRound) return;
+          if (step >= signalPattern.length) { signalBusy = false; $('signalStatus').textContent = 'Повтори сигнал по порядку'; return; }
+          const pad = document.querySelector(`[data-pad="${signalPattern[step]}"]`); pad.classList.add('lit');
+          signalTimeouts.push(setTimeout(() => pad.classList.remove('lit'), 260));
+          step++; signalTimeouts.push(setTimeout(flashNext, 470));
+        };
+        signalTimeouts.push(setTimeout(flashNext, 350));
+      }
+      function makeSignalPattern(length) { return Array.from({ length }, () => Math.floor(Math.random() * 4)); }
+      function finishSignalRound() {
+        if (!signalRound) return;
+        clearSignalTimers(); signalRound = null; signalBusy = false;
+        const reward = Math.max(0, signalPoints) * 12;
+        state.sparks += reward; state.economy.earned.arcade += reward;
+        $('signalStatus').textContent = `Раунд завершён · ${signalPoints} очков`;
+        showRoundReport('Сигнал расшифрован', `Верных импульсов: <b>${signalPoints}</b><br>Награда: <b>✦ ${fullNumber(reward)} звёздной пыли</b>`, $('signalPanel'), $('signalLobby'));
+        checkAchievements(); render(); save();
+      }
+      function cancelSignalRound() {
+        if (!signalRound) return;
+        clearSignalTimers(); signalRound = null; signalBusy = false;
+        $('signalPanel').classList.remove('round-fullscreen'); $('signalPanel').hidden = true; $('signalLobby').hidden = false;
+      }
+      function startSignalRound() {
+        if (state.rank < 5) return;
+        if (miniGameActive) stopMiniGame(); if (shipActive) closeShipGame(); if (cometActive) cancelCometRound();
+        clearTimeout(reportTimer); $('roundReport').hidden = true;
+        signalPoints = 0; signalStartedAt = Date.now(); signalRound = true; signalPattern = makeSignalPattern(2);
+        $('signalLobby').hidden = true; $('signalPanel').hidden = false; $('signalPanel').classList.add('round-fullscreen');
+        playSignalPattern();
+        signalClockTimer = setInterval(() => {
+          if (!signalRound) return;
+          const left = Math.max(0, 40 - Math.floor((Date.now() - signalStartedAt) / 1000));
+          if (!signalBusy) $('signalStatus').textContent = `${left} сек · ${signalPoints} очков · повтори последовательность`;
+          if (!left) finishSignalRound();
+        }, 250);
+      }
+      $('signalBoard').addEventListener('click', e => {
+        const pad = e.target.closest('[data-pad]'); if (!pad || !signalRound || signalBusy) return;
+        const chosen = Number(pad.dataset.pad);
+        if (chosen !== signalPattern[signalInput]) {
+          signalPoints = Math.max(0, signalPoints - 5); signalPattern = makeSignalPattern(Math.max(2, signalPattern.length - 1)); signalInput = 0; signalBusy = true;
+          $('signalStatus').textContent = 'Сигнал сбился · −5 очков'; signalTimeouts.push(setTimeout(playSignalPattern, 700)); haptic('impact', 'medium'); return;
+        }
+        pad.classList.add('lit'); setTimeout(() => pad.classList.remove('lit'), 160); signalInput++;
+        if (signalInput >= signalPattern.length) {
+          signalPoints += signalPattern.length * 10; signalPattern = makeSignalPattern(Math.min(12, signalPattern.length + 1)); signalBusy = true;
+          $('signalStatus').textContent = `Код принят · +${signalPattern.length - 1} уровень сложности`;
+          signalTimeouts.push(setTimeout(playSignalPattern, 550)); haptic('notify', 'success');
+        }
+      });
+      $('launchSignal').addEventListener('click', startSignalRound);
+      $('exitSignal').addEventListener('click', finishSignalRound);
       document.querySelector('.profile-switch').addEventListener('click', e => {
         const button = e.target.closest('[data-profile-view]'); if (!button) return;
         document.querySelectorAll('.profile-switch button').forEach(item => item.classList.toggle('active', item === button));
@@ -1176,6 +1575,7 @@
         const tab = button.dataset.tab;
         currentTab = tab;
         document.querySelectorAll('[data-panel]').forEach(panel => { panel.hidden = panel.dataset.panel !== tab; });
+        render();
         document.querySelectorAll('.nav-tab').forEach(navButton => {
           const active = navButton === button;
           navButton.classList.toggle('active', active);
@@ -1188,6 +1588,15 @@
           clearTimeout(reportTimer); $('roundReport').hidden = true;
           if (miniGameActive) stopMiniGame();
           if (shipActive || !$('shipPanel').hidden) closeShipGame();
+          if (cometActive) cancelCometRound();
+          else { $('cometPanel').classList.remove('round-fullscreen'); $('cometPanel').hidden = true; $('cometLobby').hidden = false; }
+          if (signalRound) cancelSignalRound();
+          else { $('signalPanel').classList.remove('round-fullscreen'); $('signalPanel').hidden = true; $('signalLobby').hidden = false; }
+        }
+        if (tab !== 'casino') {
+          if (minesRound) finishMines(minesRound.safeCount > 0);
+          clearTimeout(minesFinishTimer); $('minesPlayPanel').classList.remove('round-fullscreen'); $('minesPlayPanel').hidden = true;
+          minesBoard.hidden = true; $('minesControls').hidden = false;
         }
         window.scrollTo(0, 0);
       });
@@ -1195,10 +1604,38 @@
         telegram.BackButton.onClick(() => document.querySelector('[data-tab="home"]').click());
         telegram.BackButton.hide();
       }
+      $('rankAdvance').addEventListener('click', () => {
+        const threshold = rankThreshold(state.rank + 1);
+        if (state.sparks < threshold || casinoBusy) return;
+        const nextRank = state.rank + 1;
+        $('rankDialogIcon').textContent = rankIcon(nextRank);
+        $('rankDialogTitle').textContent = `Открыть уровень ${nextRank}?`;
+        $('rankDialogCopy').textContent = `Ты готов к рубежу «${rankName(nextRank)}». Планеты и их улучшения останутся с тобой, а в верфи появятся новые объекты.`;
+        $('rankConfirm').hidden = false;
+        $('confirmRank').focus();
+      });
+      const closeRankDialog = () => { $('rankConfirm').hidden = true; $('rankAdvance').focus(); };
+      $('cancelRank').addEventListener('click', closeRankDialog);
+      $('rankConfirm').addEventListener('click', e => { if (e.target === $('rankConfirm')) closeRankDialog(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('rankConfirm').hidden) closeRankDialog(); });
+      $('confirmRank').addEventListener('click', () => {
+        const threshold = rankThreshold(state.rank + 1);
+        if (state.sparks < threshold || casinoBusy) { closeRankDialog(); return; }
+        const nextRank = state.rank + 1;
+        state.economy.spent.prestige += state.sparks;
+        state.sparks = 0;
+        state.rank = nextRank;
+        closeRankDialog();
+        checkAchievements();
+        save(); changed();
+        $('toast').textContent = `${rankIcon(nextRank)} Новый уровень · ${rankName(nextRank)}`;
+        $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 2200);
+        haptic('notify', 'success');
+      });
       $('reset').addEventListener('click', () => {
         if (casinoBusy) { $('toast').textContent = 'Дождись результата текущего хода'; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 1500); return; }
         if (!confirm('Сбросить весь прогресс? Это действие нельзя отменить.')) return;
-        state = { ...initial, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, economy: { earned: { ...initial.economy.earned }, spent: { ...initial.economy.spent } }, assets: [], assetNext: 1, achievements: [], passiveBoosts: [], last: Date.now() }; selectedAssetId = null; save(); render();
+        state = { ...initial, rank: 1, levels: { ...initial.levels }, gameUpgrades: { ...initial.gameUpgrades }, stats: { ...initial.stats }, economy: { earned: { ...initial.economy.earned }, spent: { ...initial.economy.spent } }, assets: [], assetNext: 1, achievements: [], passiveBoosts: [], last: Date.now() }; selectedAssetId = null; save(); render();
       });
       const elapsed = Math.min(8 * 60 * 60, Math.max(0, (Date.now() - (Number(state.last) || Date.now())) / 1000));
       if (elapsed > 5 && perSecond()) {
@@ -1206,7 +1643,7 @@
       }
       state.last = Date.now(); checkAchievements(); render(); save();
       if (telegram) { try { telegram.ready(); } catch { /* The browser-only version has no Telegram readiness signal. */ } }
-      setInterval(() => { const income = perSecond(); if (income) { state.sparks += income; state.economy.earned.passive += income; checkAchievements(); render(); } }, 1000);
+      setInterval(() => { const income = perSecond(); if (income) { state.sparks += income; state.economy.earned.passive += income; checkAchievements(); render(true); } }, 1000);
       setInterval(renderCasino, 1000);
       setInterval(save, 5000);
       window.addEventListener('pagehide', save);
@@ -1214,3 +1651,4 @@
   </script>
 </body>
 </html>
+
